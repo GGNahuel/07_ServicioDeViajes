@@ -1,0 +1,36 @@
+La página intentará llamar la atención de los usuarios para que estos contraten un viaje con una agencia de turismo/ empresa de viajes 
+(a lo travel o freestyle)
+
+Habrá distintos planes de viajes que el usuario podría interesarse, por categorías?
+
+los viajes duran una cierta cantidad de días, y según el viaje este puede tener distintos lugares de paso o varios destinos. Estos destinos, o lugares de
+estadía también van a tener su propias fechas, etc.
+
+Bases de datos:
+  No hará falta que se registren usuarios.
+  Viajes
+    duración en días
+    Destinos 
+      (c/u)
+      lugar
+      dia salida
+      dia llegada
+      Medio transporte (enum)
+      Estadía
+        lugar (Destino)
+        nombre lugar de Estadía
+    planes (variarán según cada viaje)
+      precio
+      para cantidad de personas (ejemplo, plan individual, pareja, o familiar)
+    limite de personas (limite de personas para el viaje)
+    personas dentro (personas ya inscritas al plan)
+    habilitado (depende del limite de personas)
+    posibles fechas [] (por ejemplo hay fechas para, junio, octubre, enero)
+
+
+Tecnologías a usar:
+  TypeScript
+  react
+  MongoDb (para los viajes)
+  MySql (para transacciones y datos de los usuarios que ya pagaron algún viaje/ investigar más)
+  Spring
