@@ -1,9 +1,10 @@
 import './App.css'
+import { IndexPage } from './pages/Index'
 
 function App() {
   return (
     <>
-      <h1>Hello world</h1>
+      <IndexPage />
     </>
   )
 }
