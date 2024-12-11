@@ -1,3 +1,5 @@
+import "../styles/indexPage.css"
+
 export function IndexPage() {
   return (
     <>
@@ -14,7 +16,7 @@ export function IndexPage() {
       <main className="defaultPadding">
         <section id="presentationSection">
           <div><h1>Journey Joy</h1></div>
-          <video src="indexVideo.mp4" autoPlay muted loop></video>
+          <video src="indexVideo2.mp4" autoPlay muted loop></video>
           <div><h2>Viajes inolvidables, felicidad en el camino</h2></div>
         </section>
         <section className="blank">
@@ -24,38 +26,48 @@ export function IndexPage() {
         <section id="popularTravelsSection">
           <h2>Viajes populares</h2>
           <section>
-            <article className="travelPostal">
-              <img src="" alt="" />
-              <h3>Nombre viaje</h3>
+            <article className="travelPostal" style={{rotate: "-4deg"}}>
+              <img src="asd.png" alt="img" />
               <div>
+              <h3>Nombre viaje</h3>
                 <p>texto</p>
                 <div>
                   planes diponibles
                 </div>
               </div>
             </article>
-            <article className="travelPostal">
+            <article className="travelPostal" style={{rotate: "-12deg"}}>
               <img src="" alt="" />
-              <h3>Nombre viaje</h3>
               <div>
+              <h3>Nombre viaje</h3>
                 <p>texto</p>
                 <div>
                   planes diponibles
                 </div>
               </div>
             </article>
-            <article className="travelPostal">
+            <article className="travelPostal" style={{rotate: "8deg"}}>
               <img src="" alt="" />
-              <h3>Nombre viaje</h3>
               <div>
+              <h3>Nombre viaje</h3>
                 <p>texto</p>
                 <div>
                   planes diponibles
                 </div>
               </div>
             </article>
-            <a href=""><button>ver todos</button></a>
+            <article className="travelPostal" style={{rotate: "-4deg"}}>
+              <img src="" alt="" />
+              <div>
+              <h3>Nombre viaje</h3>
+                <p>texto</p>
+                <div>
+                  planes diponibles
+                </div>
+              </div>
+            </article>
           </section>
+          <a href=""><button>ver todos</button></a>
         </section>
         <section className="blank">
           <div className="carrouselContainer">
