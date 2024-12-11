@@ -1,16 +1,21 @@
 export function IndexPage() {
   return (
     <>
-      <header>
-        <nav>
-          <h2>Navbar</h2>
+      <header className="defaultPadding navbar">
+        <div className="hidden">
+          <h2>Spacing text</h2>
+        </div>
+        <nav className="fixed">
+          <div>
+            <h2>Navbar</h2>
+          </div>
         </nav>
       </header>
-      <main>
+      <main className="defaultPadding">
         <section id="presentationSection">
-          <div><h1>Página de viajes</h1></div>
-          <div className="video"></div>
-          <div><h2>Recuerdos inolvidables</h2></div>
+          <div><h1>Journey Joy</h1></div>
+          <video src="indexVideo.mp4" autoPlay muted loop></video>
+          <div><h2>Viajes inolvidables, felicidad en el camino</h2></div>
         </section>
         <section className="blank">
           <button><a href="">Sobre nosotros</a></button>
