@@ -76,3 +76,29 @@
     transition: all 300ms;
   }
 }
+
+#mapSection {
+  padding: 1rem;
+  
+  #map {
+    width: 100%;
+    position: relative;
+
+    img {
+      max-width: 100%;
+    }
+
+    .pin {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: absolute;
+      transform: translate(-50%, -50%);
+
+      &.p1 {
+        top: 30%;
+        left: 20%;
+      }
+    }
+  }
+}

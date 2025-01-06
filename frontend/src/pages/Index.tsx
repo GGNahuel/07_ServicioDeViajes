@@ -1,3 +1,4 @@
+import { LocationSvg } from "../components/SvgIcons"
 import "../styles/indexPage.css"
 
 export function IndexPage() {
@@ -106,7 +107,8 @@ export function IndexPage() {
             </div>
           </article>
           <section id="map">
-            <div className="pin">lugar1</div>
+            <img src="/map.png" alt="" />
+            <div className="pin p1"><LocationSvg />lugar1</div>
             <div className="pin">lugar2</div>
             <div className="pin">lugar3</div>
             <div className="pin">lugar4</div>
