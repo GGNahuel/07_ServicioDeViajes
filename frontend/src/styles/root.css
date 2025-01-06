@@ -38,6 +38,10 @@ section.blank {
   flex-wrap: wrap;
   gap: 1rem;
   flex-direction: row;
+
+  &.justifyStart {
+    justify-content: flex-start;
+  }
 }
 
 h1 { font-size: 4rem; }

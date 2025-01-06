@@ -1,3 +1,4 @@
+import { CarrouselAuto } from "../components/CarrouselAuto"
 import { LocationSvg } from "../components/SvgIcons"
 import "../styles/indexPage.css"
 
@@ -70,18 +71,7 @@ export function IndexPage() {
           </section>
           <a href=""><button>ver todos</button></a>
         </section>
-        <section className="blank">
-          <div className="carrouselContainer">
-            <img src="" alt="" />
-            <img src="" alt="" />
-            <img src="" alt="" />
-            <img src="" alt="" />
-            <img src="" alt="" />
-            <img src="" alt="" />
-            <img src="" alt="" />
-            <img src="" alt="" />
-          </div>
-        </section>
+        <CarrouselAuto />
         <section id="mapSection">
           <header>
             <h2>Mapa de lugares</h2>
