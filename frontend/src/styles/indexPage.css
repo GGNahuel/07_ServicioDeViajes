@@ -78,37 +78,16 @@
 }
 
 #carrouselSection {
-  position: relative;
+  padding: 0;
   overflow-x: hidden;
   
   .carrouselContainer {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 16px;
     align-items: center;
   }
   
   img {
     width: 200px;
-  }
-
-  span {
-    position: absolute;
-    background-color: rgba(201, 201, 201, 0.8);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    box-sizing: border-box;
-    z-index: 10;
-
-    &.left {
-      left: 0;
-    }
-
-    &.right {
-      right: 0;
-    }
   }
 }
 
