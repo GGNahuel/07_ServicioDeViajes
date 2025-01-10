@@ -1,6 +1,6 @@
 import { CarrouselAuto } from "../components/CarrouselAuto"
-import { LocationSvg } from "../components/SvgIcons"
 import "../styles/indexPage.css"
+import { Map } from "./indexSections/Map"
 
 export function IndexPage() {
   return (
@@ -72,44 +72,7 @@ export function IndexPage() {
           <a href=""><button>ver todos</button></a>
         </section>
         <CarrouselAuto />
-        <section id="mapSection">
-          <header>
-            <h2>Mapa de lugares</h2>
-            <a href=""><button>a página de viajes parte de búsqueda</button></a>
-          </header>
-          <article className="hoveredPlace">
-            <div>
-              <img src="" alt="" />
-              <h3>Nombre lugar</h3>
-            </div>
-            <div>
-              <p>texto</p>
-              <ul>
-                <li>
-                  <img src="" alt="" />
-                  <p>Hospedaje</p>
-                </li>
-                <li>
-                  <img src="" alt="" />
-                  <p>Hospedaje</p>
-                </li>
-              </ul>
-            </div>
-          </article>
-          <section id="map">
-            <img src="/map.png" alt="" />
-            <div className="pin p1"><LocationSvg />lugar1</div>
-            <div className="pin">lugar2</div>
-            <div className="pin">lugar3</div>
-            <div className="pin">lugar4</div>
-            <div className="pin">lugar5</div>
-            <div className="pin">lugar6</div>
-            <div className="pin">lugar7</div>
-            <div className="pin">lugar8</div>
-            <div className="pin">lugar9</div>
-            <div className="pin">lugar10</div>
-          </section>
-        </section>
+        <Map />
         <section id="paymentPlans">
           <h2>Planes para que puedas disfrutar en grupo, pareja o solo</h2>
           <article>
