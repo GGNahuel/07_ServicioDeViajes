@@ -174,6 +174,16 @@ function HoveredMapPlace({place, mapProps} : {place: mapPlaceType, mapProps: DOM
         newPercentageX = (objectiveX - mapProps.x) * 100 / mapProps.width
       }
 
+      /* const { width, right } = mapProps
+      const rect = element.getBoundingClientRect()
+
+      let newPercentageX: number | null = null
+      if (rect.x > (right - rect.width)) {
+        const objectiveX = right - rect.width - 18
+        console.log(rect.x, objectiveX, rect.width)
+        newPercentageX = (objectiveX - mapProps.x) * 100 / mapProps.width
+      } */
+
       // do it also with height?
 
       setAdjustedPositionPercentage(prev => ({...prev, x: newPercentageX || prev.x}))
