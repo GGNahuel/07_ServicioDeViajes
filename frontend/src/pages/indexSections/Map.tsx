@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { FloatingPortal, offset, shift, size, useFloating, useFocus, useHover, useInteractions } from "@floating-ui/react";
+import { CSSProperties, useState } from "react";
 import { LocationSvg } from "../../components/SvgIcons";
 
-type mapPlaceType = {
+export type mapPlaceType = {
   pinPositionPercentage: {x: number, y: number},
   name: string,
   text: string,
@@ -112,87 +113,27 @@ const mapPlaces: mapPlaceType[] = [
 ]
 
 export function Map() {
-  const [hoveredPlace, setHoveredPlace] = useState<mapPlaceType>()
-
-  const handleHover = (place: mapPlaceType | undefined) => {
-    setHoveredPlace(place)
-  }
-
-  const mapRef = useRef<HTMLDivElement>(null)
-  const [mapProps, setMapProps] = useState<DOMRect>()
-
-  useEffect(() => {
-    const map = mapRef.current
-
-    const setMapPropsFn = () => {
-      if (map) {
-        setMapProps(map.getBoundingClientRect())
-      }
-    }
-    setMapPropsFn()
-
-    window.addEventListener("resize",setMapPropsFn)
-    return () => {
-      window.removeEventListener("resize",setMapPropsFn)
-    }
-  }, [])
-
   return (
     <section id="mapSection">
       <header>
         <h2>Mapa de lugares</h2>
         <a href=""><button>a página de viajes parte de búsqueda</button></a>
       </header>
-      <section id="map" ref={mapRef}>
+      <section id="map">
         <img src="/map.png" alt="" />
         {mapPlaces.map(place => (
-          <PlacePin place={place} handleHover={handleHover} />
+          <PlacePin place={place} />
         ))}
-        {hoveredPlace && <HoveredMapPlace place={hoveredPlace} mapProps={mapProps} />}
       </section>
     </section>
   )
 }
 
-function HoveredMapPlace({place, mapProps} : {place: mapPlaceType, mapProps: DOMRect | undefined}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [adjustedPositionPercentage, setAdjustedPositionPercentage] = useState({ 
-    x: place.pinPositionPercentage.x, 
-    y: place.pinPositionPercentage.y, 
-  })
-
-  useEffect(() => {
-    const element = ref.current
-
-    if (element && mapProps) {
-      const { width } = mapProps
-      const rect = element.getBoundingClientRect()
-
-      let newPercentageX: number | null = null
-      if (rect.x > (width - rect.width)) {
-        const objectiveX = width - rect.width
-        newPercentageX = (objectiveX - mapProps.x) * 100 / mapProps.width
-      }
-
-      /* const { width, right } = mapProps
-      const rect = element.getBoundingClientRect()
-
-      let newPercentageX: number | null = null
-      if (rect.x > (right - rect.width)) {
-        const objectiveX = right - rect.width - 18
-        console.log(rect.x, objectiveX, rect.width)
-        newPercentageX = (objectiveX - mapProps.x) * 100 / mapProps.width
-      } */
-
-      // do it also with height?
-
-      setAdjustedPositionPercentage(prev => ({...prev, x: newPercentageX || prev.x}))
-    }
-    
-  }, [mapProps, place])
-  
+function HoveredMapPlace({place, floatingStyles, ...otherProps} : {place: mapPlaceType, floatingStyles: CSSProperties, otherProps: unknown}) {
   return (
-    <article className="hoveredPlace" ref={ref} style={{left: adjustedPositionPercentage.x + "%", top: place.pinPositionPercentage.y + "%",}}>
+    <article className="hoveredPlace" {...otherProps} style={{
+      ...floatingStyles,
+    }}>
       <div>
         <img src="" alt="" />
         <h3>{place.name}</h3>
@@ -212,17 +153,37 @@ function HoveredMapPlace({place, mapProps} : {place: mapPlaceType, mapProps: DOM
     )
 }
 
-function PlacePin({place, handleHover} : {place: mapPlaceType, handleHover: (p: mapPlaceType | undefined) => void}) {
+function PlacePin({place} : {place: mapPlaceType}) {
+  const [isOpen, setIsOpen] = useState(false)
+  
+  const {refs, context, floatingStyles} = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    placement: "bottom-start",
+    middleware: [shift({padding: 8}), offset(8), size()],
+  })
+
+  const onHover = useHover(context)
+  const onFocus = useFocus(context)
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([onHover, onFocus])
+
   return (
-    <div className="pin" 
-      onMouseEnter={() => handleHover(place)}
-      onMouseLeave={() => handleHover(undefined)}
-      style={{
-        left: place.pinPositionPercentage.x + "%",
-        top: place.pinPositionPercentage.y + "%"
-      }}
-    >
-      <LocationSvg />
-    </div>
+    <>
+      <div className="pin" 
+        ref={refs.setReference}
+        style={{
+          left: place.pinPositionPercentage.x + "%",
+          top: place.pinPositionPercentage.y + "%"
+        }}
+        {...getReferenceProps()}
+      >
+        <LocationSvg />
+      </div>
+      {isOpen && (<FloatingPortal>
+          <HoveredMapPlace place={place} floatingStyles={floatingStyles} otherProps={{ref: refs.setFloating, ...getFloatingProps()}} />
+        </FloatingPortal>)
+      }
+    </>
   )
 }
