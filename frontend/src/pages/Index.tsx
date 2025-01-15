@@ -75,22 +75,24 @@ export function IndexPage() {
         <Map />
         <section id="paymentPlans">
           <h2>Planes para que puedas disfrutar en grupo, pareja o solo</h2>
-          <article>
-            <img src="" alt="" />
-            <h3>Plan familiar</h3>
-          </article>
-          <article>
-            <img src="" alt="" />
-            <h3>Plan grupo de amigos</h3>
-          </article>
-          <article>
-            <img src="" alt="" />
-            <h3>Plan Pareja</h3>
-          </article>
-          <article>
-            <img src="" alt="" />
-            <h3>Plan Solo</h3>
-          </article>
+          <div>
+            <article>
+              <img src="" alt="" />
+              <h3>Plan familiar</h3>
+            </article>
+            <article>
+              <img src="" alt="" />
+              <h3>Plan grupo de amigos</h3>
+            </article>
+            <article>
+              <img src="" alt="" />
+              <h3>Plan Pareja</h3>
+            </article>
+            <article>
+              <img src="" alt="" />
+              <h3>Plan Solo</h3>
+            </article>
+          </div>
         </section>
         <section id="benefitsSection">
           <h2>Beneficios</h2>
