@@ -2,7 +2,7 @@ import { mapPlaceType } from "../pages/indexSections/Map"
 
 const mapPlaces: mapPlaceType[] = [
   {
-    pinPositionPercentage: {x: 55, y: 24},
+    pinPositionPercentage: {x: 49.8, y: 39},
     name: "Paris, France",
     text: "The city of love, known for its iconic Eiffel Tower, art museums like the Louvre, and charming streets.",
     hotels: [
@@ -12,7 +12,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 15, y: 14},
+    pinPositionPercentage: {x: 28.5, y: 44},
     name: "New York City, USA",
     text: "The city that never sleeps, featuring Times Square, Central Park, and the Statue of Liberty.",
     hotels: [
@@ -22,7 +22,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 80, y: 50},
+    pinPositionPercentage: {x: 85, y: 45},
     name: "Tokyo, Japan",
     text: "A bustling metropolis blending traditional culture and modern technology, famous for its cherry blossoms and Shibuya Crossing.",
     hotels: [
@@ -32,7 +32,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 58, y: 45},
+    pinPositionPercentage: {x: 51, y: 44},
     name: "Rome, Italy",
     text: "The Eternal City, home to the Colosseum, Vatican City, and delicious Italian cuisine.",
     hotels: [
@@ -42,7 +42,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 70, y: 70},
+    pinPositionPercentage: {x: 87.8, y: 77.5},
     name: "Sydney, Australia",
     text: "Known for its Sydney Opera House, Harbour Bridge, and stunning beaches like Bondi.",
     hotels: [
@@ -52,7 +52,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 55, y: 84},
+    pinPositionPercentage: {x: 52.3, y: 76.5},
     name: "Cape Town, South Africa",
     text: "Famous for Table Mountain, Robben Island, and its vibrant cultural scene.",
     hotels: [
@@ -62,7 +62,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 65, y: 34},
+    pinPositionPercentage: {x: 75.5, y: 56},
     name: "Bangkok, Thailand",
     text: "A city with bustling markets, grand temples like Wat Arun, and vibrant nightlife.",
     hotels: [
@@ -72,7 +72,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 85, y: 34},
+    pinPositionPercentage: {x: 61, y: 58},
     name: "Dubai, UAE",
     text: "A city of luxury and innovation, home to the Burj Khalifa and stunning desert landscapes.",
     hotels: [
@@ -82,7 +82,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 35, y: 64},
+    pinPositionPercentage: {x: 36, y: 72},
     name: "Rio de Janeiro, Brazil",
     text: "Known for its iconic Christ the Redeemer statue, Copacabana Beach, and vibrant Carnival.",
     hotels: [
@@ -92,7 +92,7 @@ const mapPlaces: mapPlaceType[] = [
     ],
   },
   {
-    pinPositionPercentage: {x: 95, y: 14},
+    pinPositionPercentage: {x: 79.2, y: 65},
     name: "Bali, Indonesia",
     text: "A tropical paradise with beautiful beaches, temples, and lush greenery.",
     hotels: [
