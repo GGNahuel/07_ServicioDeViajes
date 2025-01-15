@@ -17,7 +17,7 @@ export function Card({children, styles, onHover} : {children: ReactNode, styles?
       padding: "1rem",
       transition: "box-shadow 100ms",
       ...styles,
-    }}>
+    }} className="cards">
       {children}
     </article>
   )

@@ -1,5 +1,6 @@
 import { CarrouselAuto } from "../components/CarrouselAuto"
 import "../styles/indexPage.css"
+import { Benefits } from "./indexSections/Benefits"
 import { Map } from "./indexSections/Map"
 import { Plans } from "./indexSections/Plans"
 
@@ -75,23 +76,7 @@ export function IndexPage() {
         <CarrouselAuto />
         <Map />
         <Plans />
-        <section id="benefitsSection">
-          <h2>Beneficios</h2>
-          <section className="valija">
-            <article>
-              <img src="" alt="" />
-              <h3>texto del beneficio</h3>
-            </article>
-            <article>
-              <img src="" alt="" />
-              <h3>texto del beneficio</h3>
-            </article>
-            <article>
-              <img src="" alt="" />
-              <h3>texto del beneficio</h3>
-            </article>
-          </section>
-        </section>
+        <Benefits />
         <section className="blank">
           <div>
             <img src="" alt="" />
