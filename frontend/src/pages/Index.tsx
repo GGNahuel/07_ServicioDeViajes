@@ -16,8 +16,7 @@ export function IndexPage() {
         </nav>
       </header>
       <main className="defaultPadding">
-        <Map />
-        <section id="presentationSection">
+       <section id="presentationSection">
           <div><h1>Journey Joy</h1></div>
           <video src="indexVideo2.mp4" autoPlay muted loop></video>
           <div><h2>Viajes inolvidables, felicidad en el camino</h2></div>
@@ -73,7 +72,7 @@ export function IndexPage() {
           <a href=""><button>ver todos</button></a>
         </section>
         <CarrouselAuto />
-
+        <Map />
         <section id="paymentPlans">
           <h2>Planes para que puedas disfrutar en grupo, pareja o solo</h2>
           <article>
