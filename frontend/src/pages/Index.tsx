@@ -1,6 +1,7 @@
 import { CarrouselAuto } from "../components/CarrouselAuto"
 import "../styles/indexPage.css"
 import { Map } from "./indexSections/Map"
+import { Plans } from "./indexSections/Plans"
 
 export function IndexPage() {
   return (
@@ -73,27 +74,7 @@ export function IndexPage() {
         </section>
         <CarrouselAuto />
         <Map />
-        <section id="paymentPlans">
-          <h2>Planes para que puedas disfrutar en grupo, pareja o solo</h2>
-          <div>
-            <article>
-              <img src="" alt="" />
-              <h3>Plan familiar</h3>
-            </article>
-            <article>
-              <img src="" alt="" />
-              <h3>Plan grupo de amigos</h3>
-            </article>
-            <article>
-              <img src="" alt="" />
-              <h3>Plan Pareja</h3>
-            </article>
-            <article>
-              <img src="" alt="" />
-              <h3>Plan Solo</h3>
-            </article>
-          </div>
-        </section>
+        <Plans />
         <section id="benefitsSection">
           <h2>Beneficios</h2>
           <section className="valija">
