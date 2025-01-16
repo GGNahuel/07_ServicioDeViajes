@@ -1,6 +1,7 @@
 import { CarrouselAuto } from "../components/CarrouselAuto"
 import "../styles/indexPage.css"
 import { Benefits } from "./indexSections/Benefits"
+import { MakeYourTravel } from "./indexSections/MakeYourTravel"
 import { Map } from "./indexSections/Map"
 import { PlaneCTA } from "./indexSections/PlaneCTA"
 import { Plans } from "./indexSections/Plans"
@@ -79,14 +80,7 @@ export function IndexPage() {
         <Plans />
         <Benefits />
         <PlaneCTA />
-        <section id="makeYourOwnTravelSection">
-          <img src="" alt="" />
-          <div>
-            <h2>Arma tu viaje personalizado con nosotros</h2>
-            <p>texto de para quienes estaría pensado esta opción</p>
-            <a href=""><button>Conoce más</button></a>
-          </div>
-        </section>
+        <MakeYourTravel />
         <section id="opinionsSection">
           <article>
             <img src="" alt="" />
