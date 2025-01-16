@@ -20,7 +20,7 @@ export function IndexPage() {
           </div>
         </nav>
       </header>
-      <main className="defaultPadding">
+      <main>
        <section id="presentationSection">
           <div><h1>Journey Joy</h1></div>
           <video src="indexVideo2.mp4" autoPlay muted loop></video>

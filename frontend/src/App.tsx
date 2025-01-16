@@ -1,4 +1,4 @@
-import { IndexPage } from './pages/Index'
+import { IndexPage } from './pages/IndexPage'
 
 function App() {
   return (
