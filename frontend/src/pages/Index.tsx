@@ -5,6 +5,7 @@ import { MakeYourTravel } from "./indexSections/MakeYourTravel"
 import { Map } from "./indexSections/Map"
 import { PlaneCTA } from "./indexSections/PlaneCTA"
 import { Plans } from "./indexSections/Plans"
+import { Reviews } from "./indexSections/Reviews"
 
 export function IndexPage() {
   return (
@@ -81,20 +82,7 @@ export function IndexPage() {
         <Benefits />
         <PlaneCTA />
         <MakeYourTravel />
-        <section id="opinionsSection">
-          <article>
-            <img src="" alt="" />
-            <p>texto de valoración</p>
-          </article>
-          <article>
-            <img src="" alt="" />
-            <p>texto de valoración</p>
-          </article>
-          <article>
-            <img src="" alt="" />
-            <p>texto de valoración</p>
-          </article>
-        </section>
+        <Reviews />
         <section id="contactSection">
           <h2>Escríbanos</h2>
           <div>
