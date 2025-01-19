@@ -1,0 +1,17 @@
+services:
+  journeyjoyapp_frontend:
+    container_name: journeyjoy_frontend_c
+    build: ./frontend
+    image: journeyjoy_frontend:1
+    ports: 
+      - "5173:5173"
+    networks:
+      - journeyJoyApp_network
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
+
+
+networks:
+  journeyJoyApp_network: 
+    name: journeyjoy_network
