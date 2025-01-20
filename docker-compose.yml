@@ -19,6 +19,8 @@ services:
       - "8080:8080"
     networks:
       - journeyjoy_network
+    volumes:
+      - ./backend:/backend
 
   journeyjoy_db:
     container_name: journeyjoy_db_c
