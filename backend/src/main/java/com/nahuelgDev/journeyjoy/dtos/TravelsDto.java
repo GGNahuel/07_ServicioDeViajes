@@ -1,20 +1,14 @@
-package com.nahuelgDev.journeyjoy.collections;
+package com.nahuelgDev.journeyjoy.dtos;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.nahuelgDev.journeyjoy.dataClasses.Destinies;
 import com.nahuelgDev.journeyjoy.dataClasses.PayPlans;
 
 import lombok.Data;
 
 @Data
-@Document
-public class Travels {
-  @Id
+public class TravelsDto {
   private String id;
   private Integer longInDays;
   private Integer maxCapacity;
@@ -22,6 +16,6 @@ public class Travels {
   private Boolean isAvailable;
   private List<LocalDate> availableDates;
 
-  private List<Destinies> destinies;
+  private List<DestiniesDto> destinies;
   private List<PayPlans> payPlans;
 }
