@@ -6,12 +6,35 @@ services:
     ports: 
       - "5173:5173"
     networks:
-      - journeyJoyApp_network
+      - journeyjoy_network
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules
 
+  journeyjoyapp_backend:
+    container_name: journeyjoy_backend_c
+    build: ./backend
+    image: journeyjoy_backend:1
+    ports:
+      - "8080:8080"
+    networks:
+      - journeyjoy_network
+
+  journeyjoy_db:
+    container_name: journeyjoy_db_c
+    image: mongo
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INIT_DB_ROOT_USERNAME=root
+      - MONGO_INIT_DB_ROOT_PASSWORD=root456
+    volumes:
+      - journeyjoy_mongo_data:/app/data
+    networks:
+      - journeyjoy_network
 
 networks:
-  journeyJoyApp_network: 
-    name: journeyjoy_network
+  journeyjoy_network: 
+
+volumes:
+  journeyjoy_mongo_data:
