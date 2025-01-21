@@ -14,4 +14,8 @@ public class StayPlaces {
   private String name;
   private String description;
   private Integer rating;
+
+  public StayPlaces(String id) {
+    this.id = id;
+  }
 }
