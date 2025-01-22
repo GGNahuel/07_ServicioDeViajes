@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.nahuelgDev.journeyjoy.dataClasses.Destinies;
@@ -16,6 +17,8 @@ import lombok.Data;
 public class Travels {
   @Id
   private String id;
+  @Indexed(unique = true)
+  private String name;
   private Integer longInDays;
   private Integer maxCapacity;
   private Integer currentCapacity;
