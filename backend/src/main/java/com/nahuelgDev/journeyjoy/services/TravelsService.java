@@ -21,6 +21,10 @@ public class TravelsService implements TravelsService_I{
     return travelsRepo.findById(id).orElse(null);
   }
 
+  public List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays) {
+    return travelsRepo.search(available, desiredCapacity, place, minDays, maxDays);
+  }
+
   public Travels create(Travels travelToCreate) {
     return travelsRepo.save(travelToCreate);
   }

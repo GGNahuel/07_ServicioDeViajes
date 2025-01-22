@@ -15,10 +15,10 @@ public interface TravelsRepository extends MongoRepository<Travels, String> {
     "{ $or: [ { :#{#available} : null }, { isAvailable: :#{#available} } ] }, " +
     "{ $or: [ { $expr: { $gte: [ :#{#desiredCapacity}, {$subtract: ['$maxCapacity', '$currentCapacity']} ] } }, { :#{#desiredCapacity} : null } ] }, " +
     "{ $or: [ { 'destinies.place': :#{#place} }, { :#{#place} : '' } ] }, " +
-    "{ longInDays: { $lte: :#{#maxDays} } }, " +
-    "{ longInDays: { $gte: :#{#minDays} } } " +
+    "{ $or: [{ longInDays: {$lte: :#{#maxDays}} }, {:#{maxDays}: null}] }, " +
+    "{ $or: [{ longInDays: {$gte: :#{#minDays}} }, {:#{minDays}: null}] } " +
   "]}")
-  List<Travels> search(
+  public List<Travels> search(
     @Param("available") Boolean available, 
     @Param("desiredCapacity") Integer desiredCapacity,
     @Param("place") String place,
