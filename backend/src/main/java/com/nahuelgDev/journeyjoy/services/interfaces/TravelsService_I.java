@@ -10,5 +10,6 @@ public interface TravelsService_I {
   public List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays);
   public Travels create(Travels travelToCreate);
   public Travels update(Travels updatedTravel);
+  String changeCurrentCapacity(String travelId, Integer relativeCapacity);
   public String delete(String id);
 }

@@ -14,12 +14,14 @@ import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
 @Service
 public class TravelsService implements TravelsService_I{
   @Autowired TravelsRepository travelsRepo;
-
+  
+  @Override
   public List<Travels> getAll() {
     
     return travelsRepo.findAll();
   }
   
+  @Override
   public Travels getById(String id) {
     checkFieldsHasContent(new Field("id", id));
 
@@ -28,10 +30,12 @@ public class TravelsService implements TravelsService_I{
     );
   }
 
+  @Override
   public List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays) {
     return travelsRepo.search(available, desiredCapacity, place, minDays, maxDays);
   }
 
+  @Override
   public Travels create(Travels travelToCreate) {
     checkFieldsHasContent(
       new Field("nombre", travelToCreate.getName()),
@@ -48,6 +52,7 @@ public class TravelsService implements TravelsService_I{
     return travelsRepo.save(travelToCreate);
   }
 
+  @Override
   public Travels update(Travels updatedTravel) {
     checkFieldsHasContent(new Field("id", updatedTravel.getId()));
 
@@ -60,6 +65,27 @@ public class TravelsService implements TravelsService_I{
     return travelsRepo.save(updatedTravel);
   }
 
+  @Override
+  public String changeCurrentCapacity(String travelId, Integer relativeCapacity) {
+    checkFieldsHasContent(new Field("id del viaje", travelId), new Field("cambio en capacidad", relativeCapacity));
+
+    Travels travel = travelsRepo.findById(travelId).orElseThrow(
+      () -> new DocumentNotFoundException("plan de viaje", travelId, "id")
+    );
+
+    int currentCapacity = travel.getCurrentCapacity();
+    int newCapacity = currentCapacity + relativeCapacity;
+
+    if (newCapacity > travel.getMaxCapacity()) return "No hay cupo para la cantidad solicitada";
+    if (newCapacity < 0) return "Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"; 
+    // Esto en realidad sería un log (al cliente retornaría otro msg)
+
+    travel.setCurrentCapacity(newCapacity);
+    travelsRepo.save(travel);
+    return "Solicitud procesada con éxito";
+  }
+
+  @Override
   public String delete(String id) {
     checkFieldsHasContent(new Field("id", id));
   

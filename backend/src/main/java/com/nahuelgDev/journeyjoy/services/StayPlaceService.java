@@ -20,12 +20,14 @@ public class StayPlaceService implements StayPlacesService_I {
   @Autowired StayPlacesRepository stayPlaceRepo;
   @Autowired ModelMapper modelMapper;
 
+  @Override
   public List<StayPlacesDto> getAll() {
     return stayPlaceRepo.findAll().stream().map(
       stayPlace -> modelMapper.map(stayPlace, StayPlacesDto.class)
     ).toList();
   }
 
+  @Override
   public StayPlacesDto getById(String id) {
     checkFieldsHasContent(new Field("id", id));
 
@@ -36,6 +38,7 @@ public class StayPlaceService implements StayPlacesService_I {
     return result != null ? modelMapper.map(result, StayPlacesDto.class) : null;
   }
 
+  @Override
   public StayPlacesDto create(StayPlacesDto placeToCreate) {
     checkFieldsHasContent(
       new Field("lugar", placeToCreate.getFrom()),
@@ -47,6 +50,7 @@ public class StayPlaceService implements StayPlacesService_I {
     ), StayPlacesDto.class);
   }
 
+  @Override
   public StayPlacesDto update(StayPlacesDto updatedPlace) {
     checkFieldsHasContent(new Field("id", updatedPlace.getId()));
 
@@ -54,30 +58,23 @@ public class StayPlaceService implements StayPlacesService_I {
       () -> new DocumentNotFoundException("lugar de estadía", updatedPlace.getId(), "id")
     );
 
-    if (placeToUpdate != null) {
-      updatedPlace.setId(placeToUpdate.getId());
+    updatedPlace.setId(placeToUpdate.getId());
 
-      return modelMapper.map(stayPlaceRepo.save(
-        modelMapper.map(updatedPlace, StayPlaces.class)
-      ), StayPlacesDto.class);
-    }
-
-    return null;
+    return modelMapper.map(stayPlaceRepo.save(
+      modelMapper.map(updatedPlace, StayPlaces.class)
+    ), StayPlacesDto.class);
   }
 
+  @Override
   public String delete(String id) {
     checkFieldsHasContent(new Field("id", id));
 
-    StayPlaces placeToDelete = stayPlaceRepo.findById(id).orElseThrow(
+    stayPlaceRepo.findById(id).orElseThrow(
       () -> new DocumentNotFoundException("lugar de estadía", id, "id")
     );
 
-    if (placeToDelete != null) {
-      stayPlaceRepo.deleteById(id);
+    stayPlaceRepo.deleteById(id);
 
-      return "Operación realizada con éxito";
-    }
-
-    return "No se pudo completar la operación";
+    return "Operación realizada con éxito";
   }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,6 +43,11 @@ public class TravelsController {
   @PutMapping("")
   public Travels update(@RequestBody Travels updatedTravel) {
     return travelsService.update(updatedTravel);
+  }
+
+  @PatchMapping("/request")
+  public String changeCurrentCapacity(@RequestParam String travelId, @RequestParam Integer newCapacity) {
+    return travelsService.changeCurrentCapacity(travelId, newCapacity);
   }
 
   @DeleteMapping("/{id}")
