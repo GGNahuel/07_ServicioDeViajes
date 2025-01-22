@@ -4,29 +4,38 @@ import java.util.List;
 
 import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
 
+import lombok.Getter;
+
 public class Verifications {
-  private static void checkArraysHaveSameLength(Object[] array1, Object[] array2) throws Exception {
-    if (array1.length != array2.length)
-      throw new Exception("Arrays don't have the same length");
+  @Getter
+  public static class Field {
+    private String name;
+    private Object value;
+
+    public Field(String name, Object value) {
+      this.name = name; this.value = value;
+    }
   }
 
-  public static void validateFieldsHasContent(String[] fieldNames, Object... fields) throws Exception {
-    checkArraysHaveSameLength(fieldNames, fields);
-    for (int i = 0; i < fieldNames.length; i++) {
-      if (fields[i] == null)
-        throw new EmptyFieldException(fieldNames[i]);
+  public static void checkFieldsHasContent(Field... fields) {
+    for (int i = 0; i < fields.length; i++) {
+      String name = fields[i].getName();
+      Object value = fields[i].getValue();
 
-      if (fields[i] instanceof String && ((String) fields[i]).isBlank())
-        throw new EmptyFieldException(fieldNames[i]);
+      if (value == null)
+        throw new EmptyFieldException(name);
 
-      if (fields[i] instanceof List) {
-        List<?> list = (List<?>) fields[i];
+      if (value instanceof String && ((String) value).isBlank())
+        throw new EmptyFieldException(name);
 
-        if (list.size() == 0) 
-          throw new EmptyFieldException(fieldNames[i]);
+      if (value instanceof List) {
+        List<?> list = (List<?>) value;
+
+        if (list.isEmpty()) 
+          throw new EmptyFieldException(name);
         
         for (Object object : list) {
-          validateFieldsHasContent(new String[]{"objeto en ".concat(fieldNames[i])}, object);
+          checkFieldsHasContent(new Field("objeto en lista".concat(name), object));
         }
       }
     }
