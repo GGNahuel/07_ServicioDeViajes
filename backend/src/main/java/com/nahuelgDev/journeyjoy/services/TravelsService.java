@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
@@ -83,6 +84,27 @@ public class TravelsService implements TravelsService_I{
     travel.setCurrentCapacity(newCapacity);
     travelsRepo.save(travel);
     return "Solicitud procesada con éxito";
+  }
+
+  @Override
+  public String addReview(String travelId, Reviews newReview) {
+    checkFieldsHasContent(
+      new Field("id del viaje", travelId), 
+      new Field("nombre del autor de la reseña", newReview.getUserName()),
+      new Field("valoración de la reseña", newReview.getRating())
+    );
+
+    Travels travel = travelsRepo.findById(travelId).orElseThrow(
+      () -> new DocumentNotFoundException("plan de viaje", travelId, "id")
+    );
+
+    List<Reviews> reviewsInTravel = travel.getReviews();
+    boolean usernameAlreadyHasReview = reviewsInTravel.stream().anyMatch(review -> review.getUserName().equals(newReview.getUserName()));
+    if (usernameAlreadyHasReview) throw new RuntimeException("Ya existe una reseña con el nombre ingresado");
+
+    reviewsInTravel.add(newReview);
+    travelsRepo.save(travel);
+    return "Gracias por valorar el viaje";
   }
 
   @Override

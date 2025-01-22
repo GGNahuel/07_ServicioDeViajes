@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.services.TravelsService;
 
@@ -48,6 +49,11 @@ public class TravelsController {
   @PatchMapping("/request")
   public String changeCurrentCapacity(@RequestParam String travelId, @RequestParam Integer newCapacity) {
     return travelsService.changeCurrentCapacity(travelId, newCapacity);
+  }
+
+  @PatchMapping("/addReview")
+  public String addReview(@RequestParam String travelId, @RequestParam Reviews newReview) {
+    return travelsService.addReview(travelId, newReview);
   }
 
   @DeleteMapping("/{id}")
