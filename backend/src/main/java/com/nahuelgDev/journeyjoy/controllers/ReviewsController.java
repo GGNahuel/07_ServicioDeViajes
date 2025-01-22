@@ -12,26 +12,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nahuelgDev.journeyjoy.collections.ServiceReviews;
-import com.nahuelgDev.journeyjoy.services.ServiceReviewsService;
+import com.nahuelgDev.journeyjoy.collections.Reviews;
+import com.nahuelgDev.journeyjoy.services.ReviewsService;
 
 @RestController
 @RequestMapping("/api/service_reviews")
-public class ServiceReviewsController {
-  @Autowired ServiceReviewsService reviewsService;
+public class ReviewsController {
+  @Autowired ReviewsService reviewsService;
 
   @GetMapping("")
-  public List<ServiceReviews> getAll() {
+  public List<Reviews> getAll() {
     return reviewsService.getAll();
   }
 
   @PostMapping("")
-  public ServiceReviews create(@RequestBody ServiceReviews reviewToCreate) {
+  public Reviews create(@RequestBody Reviews reviewToCreate) {
     return reviewsService.create(reviewToCreate);
   }
 
   @PutMapping("")
-  public ServiceReviews update(@RequestBody ServiceReviews updatedReview) {
+  public Reviews update(@RequestBody Reviews updatedReview) {
     return reviewsService.update(updatedReview);
   }
 
