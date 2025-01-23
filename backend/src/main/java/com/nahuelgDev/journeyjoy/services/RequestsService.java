@@ -23,6 +23,7 @@ import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 public class RequestsService implements RequestsService_I {
   @Autowired RequestsRepository requestsRepo;
   @Autowired TravelsRepository travelsRepo;
+  @Autowired TravelsService travelsService;
   @Autowired ModelMapper modelMapper;
 
   @Override
@@ -59,6 +60,8 @@ public class RequestsService implements RequestsService_I {
     Travels associatedTravelInDB = travelsRepo.findByName(associatedTravelName).orElseThrow(
       () -> new DocumentNotFoundException("viaje asociado", associatedTravelName, "nombre")
     );
+
+    travelsService.changeCurrentCapacity(associatedTravelInDB.getId(), requestToCreate.getPersons().size());
 
     LocalDate selectedDate = associatedTravelInDB.getAvailableDates().stream().filter(
       date -> date == requestToCreate.getSelectedDate()
@@ -97,6 +100,8 @@ public class RequestsService implements RequestsService_I {
     Travels associatedTravelInDB = travelsRepo.findByName(associatedTravelName).orElseThrow(
       () -> new DocumentNotFoundException("viaje asociado", associatedTravelName, "nombre")
     );
+
+    travelsService.changeCurrentCapacity(associatedTravelInDB.getId(), updatedRequest.getPersons().size());
 
     associatedTravelInDB.getAvailableDates().stream().filter(
       date -> date == updatedRequest.getSelectedDate()

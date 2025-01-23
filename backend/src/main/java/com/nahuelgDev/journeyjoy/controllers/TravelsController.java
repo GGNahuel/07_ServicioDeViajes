@@ -46,10 +46,10 @@ public class TravelsController {
     return travelsService.update(updatedTravel);
   }
 
-  @PatchMapping("/request")
+/*   @PatchMapping("/request")
   public String changeCurrentCapacity(@RequestParam String travelId, @RequestParam Integer newCapacity) {
     return travelsService.changeCurrentCapacity(travelId, newCapacity);
-  }
+  } */
 
   @PatchMapping("/addReview")
   public String addReview(@RequestParam String travelId, @RequestParam Reviews newReview) {
