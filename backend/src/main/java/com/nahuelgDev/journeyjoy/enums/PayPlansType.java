@@ -1,5 +1,5 @@
 package com.nahuelgDev.journeyjoy.enums;
 
-public enum PayPlansFor {
+public enum PayPlansType {
   friends, family, couple, individual
 }
