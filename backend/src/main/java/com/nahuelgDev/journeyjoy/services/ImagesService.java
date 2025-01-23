@@ -1,6 +1,7 @@
 package com.nahuelgDev.journeyjoy.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nahuelgDev.journeyjoy.collections.Images;
@@ -13,6 +14,7 @@ import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
 
 import java.io.IOException;
 
+@Service
 public class ImagesService implements ImagesService_I {
   @Autowired ImagesRepository imageRepo;
 

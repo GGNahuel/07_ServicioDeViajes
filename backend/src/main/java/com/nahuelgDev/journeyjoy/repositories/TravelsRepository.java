@@ -1,6 +1,7 @@
 package com.nahuelgDev.journeyjoy.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -25,4 +26,6 @@ public interface TravelsRepository extends MongoRepository<Travels, String> {
     @Param("maxDays") String maxDays,
     @Param("minDays") String minDays
   );
+
+  public Optional<Travels> findByName(String name);
 }
