@@ -28,4 +28,6 @@ public class Travels {
   private List<Destinies> destinies;
   private List<PayPlans> payPlans;
   private List<Reviews> reviews;
+
+  private Double rating;
 }
