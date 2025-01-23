@@ -11,6 +11,6 @@ public interface RequestsService_I {
   public List<Requests> getByTravelName(String travelName);
   public Requests create(Requests requestToCreate);
   public Requests update(RequestsUpdateDto updatedRequest);
-  public String addPayment(String id, Double payment);
+  public String addPayment(String id, Double amount);
   public String cancelRequest(String id);
 }

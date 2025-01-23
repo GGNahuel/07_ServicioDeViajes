@@ -108,14 +108,14 @@ public class RequestsService implements RequestsService_I {
   }
 
   @Override
-  public String addPayment(String id, Double payment) {
-    checkFieldsHasContent(new Field("id de la solicitud", id), new Field("monto a pagar", payment));
+  public String addPayment(String id, Double amount) {
+    checkFieldsHasContent(new Field("id de la solicitud", id), new Field("monto a pagar", amount));
 
     Requests request = requestsRepo.findById(id).orElseThrow(
       () -> new DocumentNotFoundException("solicitud de viaje", id, "id")
     );
 
-    Double updatedPayment = request.getAmountPaid() + payment;
+    Double updatedPayment = request.getAmountPaid() + amount;
     Double remainingPay = request.getTotalPrice() - updatedPayment;
 
     if (updatedPayment > request.getTotalPrice()) 
