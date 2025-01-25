@@ -2,7 +2,6 @@ package com.nahuelgDev.journeyjoy.services;
 
 import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasContent;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -19,13 +18,57 @@ import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.RequestsService_I;
 import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
+import lombok.AllArgsConstructor;
+
 @Service
 public class RequestsService implements RequestsService_I {
   @Autowired RequestsRepository requestsRepo;
   @Autowired TravelsRepository travelsRepo;
-  @Autowired TravelsService travelsService;
   @Autowired ModelMapper modelMapper;
 
+  //check methods
+  private Travels getAssociatedTravel(Requests request) {
+    String associatedTravelName = request.getAssociatedTravel().getName();
+    Travels associatedTravelInDB = travelsRepo.findByName(associatedTravelName).orElseThrow(
+      () -> new DocumentNotFoundException("viaje asociado", associatedTravelName, "nombre")
+    );
+
+    return associatedTravelInDB;
+  }
+
+  private void checkSelectedDateIsInTravel(Travels associatedTravel, Requests requestToCompare) {
+    associatedTravel.getAvailableDates().stream().filter(
+      date -> date == requestToCompare.getSelectedDate()
+    ).findFirst().orElseThrow(
+      () -> new RuntimeException("La fecha enviada no coincide con ninguna de las fechas disponibles para el viaje")
+    );
+  }
+
+  @AllArgsConstructor
+  private class CheckCapacityFunctionReturn {
+    public Integer newCapacity;
+    public boolean hasCapacityForNew;
+  }
+  private CheckCapacityFunctionReturn checkAssociatedTravelHasCapacity(Travels associatedTravel, Requests requestToCompare, Boolean isRequestUpdate) {
+    int currentCapacity = associatedTravel.getCurrentCapacity();
+    int newCapacity = currentCapacity + requestToCompare.getPersons().size();
+
+    if (isRequestUpdate) {
+      Requests previousStateOfRequest = requestsRepo.findById(requestToCompare.getId()).orElseThrow(
+        () -> new DocumentNotFoundException("solicitud de viaje", requestToCompare.getId(), "id")
+      );
+
+      newCapacity -= previousStateOfRequest.getPersons().size();
+    }
+
+    if (newCapacity > associatedTravel.getMaxCapacity()) return new CheckCapacityFunctionReturn(null, false);
+    if (newCapacity < 0) throw new RuntimeException("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
+    // Esto en realidad sería un log (al cliente retornaría otro msg)
+
+    return new CheckCapacityFunctionReturn(newCapacity, true);
+  }
+
+  // main methods
   @Override
   public List<Requests> getAll() {
     return requestsRepo.findAll();
@@ -48,26 +91,26 @@ public class RequestsService implements RequestsService_I {
   }
 
   @Override
+  public List<Requests> getByEmail(String email) {
+    checkFieldsHasContent(new Field("email de búsqueda", email));
+
+    return requestsRepo.findByEmail(email);
+  }
+
+  @Override
   public Requests create(Requests requestToCreate) {
     checkFieldsHasContent(
       new Field("plan seleccionado", requestToCreate.getSelectedPlan()),
       new Field("personas en el plan", requestToCreate.getPersons()),
       new Field("viaje asociado", requestToCreate.getAssociatedTravel()),
-      new Field("pago realizado", requestToCreate.getAmountPaid())
+      new Field("pago realizado", requestToCreate.getAmountPaid()),
+      new Field("email", requestToCreate.getEmail())
     );
 
-    String associatedTravelName = requestToCreate.getAssociatedTravel().getName();
-    Travels associatedTravelInDB = travelsRepo.findByName(associatedTravelName).orElseThrow(
-      () -> new DocumentNotFoundException("viaje asociado", associatedTravelName, "nombre")
-    );
-
-    travelsService.changeCurrentCapacity(associatedTravelInDB.getId(), requestToCreate.getPersons().size());
-
-    LocalDate selectedDate = associatedTravelInDB.getAvailableDates().stream().filter(
-      date -> date == requestToCreate.getSelectedDate()
-    ).findFirst().orElseThrow(
-      () -> new RuntimeException("La fecha enviada no coincide con ninguna de las fechas disponibles para el viaje")
-    );
+    Travels associatedTravelInDB = getAssociatedTravel(requestToCreate);
+    
+    checkSelectedDateIsInTravel(associatedTravelInDB, requestToCreate);
+    CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, requestToCreate, false);
 
     Double totalPrice = associatedTravelInDB.getPayPlans().stream().filter(
       plan -> plan.getPlanFor() == requestToCreate.getSelectedPlan().getPlanFor()
@@ -75,15 +118,20 @@ public class RequestsService implements RequestsService_I {
       () -> new RuntimeException("El plan de pago enviado no existe en los disponibles para el viaje seleccionado")
     ).getPrice();
 
-    RequestState state = requestToCreate.getAmountPaid() == totalPrice ? 
-      RequestState.completePayment :
-      requestToCreate.getAmountPaid() != 0.0 ?
-        RequestState.parcialPayment :
-        RequestState.confirmed;
+    RequestState state = !capacityFnReturn.hasCapacityForNew ? RequestState.inWaitList :
+      requestToCreate.getAmountPaid() == totalPrice ? 
+        RequestState.completePayment :
+        requestToCreate.getAmountPaid() != 0.0 ?
+          RequestState.parcialPayment :
+          RequestState.confirmed;
 
     requestToCreate.setTotalPrice(totalPrice);
     requestToCreate.setState(state);
-    requestToCreate.setSelectedDate(selectedDate);
+
+    if (capacityFnReturn.hasCapacityForNew) {
+      associatedTravelInDB.setCurrentCapacity(capacityFnReturn.newCapacity);
+      travelsRepo.save(associatedTravelInDB);      
+    }
 
     return requestsRepo.save(requestToCreate);
   }
@@ -95,21 +143,19 @@ public class RequestsService implements RequestsService_I {
     Requests requestToUpdate = requestsRepo.findById(updatedRequest.getId()).orElseThrow(
       () -> new DocumentNotFoundException("solicitud de viaje", updatedRequest.getId(), "id")
     );
+    
+    Travels associatedTravelInDB = getAssociatedTravel(requestToUpdate);
 
-    String associatedTravelName = requestToUpdate.getAssociatedTravel().getName();
-    Travels associatedTravelInDB = travelsRepo.findByName(associatedTravelName).orElseThrow(
-      () -> new DocumentNotFoundException("viaje asociado", associatedTravelName, "nombre")
-    );
+    Requests mappedUpdatedRequest = modelMapper.map(updatedRequest, Requests.class);
+    checkSelectedDateIsInTravel(associatedTravelInDB, mappedUpdatedRequest);
 
-    travelsService.changeCurrentCapacity(associatedTravelInDB.getId(), updatedRequest.getPersons().size());
+    CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, mappedUpdatedRequest, true);
+    if (capacityFnReturn.hasCapacityForNew) {
+      associatedTravelInDB.setCurrentCapacity(capacityFnReturn.newCapacity);
+      travelsRepo.save(associatedTravelInDB);
+    }
 
-    associatedTravelInDB.getAvailableDates().stream().filter(
-      date -> date == updatedRequest.getSelectedDate()
-    ).findFirst().orElseThrow(
-      () -> new RuntimeException("La fecha enviada no coincide con ninguna de las fechas disponibles para el viaje")
-    );
-
-    return requestsRepo.save(modelMapper.map(updatedRequest, Requests.class));
+    return requestsRepo.save(mappedUpdatedRequest);
   }
 
   @Override

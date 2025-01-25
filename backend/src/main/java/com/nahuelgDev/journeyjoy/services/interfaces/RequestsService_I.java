@@ -9,6 +9,7 @@ public interface RequestsService_I {
   public List<Requests> getAll();
   public Requests getById(String id);
   public List<Requests> getByTravelName(String travelName);
+  public List<Requests> getByEmail(String email);
   public Requests create(Requests requestToCreate);
   public Requests update(RequestsUpdateDto updatedRequest);
   public String addPayment(String id, Double amount);

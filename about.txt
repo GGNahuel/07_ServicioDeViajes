@@ -64,3 +64,7 @@ Secciones vista de viajes y promociones
   Viajes populares
   Destinos
   Búsqueda de viajes según destinos
+
+
+
+Lista de espera para viajes

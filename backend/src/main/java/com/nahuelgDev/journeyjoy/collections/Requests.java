@@ -20,6 +20,7 @@ public class Requests {
   private String id;
   private PayPlans selectedPlan;
   private List<Persons> persons;
+  private String email;
   private RequestState state;
   private Double amountPaid;
   private Double totalPrice;

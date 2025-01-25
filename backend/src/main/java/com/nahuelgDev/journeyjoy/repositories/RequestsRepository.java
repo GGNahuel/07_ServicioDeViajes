@@ -13,4 +13,6 @@ import com.nahuelgDev.journeyjoy.collections.Requests;
 public interface RequestsRepository extends MongoRepository<Requests, String> {
   @Query("{associatedTravel.name: :#{travelName}}")
   List<Requests> findByAssociatedTravelName(@Param("travelName") String travelName);
+
+  List<Requests> findByEmail(String email);
 }

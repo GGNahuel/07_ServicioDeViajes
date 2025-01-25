@@ -37,6 +37,11 @@ public class RequestsController {
     return requestsService.getByTravelName(name);
   }
 
+  @GetMapping("/email")
+  public List<Requests> getByEmail(@RequestParam String email) {
+    return requestsService.getByEmail(email);
+  }
+
   @PostMapping("")
   public Requests create(@RequestBody Requests requestToCreate) {
     return requestsService.create(requestToCreate);
