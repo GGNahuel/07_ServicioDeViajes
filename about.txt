@@ -68,3 +68,6 @@ Secciones vista de viajes y promociones
 
 
 Lista de espera para viajes
+  el estado de en espera cambiaría a "confirmed" cuándo se pague al menos el 17% (la sexta parte) del total del viaje. Y haya cupo
+
+distintos precios según el método de pago en las instancias de PayPlans

@@ -44,16 +44,25 @@ public class RequestsService implements RequestsService_I {
     );
   }
 
+  private RequestState getNewState(boolean hasCapacityForNew, double amountPaid, double totalPrice) {
+    return !hasCapacityForNew ? RequestState.inWaitList :
+    amountPaid == totalPrice ? 
+      RequestState.completePayment :
+      RequestState.parcialPayment;
+  }
+
   @AllArgsConstructor
   private class CheckCapacityFunctionReturn {
     public Integer newCapacity;
     public boolean hasCapacityForNew;
   }
-  private CheckCapacityFunctionReturn checkAssociatedTravelHasCapacity(Travels associatedTravel, Requests requestToCompare, Boolean isRequestUpdate) {
+  private CheckCapacityFunctionReturn checkAssociatedTravelHasCapacity(
+    Travels associatedTravel, Requests requestToCompare, Boolean requestCapacityHasChange
+  ) {
     int currentCapacity = associatedTravel.getCurrentCapacity();
     int newCapacity = currentCapacity + requestToCompare.getPersons().size();
 
-    if (isRequestUpdate) {
+    if (requestCapacityHasChange) {
       Requests previousStateOfRequest = requestsRepo.findById(requestToCompare.getId()).orElseThrow(
         () -> new DocumentNotFoundException("solicitud de viaje", requestToCompare.getId(), "id")
       );
@@ -118,12 +127,11 @@ public class RequestsService implements RequestsService_I {
       () -> new RuntimeException("El plan de pago enviado no existe en los disponibles para el viaje seleccionado")
     ).getPrice();
 
-    RequestState state = !capacityFnReturn.hasCapacityForNew ? RequestState.inWaitList :
-      requestToCreate.getAmountPaid() == totalPrice ? 
-        RequestState.completePayment :
-        requestToCreate.getAmountPaid() != 0.0 ?
-          RequestState.parcialPayment :
-          RequestState.confirmed;
+    if (!capacityFnReturn.hasCapacityForNew && requestToCreate.getAmountPaid() != 0.0) {
+      throw new RuntimeException("No hay cupo disponible para el viaje seleccionado, no debería recibirse pago de la solicitud.");
+    }
+
+    RequestState state = getNewState(capacityFnReturn.hasCapacityForNew, requestToCreate.getAmountPaid(), totalPrice);
 
     requestToCreate.setTotalPrice(totalPrice);
     requestToCreate.setState(state);
@@ -172,9 +180,28 @@ public class RequestsService implements RequestsService_I {
     if (updatedPayment > request.getTotalPrice()) 
       throw new RuntimeException("El valor ingresado como pago, sumado a lo pagado anteriormente, excede al total de lo requerido");
 
+    if (request.getState() == RequestState.inWaitList) {
+      if (updatedPayment < (request.getTotalPrice() * 0.16))
+        throw new RuntimeException("Para que la solicitud sea confirmada debe recibirse como pago al menos la sexta parte del total");
+      
+      Travels associatedTravelInDB = getAssociatedTravel(request);
+      
+      CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, request, false);
+      if (!capacityFnReturn.hasCapacityForNew) 
+        throw new RuntimeException(
+          "En estos momentos no hay cupo disponible para validar el pago de su solicitud. " + 
+          "Si usted ha recibido un mail indicando lo contrario es probable que alguien en lista de espera ya haya hecho el pago requerido"
+        );
+
+      RequestState state = getNewState(capacityFnReturn.hasCapacityForNew, updatedPayment, request.getTotalPrice());
+      request.setState(state);
+      
+      associatedTravelInDB.setCurrentCapacity(capacityFnReturn.newCapacity);
+      travelsRepo.save(associatedTravelInDB);
+    }
+    
     request.setAmountPaid(updatedPayment);
     requestsRepo.save(request);
-
     return String.format("Pago realizado con éxito. Total pagado: %s. Falta pagar: %s", updatedPayment, remainingPay);
   }
 
