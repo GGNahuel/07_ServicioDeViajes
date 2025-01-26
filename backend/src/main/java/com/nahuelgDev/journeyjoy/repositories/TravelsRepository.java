@@ -14,12 +14,12 @@ import com.nahuelgDev.journeyjoy.collections.Travels;
 public interface TravelsRepository extends MongoRepository<Travels, String> {
   @Query("{ $and: [ " +
     "{ $or: [ { :#{#available} : null }, { isAvailable: :#{#available} } ] }, " +
-    "{ $or: [ { $expr: { $gte: [ :#{#desiredCapacity}, {$subtract: ['$maxCapacity', '$currentCapacity']} ] } }, { :#{#desiredCapacity} : null } ] }, " +
+    "{ $or: [ { $expr: { $lte: [ :#{#desiredCapacity}, {$subtract: ['$maxCapacity', '$currentCapacity']} ] } }, { :#{#desiredCapacity} : null } ] }, " +
     "{ $or: [ { 'destinies.place': :#{#place} }, { :#{#place} : '' } ] }, " +
     "{ $or: [{ longInDays: {$lte: :#{#maxDays}} }, {:#{maxDays}: null}] }, " +
     "{ $or: [{ longInDays: {$gte: :#{#minDays}} }, {:#{minDays}: null}] } " +
   "]}")
-  public List<Travels> search(
+  List<Travels> search(
     @Param("available") Boolean available, 
     @Param("desiredCapacity") Integer desiredCapacity,
     @Param("place") String place,
@@ -27,5 +27,11 @@ public interface TravelsRepository extends MongoRepository<Travels, String> {
     @Param("minDays") String minDays
   );
 
-  public Optional<Travels> findByName(String name);
+  Optional<Travels> findByName(String name);
+
+  @Query("{ currentCapacity: { $lt: '$maxCapacity' }}")
+  List<Travels> findByHasCapacityAvailable();
+
+  @Query("{ currentCapacity: '$maxCapacity' }")
+  List<Travels> findByNoCapacityLeft();
 }

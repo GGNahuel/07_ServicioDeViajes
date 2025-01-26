@@ -33,6 +33,11 @@ public class TravelsService implements TravelsService_I{
   }
 
   @Override
+  public List<Travels> getByCapacityLeft(boolean wantCapacity) {
+    return wantCapacity ? travelsRepo.findByHasCapacityAvailable() : travelsRepo.findByNoCapacityLeft();
+  }
+
+  @Override
   public List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays) {
     return travelsRepo.search(available, desiredCapacity, place, minDays, maxDays);
   }

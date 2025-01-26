@@ -36,6 +36,11 @@ public class TravelsController {
     return travelsService.search(available, desiredCapacity, place, minDays, maxDays);
   }
 
+  @GetMapping("/capacity")
+  public List<Travels> getByCapacityLeft(@RequestParam boolean wantCapacity) {
+    return travelsService.getByCapacityLeft(wantCapacity);
+  }
+
   @PostMapping("")
   public Travels create(@RequestBody Travels travel) {
     return travelsService.create(travel);
