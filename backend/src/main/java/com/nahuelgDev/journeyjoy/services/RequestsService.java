@@ -83,6 +83,28 @@ public class RequestsService implements RequestsService_I {
     return new CheckCapacityFunctionReturn(newCapacity, true);
   }
 
+  // others
+
+  private void makeRequestInWaitListConfirmed(Double updatedPayment, Requests request) {
+    if (updatedPayment < (request.getTotalPrice() * 0.16))
+      throw new RuntimeException("Para que la solicitud sea confirmada debe recibirse como pago al menos la sexta parte del total");
+    
+    Travels associatedTravelInDB = getAssociatedTravel(request);
+    
+    CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, request, false);
+    if (!capacityFnReturn.hasCapacityForNew) 
+      throw new RuntimeException(
+        "En estos momentos no hay cupo disponible para validar el pago de su solicitud. \n" + 
+        "Si usted ha recibido un mail indicando lo contrario es probable que alguien en lista de espera ya haya hecho el pago requerido"
+      );
+
+    RequestState state = getNewState(capacityFnReturn.hasCapacityForNew, updatedPayment, request.getTotalPrice());
+    request.setState(state);
+    
+    associatedTravelInDB.setCurrentCapacity(capacityFnReturn.newCapacity);
+    travelsRepo.save(associatedTravelInDB);
+  }
+
   // main methods
 
   @Override
@@ -182,6 +204,7 @@ public class RequestsService implements RequestsService_I {
       travelsRepo.save(associatedTravelInDB);
     }
 
+    emailsService.sendEmail(requestToUpdate.getEmail().getEmail(), "Solicitud de viaje actualizada - Journey Joy", EmailContents.updatedRequestNotification(mappedUpdatedRequest));
     return requestsRepo.save(mappedUpdatedRequest);
   }
 
@@ -200,27 +223,12 @@ public class RequestsService implements RequestsService_I {
       throw new RuntimeException("El valor ingresado como pago, sumado a lo pagado anteriormente, excede al total de lo requerido");
 
     if (request.getState() == RequestState.inWaitList) {
-      if (updatedPayment < (request.getTotalPrice() * 0.16))
-        throw new RuntimeException("Para que la solicitud sea confirmada debe recibirse como pago al menos la sexta parte del total");
-      
-      Travels associatedTravelInDB = getAssociatedTravel(request);
-      
-      CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, request, false);
-      if (!capacityFnReturn.hasCapacityForNew) 
-        throw new RuntimeException(
-          "En estos momentos no hay cupo disponible para validar el pago de su solicitud. " + 
-          "Si usted ha recibido un mail indicando lo contrario es probable que alguien en lista de espera ya haya hecho el pago requerido"
-        );
-
-      RequestState state = getNewState(capacityFnReturn.hasCapacityForNew, updatedPayment, request.getTotalPrice());
-      request.setState(state);
-      
-      associatedTravelInDB.setCurrentCapacity(capacityFnReturn.newCapacity);
-      travelsRepo.save(associatedTravelInDB);
+      makeRequestInWaitListConfirmed(updatedPayment, request);
     }
     
     request.setAmountPaid(updatedPayment);
     requestsRepo.save(request);
+    emailsService.sendEmail(request.getEmail().getEmail(), "Pago realizado - Journey Joy", EmailContents.paymentNotification(amount, request));
     return String.format("Pago realizado con éxito. Total pagado: %s. Falta pagar: %s", updatedPayment, remainingPay);
   }
 
@@ -236,6 +244,17 @@ public class RequestsService implements RequestsService_I {
     // here should be the connection with the payment gateway to make the refund if it's applicable
 
     requestsRepo.save(request);
+    emailsService.sendEmail(request.getEmail().getEmail(), "Cancelación de solicitud - Journey Joy", EmailContents.cancelRequest(request));
+
+    List<Requests> requestsInWaitList = requestsRepo.findByAssociatedTravelNameAndState(request.getAssociatedTravel().getName(), RequestState.inWaitList);
+
+    requestsInWaitList.forEach(requestInWaitList -> {
+      emailsService.sendEmail(
+        requestInWaitList.getEmail().getEmail(), 
+        "Posible confirmación de viaje - Journey Joy", 
+        EmailContents.travelNowHasCapacityNotification(request)
+      );
+    });
     return "Solicitud cancelada con éxito";
   }
 }
