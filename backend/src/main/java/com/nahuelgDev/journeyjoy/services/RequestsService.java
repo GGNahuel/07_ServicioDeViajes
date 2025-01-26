@@ -8,14 +8,17 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nahuelgDev.journeyjoy.collections.Emails;
 import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
 import com.nahuelgDev.journeyjoy.enums.RequestState;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
+import com.nahuelgDev.journeyjoy.repositories.EmailsRepository;
 import com.nahuelgDev.journeyjoy.repositories.RequestsRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.RequestsService_I;
+import com.nahuelgDev.journeyjoy.utilities.EmailContents;
 import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +27,12 @@ import lombok.AllArgsConstructor;
 public class RequestsService implements RequestsService_I {
   @Autowired RequestsRepository requestsRepo;
   @Autowired TravelsRepository travelsRepo;
+  @Autowired EmailsRepository emailsRepo;
+  @Autowired EmailsService emailsService;
   @Autowired ModelMapper modelMapper;
 
   //check methods
+  
   private Travels getAssociatedTravel(Requests request) {
     String associatedTravelName = request.getAssociatedTravel().getName();
     Travels associatedTravelInDB = travelsRepo.findByName(associatedTravelName).orElseThrow(
@@ -78,6 +84,7 @@ public class RequestsService implements RequestsService_I {
   }
 
   // main methods
+
   @Override
   public List<Requests> getAll() {
     return requestsRepo.findAll();
@@ -136,11 +143,23 @@ public class RequestsService implements RequestsService_I {
     requestToCreate.setTotalPrice(totalPrice);
     requestToCreate.setState(state);
 
+    String associatedEmail = requestToCreate.getEmail().getEmail();
+    boolean emailIsRegistered = emailsRepo.findByEmail(associatedEmail).isPresent();
+    if (!emailIsRegistered) {
+      Emails newEmailInDB = new Emails();
+
+      newEmailInDB.setEmail(associatedEmail);
+      newEmailInDB.setOwner(requestToCreate.getPersons().get(0).getName());
+
+      emailsRepo.save(newEmailInDB);
+    }
+
     if (capacityFnReturn.hasCapacityForNew) {
       associatedTravelInDB.setCurrentCapacity(capacityFnReturn.newCapacity);
       travelsRepo.save(associatedTravelInDB);      
     }
 
+    emailsService.sendEmail(associatedEmail, "Solicitud de viaje realizada - Journey Joy", EmailContents.requestNotification(requestToCreate));
     return requestsRepo.save(requestToCreate);
   }
 
@@ -213,6 +232,8 @@ public class RequestsService implements RequestsService_I {
       () -> new DocumentNotFoundException("solicitud de viaje", id, "id")
     );
     request.setState(RequestState.canceled);
+
+    // here should be the connection with the payment gateway to make the refund if it's applicable
 
     requestsRepo.save(request);
     return "Solicitud cancelada con éxito";
