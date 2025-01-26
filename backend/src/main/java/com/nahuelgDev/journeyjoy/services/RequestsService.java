@@ -64,11 +64,12 @@ public class RequestsService implements RequestsService_I {
     public Integer newCapacity;
     public boolean hasCapacityForNew;
   }
+
   private CheckCapacityFunctionReturn checkAssociatedTravelHasCapacity(
     Travels associatedTravel, Requests requestToCompare, Boolean requestCapacityHasChange
   ) {
     int currentCapacity = associatedTravel.getCurrentCapacity();
-    int newCapacity = currentCapacity + requestToCompare.getPersons().size();
+    int newCapacity = currentCapacity + requestToCompare.getPersons().size() * (requestToCompare.getState() == RequestState.canceled ? -1 : 1);
 
     if (requestCapacityHasChange) {
       Requests previousStateOfRequest = requestsRepo.findById(requestToCompare.getId()).orElseThrow(
@@ -194,6 +195,8 @@ public class RequestsService implements RequestsService_I {
     Requests requestToUpdate = requestsRepo.findById(updatedRequest.getId()).orElseThrow(
       () -> new DocumentNotFoundException("solicitud de viaje", updatedRequest.getId(), "id")
     );
+    if (requestToUpdate.getState() == RequestState.canceled)
+      throw new InvalidOperation("No se puede modificar una solicitud que ya fue cancelada");
     
     Travels associatedTravelInDB = getAssociatedTravel(requestToUpdate);
 
@@ -242,6 +245,16 @@ public class RequestsService implements RequestsService_I {
       () -> new DocumentNotFoundException("solicitud de viaje", id, "id")
     );
     request.setState(RequestState.canceled);
+
+    Travels associatedTravel = travelsRepo.findById(request.getAssociatedTravel().getId()).orElseThrow(
+      () -> new DocumentNotFoundException("viaje", id, "id")
+    );
+    CheckCapacityFunctionReturn check = checkAssociatedTravelHasCapacity(associatedTravel, request, false);
+    if (check.hasCapacityForNew) {
+      associatedTravel.setCurrentCapacity(check.newCapacity);
+
+      travelsRepo.save(associatedTravel);
+    }
 
     // here should be the connection with the payment gateway to make the refund if it's applicable
 
