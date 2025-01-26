@@ -19,10 +19,10 @@ public class DBInitializer {
   @Autowired StayPlacesRepository stayPlacesRepo;
   @Autowired ReviewsRepository reviewsRepo;
 
+  @Autowired ObjectMapper objectMapper;
+
   @PostConstruct
   public void init() throws Exception {
-    ObjectMapper objectMapper = new ObjectMapper();
-
     for (int i = 0; i < InitData.stayPlaces().indexList.size(); i++) {
       String placeId = InitData.stayPlaces().indexList.get(i);
       String placeData = InitData.stayPlaces().data.get(i);
