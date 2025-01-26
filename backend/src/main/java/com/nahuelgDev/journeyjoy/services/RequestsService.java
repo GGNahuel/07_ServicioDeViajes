@@ -18,8 +18,8 @@ import com.nahuelgDev.journeyjoy.repositories.EmailsRepository;
 import com.nahuelgDev.journeyjoy.repositories.RequestsRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.RequestsService_I;
-import com.nahuelgDev.journeyjoy.utilities.EmailContents;
 import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
+import com.nahuelgDev.journeyjoy.utilities.constants.EmailContents;
 
 import lombok.AllArgsConstructor;
 

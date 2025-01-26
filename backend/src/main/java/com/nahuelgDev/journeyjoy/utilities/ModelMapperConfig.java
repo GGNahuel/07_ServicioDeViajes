@@ -1,4 +1,5 @@
-/* package com.nahuelgDev.journeyjoy;
+/* 
+package com.nahuelgDev.journeyjoy.utilities;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;

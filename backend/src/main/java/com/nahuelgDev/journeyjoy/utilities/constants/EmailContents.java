@@ -1,4 +1,4 @@
-package com.nahuelgDev.journeyjoy.utilities;
+package com.nahuelgDev.journeyjoy.utilities.constants;
 
 import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.dataClasses.Person;
