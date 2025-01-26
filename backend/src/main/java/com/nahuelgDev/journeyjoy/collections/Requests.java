@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.nahuelgDev.journeyjoy.dataClasses.PayPlans;
-import com.nahuelgDev.journeyjoy.dataClasses.Persons;
+import com.nahuelgDev.journeyjoy.dataClasses.Person;
 import com.nahuelgDev.journeyjoy.enums.RequestState;
 
 import lombok.Data;
@@ -19,8 +19,8 @@ public class Requests {
   @Id
   private String id;
   private PayPlans selectedPlan;
-  private List<Persons> persons;
-  private String email;
+  private List<Person> persons;
+  private Emails email;
   private RequestState state;
   private Double amountPaid;
   private Double totalPrice;

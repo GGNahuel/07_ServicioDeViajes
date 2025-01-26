@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.dataClasses.PayPlans;
-import com.nahuelgDev.journeyjoy.dataClasses.Persons;
+import com.nahuelgDev.journeyjoy.dataClasses.Person;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import lombok.Data;
 public class RequestsUpdateDto {
   private String id;
   private PayPlans selectedPlan;
-  private List<Persons> persons;
+  private List<Person> persons;
   
   // en el modelMapper hacer que skipee esta propiedad en el mapeo
   private Travels associatedTravel;

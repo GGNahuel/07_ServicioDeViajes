@@ -3,7 +3,7 @@ package com.nahuelgDev.journeyjoy.dataClasses;
 import lombok.Data;
 
 @Data
-public class Persons {
+public class Person {
   private String name;
   private Integer age;
   private long identificationNumber;
