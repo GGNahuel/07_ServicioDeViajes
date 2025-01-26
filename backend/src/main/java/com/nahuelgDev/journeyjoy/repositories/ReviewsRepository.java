@@ -9,5 +9,5 @@ import com.nahuelgDev.journeyjoy.collections.Reviews;
 
 @Repository
 public interface ReviewsRepository extends MongoRepository<Reviews, String> {
-  public Optional<Reviews> findByUserName(String username);
+  Optional<Reviews> findByUserName(String username);
 }

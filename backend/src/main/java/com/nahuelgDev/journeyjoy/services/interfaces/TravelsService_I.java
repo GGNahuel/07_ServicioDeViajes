@@ -6,12 +6,13 @@ import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 
 public interface TravelsService_I {
-  public List<Travels> getAll();
-  public Travels getById(String id);
-  public List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays);
-  public Travels create(Travels travelToCreate);
-  public Travels update(Travels updatedTravel);
-  public String changeCurrentCapacity(String travelId, Integer relativeCapacity);
-  public String addReview(String travelId, Reviews newReview);
-  public String delete(String id);
+  List<Travels> getAll();
+  Travels getById(String id);
+  List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays);
+  List<Travels> getByCapacityLeft(boolean wantCapacity);
+  Travels create(Travels travelToCreate);
+  Travels update(Travels updatedTravel);
+  String changeCurrentCapacity(String travelId, Integer relativeCapacity);
+  String addReview(String travelId, Reviews newReview);
+  String delete(String id);
 }

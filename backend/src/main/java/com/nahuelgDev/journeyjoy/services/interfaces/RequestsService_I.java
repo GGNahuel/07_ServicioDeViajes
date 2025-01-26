@@ -6,12 +6,12 @@ import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
 
 public interface RequestsService_I {
-  public List<Requests> getAll();
-  public Requests getById(String id);
-  public List<Requests> getByTravelName(String travelName);
-  public List<Requests> getByEmail(String email);
-  public Requests create(Requests requestToCreate);
-  public Requests update(RequestsUpdateDto updatedRequest);
-  public String addPayment(String id, Double amount);
-  public String cancelRequest(String id);
+  List<Requests> getAll();
+  Requests getById(String id);
+  List<Requests> getByTravelName(String travelName);
+  List<Requests> getByEmail(String email);
+  Requests create(Requests requestToCreate);
+  Requests update(RequestsUpdateDto updatedRequest);
+  String addPayment(String id, Double amount);
+  String cancelRequest(String id);
 }
