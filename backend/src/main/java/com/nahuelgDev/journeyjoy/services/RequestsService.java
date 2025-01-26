@@ -14,6 +14,8 @@ import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
 import com.nahuelgDev.journeyjoy.enums.RequestState;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
+import com.nahuelgDev.journeyjoy.exceptions.InvalidFieldValueException;
+import com.nahuelgDev.journeyjoy.exceptions.InvalidOperation;
 import com.nahuelgDev.journeyjoy.repositories.EmailsRepository;
 import com.nahuelgDev.journeyjoy.repositories.RequestsRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
@@ -46,7 +48,7 @@ public class RequestsService implements RequestsService_I {
     associatedTravel.getAvailableDates().stream().filter(
       date -> date == requestToCompare.getSelectedDate()
     ).findFirst().orElseThrow(
-      () -> new RuntimeException("La fecha enviada no coincide con ninguna de las fechas disponibles para el viaje")
+      () -> new InvalidFieldValueException("La fecha enviada no coincide con ninguna de las fechas disponibles para el viaje")
     );
   }
 
@@ -77,7 +79,7 @@ public class RequestsService implements RequestsService_I {
     }
 
     if (newCapacity > associatedTravel.getMaxCapacity()) return new CheckCapacityFunctionReturn(null, false);
-    if (newCapacity < 0) throw new RuntimeException("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
+    if (newCapacity < 0) throw new InvalidOperation("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
     // Esto en realidad sería un log (al cliente retornaría otro msg)
 
     return new CheckCapacityFunctionReturn(newCapacity, true);
@@ -87,13 +89,13 @@ public class RequestsService implements RequestsService_I {
 
   private void makeRequestInWaitListConfirmed(Double updatedPayment, Requests request) {
     if (updatedPayment < (request.getTotalPrice() * 0.16))
-      throw new RuntimeException("Para que la solicitud sea confirmada debe recibirse como pago al menos la sexta parte del total");
+      throw new InvalidFieldValueException("Para que la solicitud sea confirmada debe recibirse como pago al menos la sexta parte del total");
     
     Travels associatedTravelInDB = getAssociatedTravel(request);
     
     CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, request, false);
     if (!capacityFnReturn.hasCapacityForNew) 
-      throw new RuntimeException(
+      throw new InvalidOperation(
         "En estos momentos no hay cupo disponible para validar el pago de su solicitud. \n" + 
         "Si usted ha recibido un mail indicando lo contrario es probable que alguien en lista de espera ya haya hecho el pago requerido"
       );
@@ -153,11 +155,11 @@ public class RequestsService implements RequestsService_I {
     Double totalPrice = associatedTravelInDB.getPayPlans().stream().filter(
       plan -> plan.getPlanFor() == requestToCreate.getSelectedPlan().getPlanFor()
     ).findFirst().orElseThrow(
-      () -> new RuntimeException("El plan de pago enviado no existe en los disponibles para el viaje seleccionado")
+      () -> new InvalidFieldValueException("El plan de pago enviado no existe en los disponibles para el viaje seleccionado")
     ).getPrice();
 
     if (!capacityFnReturn.hasCapacityForNew && requestToCreate.getAmountPaid() != 0.0) {
-      throw new RuntimeException("No hay cupo disponible para el viaje seleccionado, no debería recibirse pago de la solicitud.");
+      throw new InvalidFieldValueException("No hay cupo disponible para el viaje seleccionado, no debería recibirse pago de la solicitud.");
     }
 
     RequestState state = getNewState(capacityFnReturn.hasCapacityForNew, requestToCreate.getAmountPaid(), totalPrice);
@@ -220,7 +222,7 @@ public class RequestsService implements RequestsService_I {
     Double remainingPay = request.getTotalPrice() - updatedPayment;
 
     if (updatedPayment > request.getTotalPrice()) 
-      throw new RuntimeException("El valor ingresado como pago, sumado a lo pagado anteriormente, excede al total de lo requerido");
+      throw new InvalidFieldValueException("El valor ingresado como pago, sumado a lo pagado anteriormente, excede al total de lo requerido");
 
     if (request.getState() == RequestState.inWaitList) {
       makeRequestInWaitListConfirmed(updatedPayment, request);
