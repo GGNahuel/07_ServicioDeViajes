@@ -1,0 +1,48 @@
+package com.nahuelgDev.journeyjoy.utilities;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nahuelgDev.journeyjoy.collections.StayPlaces;
+import com.nahuelgDev.journeyjoy.collections.Travels;
+import com.nahuelgDev.journeyjoy.repositories.ReviewsRepository;
+import com.nahuelgDev.journeyjoy.repositories.StayPlacesRepository;
+import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
+import com.nahuelgDev.journeyjoy.utilities.constants.InitData;
+
+import jakarta.annotation.PostConstruct;
+
+@Component
+public class DBInitializer {
+  @Autowired TravelsRepository travelsRepo;
+  @Autowired StayPlacesRepository stayPlacesRepo;
+  @Autowired ReviewsRepository reviewsRepo;
+
+  @PostConstruct
+  public void init() throws Exception {
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    for (int i = 0; i < InitData.stayPlaces().indexList.size(); i++) {
+      String placeId = InitData.stayPlaces().indexList.get(i);
+      String placeData = InitData.stayPlaces().data.get(i);
+
+      if (!stayPlacesRepo.findById(placeId).isPresent()) {
+        StayPlaces place = objectMapper.readValue(placeData, StayPlaces.class);
+
+        stayPlacesRepo.save(place);
+      }
+    }
+
+    for (int i = 0; i < InitData.travels().indexList.size(); i++) {
+      String travelName = InitData.travels().indexList.get(i);
+      String travelData = InitData.travels().data.get(i);
+
+      if (!travelsRepo.findByName(travelName).isPresent()) {
+        Travels travel = objectMapper.readValue(travelData, Travels.class);
+
+        travelsRepo.save(travel);
+      }
+    }
+  }
+}
