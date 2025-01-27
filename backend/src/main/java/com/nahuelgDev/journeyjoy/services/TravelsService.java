@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
-import com.nahuelgDev.journeyjoy.exceptions.InvalidOperation;
+import com.nahuelgDev.journeyjoy.exceptions.InvalidOperationException;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.TravelsService_I;
 import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
@@ -107,7 +107,7 @@ public class TravelsService implements TravelsService_I{
     List<Reviews> reviewsInTravel = travel.getReviews();
 
     boolean usernameAlreadyHasReview = reviewsInTravel.stream().anyMatch(review -> review.getUserName().equals(newReview.getUserName()));
-    if (usernameAlreadyHasReview) throw new InvalidOperation("Ya existe una reseña para el nombre ingresado");
+    if (usernameAlreadyHasReview) throw new InvalidOperationException("Ya existe una reseña para el nombre ingresado");
 
     reviewsInTravel.add(newReview);
 

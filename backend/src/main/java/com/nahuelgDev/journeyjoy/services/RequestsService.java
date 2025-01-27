@@ -15,7 +15,7 @@ import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
 import com.nahuelgDev.journeyjoy.enums.RequestState;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.InvalidFieldValueException;
-import com.nahuelgDev.journeyjoy.exceptions.InvalidOperation;
+import com.nahuelgDev.journeyjoy.exceptions.InvalidOperationException;
 import com.nahuelgDev.journeyjoy.repositories.EmailsRepository;
 import com.nahuelgDev.journeyjoy.repositories.RequestsRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
@@ -80,7 +80,7 @@ public class RequestsService implements RequestsService_I {
     }
 
     if (newCapacity > associatedTravel.getMaxCapacity()) return new CheckCapacityFunctionReturn(null, false);
-    if (newCapacity < 0) throw new InvalidOperation("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
+    if (newCapacity < 0) throw new InvalidOperationException("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
     // Esto en realidad sería un log (al cliente retornaría otro msg)
 
     return new CheckCapacityFunctionReturn(newCapacity, true);
@@ -96,7 +96,7 @@ public class RequestsService implements RequestsService_I {
     
     CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, request, false);
     if (!capacityFnReturn.hasCapacityForNew) 
-      throw new InvalidOperation(
+      throw new InvalidOperationException(
         "En estos momentos no hay cupo disponible para validar el pago de su solicitud. \n" + 
         "Si usted ha recibido un mail indicando lo contrario es probable que alguien en lista de espera ya haya hecho el pago requerido"
       );
@@ -196,7 +196,7 @@ public class RequestsService implements RequestsService_I {
       () -> new DocumentNotFoundException("solicitud de viaje", updatedRequest.getId(), "id")
     );
     if (requestToUpdate.getState() == RequestState.canceled)
-      throw new InvalidOperation("No se puede modificar una solicitud que ya fue cancelada");
+      throw new InvalidOperationException("No se puede modificar una solicitud que ya fue cancelada");
     
     Travels associatedTravelInDB = getAssociatedTravel(requestToUpdate);
 
