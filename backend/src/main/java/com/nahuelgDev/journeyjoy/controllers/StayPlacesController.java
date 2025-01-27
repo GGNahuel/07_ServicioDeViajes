@@ -3,7 +3,6 @@ package com.nahuelgDev.journeyjoy.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,19 +26,19 @@ public class StayPlacesController {
   }
 
   @PostMapping("")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public StayPlacesDto create(@RequestBody StayPlacesDto stayPlace) {
     return stayPlaceService.create(stayPlace);
   }
 
   @PutMapping("")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public StayPlacesDto update(@RequestBody StayPlacesDto updatedPlace) {
     return stayPlaceService.update(updatedPlace);
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public String delete(@PathVariable String id) {
     return stayPlaceService.delete(id);
   }

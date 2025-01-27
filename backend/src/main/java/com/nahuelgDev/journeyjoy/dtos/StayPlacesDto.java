@@ -8,5 +8,5 @@ public class StayPlacesDto {
   private String from;
   private String name;
   private String description;
-  private Integer rating;
+  private Double rating;
 }

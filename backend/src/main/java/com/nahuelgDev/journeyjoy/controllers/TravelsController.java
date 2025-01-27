@@ -43,13 +43,13 @@ public class TravelsController {
   }
 
   @PostMapping("")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public Travels create(@RequestBody Travels travel) {
     return travelsService.create(travel);
   }
 
   @PutMapping("")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public Travels update(@RequestBody Travels updatedTravel) {
     return travelsService.update(updatedTravel);
   }
@@ -60,7 +60,7 @@ public class TravelsController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public String delete(@PathVariable String id) {
     return travelsService.delete(id);
   }

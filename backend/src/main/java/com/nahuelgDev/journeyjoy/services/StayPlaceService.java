@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nahuelgDev.journeyjoy.collections.StayPlaces;
 import com.nahuelgDev.journeyjoy.dtos.StayPlacesDto;
@@ -20,14 +21,14 @@ public class StayPlaceService implements StayPlacesService_I {
   @Autowired StayPlacesRepository stayPlaceRepo;
   @Autowired ModelMapper modelMapper;
 
-  @Override
+  @Override @Transactional(readOnly = true)
   public List<StayPlacesDto> getAll() {
     return stayPlaceRepo.findAll().stream().map(
       stayPlace -> modelMapper.map(stayPlace, StayPlacesDto.class)
     ).toList();
   }
 
-  @Override
+  @Override @Transactional(readOnly = true)
   public StayPlacesDto getById(String id) {
     checkFieldsHasContent(new Field("id", id));
 
@@ -38,7 +39,7 @@ public class StayPlaceService implements StayPlacesService_I {
     return result != null ? modelMapper.map(result, StayPlacesDto.class) : null;
   }
 
-  @Override
+  @Override @Transactional
   public StayPlacesDto create(StayPlacesDto placeToCreate) {
     checkFieldsHasContent(
       new Field("lugar", placeToCreate.getFrom()),
@@ -50,22 +51,19 @@ public class StayPlaceService implements StayPlacesService_I {
     ), StayPlacesDto.class);
   }
 
-  @Override
+  @Override @Transactional
   public StayPlacesDto update(StayPlacesDto updatedPlace) {
     checkFieldsHasContent(new Field("id", updatedPlace.getId()));
 
-    StayPlaces placeToUpdate = stayPlaceRepo.findById(updatedPlace.getId()).orElseThrow(
+    stayPlaceRepo.findById(updatedPlace.getId()).orElseThrow(
       () -> new DocumentNotFoundException("lugar de estadía", updatedPlace.getId(), "id")
     );
 
-    updatedPlace.setId(placeToUpdate.getId());
-
-    return modelMapper.map(stayPlaceRepo.save(
-      modelMapper.map(updatedPlace, StayPlaces.class)
-    ), StayPlacesDto.class);
+    StayPlaces updated = modelMapper.map(updatedPlace, StayPlaces.class);
+    return modelMapper.map(stayPlaceRepo.save(updated), StayPlacesDto.class);
   }
 
-  @Override
+  @Override @Transactional
   public String delete(String id) {
     checkFieldsHasContent(new Field("id", id));
 

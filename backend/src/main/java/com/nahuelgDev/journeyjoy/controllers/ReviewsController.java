@@ -40,7 +40,7 @@ public class ReviewsController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public String delete(@PathVariable String id) {
     return reviewsService.delete(id);
   }

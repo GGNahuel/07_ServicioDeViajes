@@ -38,6 +38,7 @@ public class SecurityConfig {
         })
         .permitAll()
       )
+      .csrf(csrf -> csrf.disable())
       .rememberMe(remember -> remember
         .key(Generators.generateKey(16))
         .tokenValiditySeconds(60 * 60)

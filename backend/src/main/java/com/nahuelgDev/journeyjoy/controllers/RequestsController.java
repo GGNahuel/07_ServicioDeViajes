@@ -24,19 +24,19 @@ public class RequestsController {
   @Autowired RequestsService requestsService;
 
   @GetMapping("")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public List<Requests> getAll() {
     return requestsService.getAll();
   }
 
   @GetMapping("/{id}")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public Requests getById(@PathVariable String id) {
     return requestsService.getById(id);
   }
 
   @GetMapping("/travel")
-  @PreAuthorize("authenticated()")
+  // @PreAuthorize("authenticated()")
   public List<Requests> getByTravelName(@RequestParam String name) {
     return requestsService.getByTravelName(name);
   }

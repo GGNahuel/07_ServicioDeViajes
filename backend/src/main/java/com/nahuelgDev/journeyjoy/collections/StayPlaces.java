@@ -15,7 +15,7 @@ public class StayPlaces {
   private String from;
   private String name;
   private String description;
-  private Integer rating;
+  private Double rating;
 
   public StayPlaces(String id) {
     this.id = id;
