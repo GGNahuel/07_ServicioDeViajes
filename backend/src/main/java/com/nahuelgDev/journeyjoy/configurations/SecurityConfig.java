@@ -40,7 +40,7 @@ public class SecurityConfig {
       )
       .rememberMe(remember -> remember
         .key(Generators.generateKey(16))
-        .tokenValiditySeconds(43200)
+        .tokenValiditySeconds(60 * 60)
       );
 
     return httpSecurity.build();
