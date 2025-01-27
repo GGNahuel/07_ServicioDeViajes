@@ -1,11 +1,14 @@
 package com.nahuelgDev.journeyjoy.utilities;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nahuelgDev.journeyjoy.collections.Admin;
 import com.nahuelgDev.journeyjoy.collections.StayPlaces;
 import com.nahuelgDev.journeyjoy.collections.Travels;
+import com.nahuelgDev.journeyjoy.repositories.AdminRepository;
 import com.nahuelgDev.journeyjoy.repositories.ReviewsRepository;
 import com.nahuelgDev.journeyjoy.repositories.StayPlacesRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
@@ -18,11 +21,18 @@ public class DBInitializer {
   @Autowired TravelsRepository travelsRepo;
   @Autowired StayPlacesRepository stayPlacesRepo;
   @Autowired ReviewsRepository reviewsRepo;
+  @Autowired AdminRepository adminRepo;
 
   @Autowired ObjectMapper objectMapper;
 
   @PostConstruct
   public void init() throws Exception {
+    Admin admin = new Admin();
+    admin.setUsername("admin");
+    admin.setPassword(new BCryptPasswordEncoder().encode("abc123"));
+    adminRepo.deleteAll();
+    adminRepo.save(admin);
+
     for (int i = 0; i < InitData.stayPlaces().indexList.size(); i++) {
       String placeId = InitData.stayPlaces().indexList.get(i);
       String placeData = InitData.stayPlaces().data.get(i);
