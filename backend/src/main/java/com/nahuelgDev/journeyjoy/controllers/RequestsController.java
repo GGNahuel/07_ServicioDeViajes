@@ -3,6 +3,7 @@ package com.nahuelgDev.journeyjoy.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,16 +24,19 @@ public class RequestsController {
   @Autowired RequestsService requestsService;
 
   @GetMapping("")
+  @PreAuthorize("authenticated()")
   public List<Requests> getAll() {
     return requestsService.getAll();
   }
 
   @GetMapping("/{id}")
+  @PreAuthorize("authenticated()")
   public Requests getById(@PathVariable String id) {
     return requestsService.getById(id);
   }
 
   @GetMapping("/travel")
+  @PreAuthorize("authenticated()")
   public List<Requests> getByTravelName(@RequestParam String name) {
     return requestsService.getByTravelName(name);
   }
