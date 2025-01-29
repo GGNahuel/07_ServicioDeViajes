@@ -34,8 +34,10 @@ public class Verifications {
         if (list.isEmpty()) 
           throw new EmptyFieldException(name);
         
-        for (Object object : list) {
-          checkFieldsHasContent(new Field("objeto en lista".concat(name), object));
+        for (int j = 0; j < list.size(); j++) {
+          Object object = list.get(j);
+          Integer ji = j + 1;
+          checkFieldsHasContent(new Field(String.format("%s' en la posición '%s", name, ji.toString()), object));
         }
       }
     }
