@@ -71,3 +71,15 @@ Lista de espera para viajes
   el estado de en espera cambiaría a "confirmed" cuándo se pague al menos el 17% (la sexta parte) del total del viaje. Y haya cupo
 
 distintos precios según el método de pago en las instancias de PayPlans
+
+  @BeforeEach
+  void setUp() {
+    placeInDb1 = new StayPlacesDto("1", "Place A", "Name A", "DA", 2.3);
+    placeInDb2 = new StayPlacesDto("2", "Place B", "Name B", "DB", 5.8);
+    placeToCreate = StayPlacesDto.builder()
+      .from("New Place")
+      .name("Name C")
+      .description("DC")
+      .rating(2.4)
+    .build();
+  }
