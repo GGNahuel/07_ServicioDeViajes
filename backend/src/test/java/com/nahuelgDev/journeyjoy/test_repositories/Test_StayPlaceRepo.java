@@ -22,9 +22,10 @@ public class Test_StayPlaceRepo {
 
   private StayPlaces stayPlace1, stayPlace2, stayPlace3;
 
+  // estas pruebas no son necesarios, ya que los métodos de MongoRepository ya están testeados por spring boot
   @BeforeEach
   void setUp() {
-    stayPlacesRepository.deleteAll(); // Limpiar la base de datos antes de cada prueba
+    stayPlacesRepository.deleteAll();
 
     stayPlace1 = new StayPlaces("1");
     stayPlace1.setFrom("Argentina");
