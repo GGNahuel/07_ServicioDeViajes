@@ -26,14 +26,17 @@ public class SecurityConfig {
         .loginProcessingUrl("/logincheck")
         .usernameParameter("username")
         .passwordParameter("password")
-        .successHandler((request, response, authentication) -> {
+        .successHandler((request, response, auth) -> {
           response.setStatus(HttpServletResponse.SC_OK);
+        })
+        .failureHandler((request, response, authEx) -> {
+          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // cambiar status
         })
         .permitAll()
       )
       .logout(logout -> logout
         .logoutUrl("/logout")
-        .logoutSuccessHandler((request, response, asd) -> {
+        .logoutSuccessHandler((request, response, auth) -> {
           response.setStatus(HttpServletResponse.SC_OK);
         })
         .permitAll()
@@ -42,6 +45,11 @@ public class SecurityConfig {
       .rememberMe(remember -> remember
         .key(Generators.generateKey(16))
         .tokenValiditySeconds(60 * 60)
+      )
+      .exceptionHandling(exceptionHandling -> exceptionHandling
+        .authenticationEntryPoint((request, response, authEx) -> {
+          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        })
       );
 
     return httpSecurity.build();
