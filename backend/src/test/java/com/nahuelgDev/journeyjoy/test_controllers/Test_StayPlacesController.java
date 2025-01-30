@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 //import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
@@ -18,7 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -37,11 +42,19 @@ public class Test_StayPlacesController {
   @Autowired MockMvc mockMvc;
   @Autowired ObjectMapper objectMapper;
 
+  @Autowired ApplicationContext applicationContext;
+
   @SuppressWarnings("removal")
   @MockBean StayPlaceService service;
 
   @Test
-  void getAll_ReturnsExpectedList() throws Exception {
+  @WithMockUser
+  void securityConfigIsActive() {
+    assertNotNull(applicationContext.getBean(SecurityFilterChain.class));
+  }
+
+  @Test
+  void getAll_returnsExpectedList() throws Exception {
     // setting 
     List<StayPlacesDto> expectedResponse = List.of(
       StayPlacesDto.builder().id("1").from("Place 1").name("StayPlace 1").build(),
@@ -63,6 +76,38 @@ public class Test_StayPlacesController {
     assertTrue(actualResponse.stream().allMatch(element -> element instanceof StayPlacesDto));
     assertIterableEquals(expectedResponse, actualResponse);
     verify(service, times(1)).getAll();
+  }
+
+  @Test
+  @WithMockUser
+  void create_returnsStayPlaceDtoWithId() throws Exception {
+    StayPlacesDto input = StayPlacesDto.builder().from("from").name("name").build();
+    String inputInJson = objectMapper.writeValueAsString(input);
+    StayPlacesDto expected = StayPlacesDto.builder().id("1").from("from").name("name").build();
+    when(service.create(input)).thenReturn(expected);
+
+    MvcResult response = mockMvc.perform(post("/api/stayplaces")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(inputInJson))
+      .andExpect(status().isOk()).andReturn();
+
+    String responseInJson = response.getResponse().getContentAsString();
+    StayPlacesDto actual = objectMapper.readValue(responseInJson, StayPlacesDto.class);
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void create_shouldDenyAccess() throws Exception {
+    StayPlacesDto input = StayPlacesDto.builder().from("from").name("name").build();
+    String inputInJson = objectMapper.writeValueAsString(input);
+
+    mockMvc.perform(post("/api/stayplaces")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(inputInJson)
+    ).andExpect(status().isUnauthorized());
+
+    verify(service, times(0)).create(input);
   }
 }
 
