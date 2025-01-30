@@ -50,7 +50,6 @@ public class Test_StayPlacesController {
   @MockBean StayPlaceService service;
 
   @Test
-  @WithMockUser
   void securityConfigIsActive() {
     assertNotNull(applicationContext.getBean(SecurityFilterChain.class));
   }
