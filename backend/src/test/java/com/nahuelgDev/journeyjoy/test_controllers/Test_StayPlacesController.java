@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 //import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
@@ -109,36 +111,50 @@ public class Test_StayPlacesController {
 
     verify(service, times(0)).create(input);
   }
-}
 
-/* 
   @Test
   @WithMockUser
-  void update_ReturnsUpdatedStayPlace_WhenAuthenticated() throws Exception {
-    // Mockear la entrada y salida
-    StayPlacesDto input = new StayPlacesDto("3", "Updated Place");
-    StayPlacesDto mockResponse = new StayPlacesDto("3", "Updated Place");
-    Mockito.when(stayPlaceService.update(Mockito.any(StayPlacesDto.class))).thenReturn(mockResponse);
+  void update_returnsAStayPlaceDto() throws Exception {
+    StayPlacesDto input = new StayPlacesDto();
+    String inputInJson = objectMapper.writeValueAsString(input);
+    when(service.update(input)).thenReturn(input);
 
-    // Ejecutar la solicitud y verificar resultados
+    MvcResult response = mockMvc.perform(put("/api/stayplaces")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(inputInJson))
+      .andExpect(status().isOk()).andReturn();
+
+    String responseInJson = response.getResponse().getContentAsString();
+    StayPlacesDto actual = objectMapper.readValue(responseInJson, StayPlacesDto.class);
+
+    assertEquals(input, actual);
+  }
+
+  @Test
+  void update_shouldDenyAccess() throws Exception {
+    StayPlacesDto input = new StayPlacesDto();
+    String inputInJson = objectMapper.writeValueAsString(input);
+
     mockMvc.perform(put("/api/stayplaces")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(new ObjectMapper().writeValueAsString(input)))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.id").value("3"))
-      .andExpect(jsonPath("$.name").value("Updated Place"));
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(inputInJson)
+    ).andExpect(status().isUnauthorized());
+
+    verify(service, times(0)).update(input);
   }
 
   @Test
   @WithMockUser
-  void delete_ReturnsSuccessMessage_WhenAuthenticated() throws Exception {
-    // Mockear la respuesta del servicio
-    String mockResponse = "Deleted Successfully";
-    Mockito.when(stayPlaceService.delete("3")).thenReturn(mockResponse);
+  void delete_returnString() throws Exception {
+    when(service.delete("1")).thenReturn("Operación realizada con éxito");
 
-    // Ejecutar la solicitud y verificar resultados
-    mockMvc.perform(delete("/api/stayplaces/3"))
-      .andExpect(status().isOk())
-      .andExpect(content().string("Deleted Successfully"));
+    mockMvc.perform(delete("/api/stayplaces/1")).andExpect(status().isOk());
   }
- */
+
+  @Test
+  void delete_shouldDenyAccess() throws Exception {
+    mockMvc.perform(delete("/api/stayplaces/1")).andExpect(status().isUnauthorized());
+
+    verify(service, times(0)).delete("1");
+  }
+}
