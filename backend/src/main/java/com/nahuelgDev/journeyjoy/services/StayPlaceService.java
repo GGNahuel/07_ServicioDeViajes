@@ -36,7 +36,7 @@ public class StayPlaceService implements StayPlacesService_I {
       () -> new DocumentNotFoundException("lugar de estadía", id, "id")
     );
 
-    return result != null ? modelMapper.map(result, StayPlacesDto.class) : null;
+    return modelMapper.map(result, StayPlacesDto.class);
   }
 
   @Override @Transactional
