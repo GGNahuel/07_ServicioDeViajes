@@ -27,19 +27,19 @@ public class StayPlacesController {
   }
 
   @PostMapping("")
-  @PreAuthorize("authenticated()")
+  @PreAuthorize("isAuthenticated()")
   public StayPlacesDto create(@RequestBody StayPlacesDto stayPlace) {
     return stayPlaceService.create(stayPlace);
   }
 
   @PutMapping("")
-  @PreAuthorize("authenticated()")
+  @PreAuthorize("isAuthenticated()")
   public StayPlacesDto update(@RequestBody StayPlacesDto updatedPlace) {
     return stayPlaceService.update(updatedPlace);
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("authenticated()")
+  @PreAuthorize("isAuthenticated()")
   public String delete(@PathVariable String id) {
     return stayPlaceService.delete(id);
   }
