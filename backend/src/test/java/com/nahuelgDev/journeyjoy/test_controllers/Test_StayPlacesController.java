@@ -80,6 +80,25 @@ public class Test_StayPlacesController {
   }
 
   @Test
+  void searchByNameAndFrom_returnsDtoList() throws Exception {
+    List<StayPlacesDto> expected = List.of(
+      StayPlacesDto.builder().id("1").from("Place 1").name("StayPlace 1").build(),
+      StayPlacesDto.builder().id("2").from("Place 2").name("StayPlace 2").build()
+    );
+    when(service.searchByNameAndFrom("place", "")).thenReturn(expected);
+
+    MvcResult response = mockMvc.perform(
+      get("/api/stayplaces/search").param("name", "place").param("from", "")
+    ).andExpect(status().isOk()).andReturn();
+
+    String responseInJson = response.getResponse().getContentAsString();
+    List<StayPlacesDto> actual = objectMapper.readValue(responseInJson, new TypeReference<List<StayPlacesDto>>() {});
+
+    assertIterableEquals(expected, actual);
+    verify(service).searchByNameAndFrom("place", "");
+  }
+
+  @Test
   @WithMockUser
   void create_returnsStayPlaceDtoWithId() throws Exception {
     StayPlacesDto input = StayPlacesDto.builder().from("from").name("name").build();

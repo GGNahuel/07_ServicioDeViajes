@@ -39,6 +39,13 @@ public class StayPlaceService implements StayPlacesService_I {
     return modelMapper.map(result, StayPlacesDto.class);
   }
 
+  @Override @Transactional(readOnly = true)
+  public List<StayPlacesDto> searchByNameAndFrom(String name, String from) {
+    return stayPlaceRepo.searchByNameAndFromAttr(name, from).stream().map(
+      element -> modelMapper.map(element, StayPlacesDto.class)
+    ).toList();
+  }
+
   @Override @Transactional
   public StayPlacesDto create(StayPlacesDto placeToCreate) {
     checkFieldsHasContent(

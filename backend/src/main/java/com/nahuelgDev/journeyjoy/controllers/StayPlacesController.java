@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nahuelgDev.journeyjoy.dtos.StayPlacesDto;
 import com.nahuelgDev.journeyjoy.services.StayPlaceService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/stayplaces")
@@ -25,6 +27,15 @@ public class StayPlacesController {
   public List<StayPlacesDto> getAll() {
     return stayPlaceService.getAll();
   }
+
+  @GetMapping("/search")
+  public List<StayPlacesDto> searchByNameAndFrom(
+    @RequestParam(required = false, defaultValue = "") String name, 
+    @RequestParam(required = false, defaultValue = "") String from
+  ) {
+    return stayPlaceService.searchByNameAndFrom(name, from);
+  }
+  
 
   @PostMapping("")
   @PreAuthorize("isAuthenticated()")

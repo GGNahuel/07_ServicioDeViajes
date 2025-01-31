@@ -105,6 +105,18 @@ public class Test_StayPlacesService {
   }
 
   @Test
+  void searchByNameAndFrom_returnsMappedList() {
+    when(stayPlaceRepo.searchByNameAndFromAttr(anyString(), anyString())).thenReturn(List.of(stayPlace));
+    when(modelMapper.map(stayPlace, StayPlacesDto.class)).thenReturn(stayPlaceDto);
+
+    List<StayPlacesDto> actual = stayPlaceService.searchByNameAndFrom(anyString(), anyString());
+
+    assertIterableEquals(List.of(stayPlaceDto), actual);
+    verify(stayPlaceRepo).searchByNameAndFromAttr(anyString(), anyString());
+    verify(modelMapper).map(stayPlace, StayPlacesDto.class);
+  }
+
+  @Test
   void create_returnsTheCreatedDto() {
     when(modelMapper.map(stayPlaceDto, StayPlaces.class)).thenReturn(stayPlace);
     when(stayPlaceRepo.save(stayPlace)).thenReturn(stayPlace);
