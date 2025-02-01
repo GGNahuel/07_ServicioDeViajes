@@ -134,17 +134,17 @@ public class Test_StayPlacesService {
     StayPlacesDto emptyName = StayPlacesDto.builder().name("").from("from").build();
     StayPlacesDto emptyFrom = StayPlacesDto.builder().name("name").from("").build();
     
-    StayPlacesDto succesCase = StayPlacesDto.builder().name("name").from("from").build();
-    when(modelMapper.map(succesCase, StayPlaces.class)).thenReturn(new StayPlaces());
+    StayPlacesDto successCase = StayPlacesDto.builder().name("name").from("from").build();
+    when(modelMapper.map(successCase, StayPlaces.class)).thenReturn(new StayPlaces());
 
     assertThrows(EmptyFieldException.class, () -> stayPlaceService.create(emptyName));
     assertThrows(EmptyFieldException.class, () -> stayPlaceService.create(emptyFrom));
-    assertDoesNotThrow(() -> stayPlaceService.create(succesCase));
+    assertDoesNotThrow(() -> stayPlaceService.create(successCase));
     verify(stayPlaceRepo, times(1)).save(any());
   }
 
   @Test
-  void update_Success() {
+  void update_success() {
     when(stayPlaceRepo.findById("1")).thenReturn(Optional.of(stayPlace));
     when(modelMapper.map(stayPlaceDto, StayPlaces.class)).thenReturn(stayPlace);
     when(stayPlaceRepo.save(stayPlace)).thenReturn(stayPlace);

@@ -1,5 +1,7 @@
 package com.nahuelgDev.journeyjoy.services;
 
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
+import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.repositories.ReviewsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.ReviewsService_I;
 
@@ -21,31 +24,50 @@ public class ReviewsService implements ReviewsService_I {
   }
 
   public Reviews getById(String id) {
-    return reviewsRepo.findById(id).orElse(null);
+    checkFieldsHasContent(new Field("id", id));
+
+    return reviewsRepo.findById(id).orElseThrow(
+      () -> new DocumentNotFoundException("valoración", id, "id")
+    );
   }
 
   public Reviews create(Reviews reviewToCreate, MultipartFile image) throws IOException {
+    checkFieldsHasContent(
+      new Field("autor", reviewToCreate.getUserName()),
+      new Field("puntaje", reviewToCreate.getRating()),
+      new Field("foto", image)
+    );
+    
     reviewToCreate.setUserImage(imageService.add(image));
     
     return reviewsRepo.save(reviewToCreate);
   }
   
   public Reviews update(Reviews updatedReview, MultipartFile image) throws IOException {
-    Reviews reviewToUpdate = reviewsRepo.findById(updatedReview.getId()).orElse(null);
+    checkFieldsHasContent(
+      new Field("id", updatedReview.getId()),
+      new Field("foto previa", updatedReview.getUserImage()),
+      new Field("foto en archivo", image)
+    );
+    
+    reviewsRepo.findById(updatedReview.getId()).orElseThrow(
+      () -> new DocumentNotFoundException("valoración", updatedReview.getId(), "id")
+    );
+    
     updatedReview.setUserImage(imageService.update(updatedReview.getUserImage().getId(), image));
     
-    return reviewToUpdate != null ? reviewsRepo.save(updatedReview) : null;
+    return reviewsRepo.save(updatedReview);
   }
 
   public String delete(String id) {
-    Reviews reviewToDelete = reviewsRepo.findById(id).orElse(null);
+    checkFieldsHasContent(new Field("id", id));
 
-    if (reviewToDelete != null) {
-      reviewsRepo.deleteById(id);
+    reviewsRepo.findById(id).orElseThrow(
+      () -> new DocumentNotFoundException("valoración", id, "id")
+    );
 
-      return "Operación realizada con éxito";
-    }
+    reviewsRepo.deleteById(id);
 
-    return "No se pudo completar la operación, la entidad a borrar no existe";
+    return "Operación realizada con éxito";
   }
 }

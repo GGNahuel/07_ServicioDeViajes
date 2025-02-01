@@ -4,16 +4,20 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+@Data @Builder
+@AllArgsConstructor @NoArgsConstructor
 @Document
 public class Reviews {
   @Id
   private String id;
   private String userName;
   private String comment;
-  private Integer rating;
+  private Double rating;
 
   @DBRef
   private Images userImage;
