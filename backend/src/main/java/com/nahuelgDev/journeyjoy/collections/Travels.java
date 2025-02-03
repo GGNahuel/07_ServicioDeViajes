@@ -10,9 +10,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.nahuelgDev.journeyjoy.dataClasses.Destinies;
 import com.nahuelgDev.journeyjoy.dataClasses.PayPlans;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
 @Document
 public class Travels {
   @Id

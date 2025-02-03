@@ -11,10 +11,14 @@ import com.nahuelgDev.journeyjoy.dataClasses.PayPlans;
 import com.nahuelgDev.journeyjoy.dataClasses.Person;
 import com.nahuelgDev.journeyjoy.enums.RequestState;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data @Builder
+@AllArgsConstructor @NoArgsConstructor
 @Document
-@Data
 public class Requests {
   @Id
   private String id;

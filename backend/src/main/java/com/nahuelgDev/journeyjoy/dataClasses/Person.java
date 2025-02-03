@@ -1,8 +1,12 @@
 package com.nahuelgDev.journeyjoy.dataClasses;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class Person {
   private String name;
   private Integer age;

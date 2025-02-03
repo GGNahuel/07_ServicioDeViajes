@@ -13,7 +13,7 @@ public class EmailContents {
     for (Person person : list) {
       peopleData.concat(
         String.format(
-          "\n  Nombre de la persona: %s, edad: %s, número de identificación: %s \n", 
+          "\n  - Nombre de la persona: %s, edad: %s, número de identificación: %s \n", 
           person.getName(), person.getAge().toString(), person.getIdentificationNumber()
         )
       );
@@ -26,7 +26,7 @@ public class EmailContents {
 
     return String.format(
       "\n\nDatos de la solicitud: \n" +
-      "Viaje: %s. Cantidad de personas: %i. Plan elegido: %s. Estado de la solicitud: %s. Precio total: $%s. Cantidad paga: $%s. Fecha elegida: %s." +
+      "Viaje: %s. Cantidad de personas: %d. Plan elegido: %s. Estado de la solicitud: %s. Precio total: $%s. Cantidad paga: $%s. Fecha elegida: %s." +
       "%s", 
       request.getAssociatedTravel().getName(), request.getPersons().size(), request.getSelectedPlan(),
       request.getState(), request.getTotalPrice().toString(), request.getAmountPaid(),
