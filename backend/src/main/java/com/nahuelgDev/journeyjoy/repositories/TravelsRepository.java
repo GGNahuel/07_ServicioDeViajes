@@ -5,32 +5,30 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.nahuelgDev.journeyjoy.collections.Travels;
 
 @Repository
 public interface TravelsRepository extends MongoRepository<Travels, String> {
-  @Query("{ $and: [ " +
-    "{ $or: [ { :#{#available} : null }, { isAvailable: :#{#available} } ] }, " +
-    "{ $or: [ { $expr: { $lte: [ :#{#desiredCapacity}, {$subtract: ['$maxCapacity', '$currentCapacity']} ] } }, { :#{#desiredCapacity} : null } ] }, " +
-    "{ $or: [ { 'destinies.place': :#{#place} }, { :#{#place} : '' } ] }, " +
-    "{ $or: [{ longInDays: {$lte: :#{#maxDays}} }, {:#{maxDays}: null}] }, " +
-    "{ $or: [{ longInDays: {$gte: :#{#minDays}} }, {:#{minDays}: null}] } " +
-  "]}")
-  List<Travels> search(
-    @Param("available") Boolean available, 
-    @Param("desiredCapacity") Integer desiredCapacity,
-    @Param("place") String place,
-    @Param("maxDays") String maxDays,
-    @Param("minDays") String minDays
-  );
+
+  List<Travels> findByIsAvailable(Boolean isAvailable);
+  
+  @Query("{ $expr: {$lte: [?0, {$subtract: ['$maxCapacity', '$currentCapacity']}]} }")
+  List<Travels> findByDesiredCapacity(Integer desiredCapacity);
+  
+  @Query("{'destinies.place': {$regex: ?0, $options: 'i'}}")
+  List<Travels> findByPlace(String place);
+
+  List<Travels> findByLongInDaysLessThanEqual(Integer maxDays);
+
+  List<Travels> findByLongInDaysGreaterThanEqual(Integer minDays);
+
 
   Optional<Travels> findByName(String name);
 
-  @Query("{ currentCapacity: { $lt: '$maxCapacity' }}")
-  List<Travels> findByHasCapacityAvailable();
+  @Query("{ $expr: { $lt: ['$currentCapacity', '$maxCapacity'] } }")
+  List<Travels> findByHasCapacityLeft();
 
   @Query("{ currentCapacity: '$maxCapacity' }")
   List<Travels> findByNoCapacityLeft();

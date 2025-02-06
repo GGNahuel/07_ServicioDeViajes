@@ -8,7 +8,7 @@ import com.nahuelgDev.journeyjoy.collections.Travels;
 public interface TravelsService_I {
   List<Travels> getAll();
   Travels getById(String id);
-  List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays);
+  List<Travels> search(Boolean available, Integer desiredCapacity, String place, Integer minDays, Integer maxDays);
   List<Travels> getByCapacityLeft(boolean wantCapacity);
   Travels create(Travels travelToCreate);
   Travels update(Travels updatedTravel);

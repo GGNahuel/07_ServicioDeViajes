@@ -32,7 +32,8 @@ public class TravelsController {
   @GetMapping("/search")
   public List<Travels> search(
     @RequestParam(required = false) Boolean available, @RequestParam(required = false) Integer desiredCapacity, 
-    @RequestParam(required = false) String place, @RequestParam(required = false) String minDays, @RequestParam(required = false) String maxDays
+    @RequestParam(required = false) String place, 
+    @RequestParam(required = false) Integer minDays, @RequestParam(required = false) Integer maxDays
   ) {
     return travelsService.search(available, desiredCapacity, place, minDays, maxDays);
   }

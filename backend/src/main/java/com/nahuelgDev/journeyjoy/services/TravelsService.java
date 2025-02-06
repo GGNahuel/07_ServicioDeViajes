@@ -11,6 +11,8 @@ import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.InvalidOperationException;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.TravelsService_I;
+import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
+
 import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
 
 @Service
@@ -34,12 +36,44 @@ public class TravelsService implements TravelsService_I{
 
   @Override
   public List<Travels> getByCapacityLeft(boolean wantCapacity) {
-    return wantCapacity ? travelsRepo.findByHasCapacityAvailable() : travelsRepo.findByNoCapacityLeft();
+    return wantCapacity ? travelsRepo.findByHasCapacityLeft() : travelsRepo.findByNoCapacityLeft();
   }
 
   @Override
-  public List<Travels> search(Boolean available, Integer desiredCapacity, String place, String minDays, String maxDays) {
-    return travelsRepo.search(available, desiredCapacity, place, minDays, maxDays);
+  public List<Travels> search(Boolean available, Integer desiredCapacity, String place, Integer minDays, Integer maxDays) {
+    List<Travels> listToReturn = List.of();
+
+    if (available != null) {
+      listToReturn = travelsRepo.findByIsAvailable(available);
+    }
+    if (desiredCapacity != null) {
+      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByDesiredCapacity(desiredCapacity) :
+        listToReturn.stream().filter(
+          travel -> desiredCapacity <= (travel.getMaxCapacity() - travel.getCurrentCapacity())
+        ).toList();
+    }
+    if (place != null && !place.isBlank()) {
+      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByPlace(place) :
+        listToReturn.stream().filter(
+          travel -> travel.getDestinies().stream().anyMatch(
+            destiny -> destiny.getPlace().contains(place)
+          )
+        ).toList();
+    }
+    if (minDays != null) {
+      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByLongInDaysGreaterThanEqual(minDays) :
+        listToReturn.stream().filter(
+          travel -> travel.getLongInDays() >= minDays
+        ).toList();
+    }
+    if (maxDays != null) {
+      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByLongInDaysLessThanEqual(maxDays) :
+        listToReturn.stream().filter(
+          travel -> travel.getLongInDays() <= maxDays
+        ).toList();
+    }
+
+    return listToReturn.isEmpty() ? travelsRepo.findAll() : listToReturn;
   }
 
   @Override
