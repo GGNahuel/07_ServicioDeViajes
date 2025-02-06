@@ -50,40 +50,52 @@ public class Test_EmailContents {
   }
 
   @Test
-  void getPeopleData() {
-    
+  void getPeopleData_listsItemsOfGivenListWithInfo() {
+    String result = EmailContents.requestNotification(request);
+    assertTrue(result.contains("- Nombre de la persona: person1, edad: 20, número de identificación: 12345678"));
+    assertTrue(result.contains("- Nombre de la persona: person2, edad: 25, número de identificación: 87654321"));
   }
 
   @Test
-  void requestNotification_ShouldContainRequestDetails() {
+  void getRequestData_giveRequestData() {
+    String result = EmailContents.requestNotification(request);
+    
+    assertTrue(result.contains("Viaje: test_viaje. Cantidad de personas: 2. Plan elegido: de pareja, precio del mismo: $500.0." + 
+      " Estado de la solicitud: con deuda. Precio total: $500.0. Cantidad paga: $150.0. Fecha elegida: 2025-03-05."
+    ));
+    assertTrue(result.contains("Nombre de la persona: person1"));
+    assertTrue(result.contains("Nombre de la persona: person2"));
+  }
+
+  @Test
+  void requestNotification_shouldContainRequestDetails() {
     String result = EmailContents.requestNotification(request);
     assertTrue(result.contains("Gracias por utilizar nuestro servicio de viajes"));
     assertTrue(result.contains("Viaje: test_viaje"));
-    assertTrue(result.contains("Cantidad de personas: 2"));
   }
 
   @Test
-  void paymentNotification_ShouldContainPaymentDetails() {
+  void paymentNotification_shouldContainPaymentDetails() {
     String result = EmailContents.paymentNotification(100.0, request);
     assertTrue(result.contains("Se ha recibido un pago de $100.0"));
     assertTrue(result.contains("Viaje: test_viaje"));
   }
 
   @Test
-  void updatedRequestNotification_ShouldContainUpdatedMessage() {
+  void updatedRequestNotification_shouldContainUpdatedMessage() {
     String result = EmailContents.updatedRequestNotification(request);
     assertTrue(result.contains("Se ha actualizado la solicitud de su viaje."));
     assertTrue(result.contains("Viaje: test_viaje"));
   }
 
   @Test
-  void cancelRequest_ShouldContainCancellationMessage() {
+  void cancelRequest_shouldContainCancellationMessage() {
     String result = EmailContents.cancelRequest(request);
     assertTrue(result.contains("Su solicitud del viaje test_viaje, para la fecha 2025-03-05, ha sido cancelada con éxito."));
   }
 
   @Test
-  void travelNowHasCapacityNotification_ShouldContainCapacityUpdateMessage() {
+  void travelNowHasCapacityNotification_shouldContainCapacityUpdateMessage() {
     String result = EmailContents.travelNowHasCapacityNotification(request);
     assertTrue(result.contains("La capacidad del viaje de su solicitud en lista de espera se ha reducido."));
     assertTrue(result.contains("Viaje: test_viaje"));
