@@ -1,28 +1,25 @@
 package com.nahuelgDev.journeyjoy.services;
 
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasContent;
+
 import java.util.List;
 
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.InvalidOperationException;
+import com.nahuelgDev.journeyjoy.repositories.Custom_TravelRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.TravelsService_I;
 import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
-import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
-
 @Service
 public class TravelsService_Impl implements TravelsService_I{
   @Autowired TravelsRepository travelsRepo;
-  @Autowired MongoTemplate mongoTemplate;
+  @Autowired Custom_TravelRepository customRepo;
   
   @Override
   public List<Travels> getAll() {
@@ -46,30 +43,7 @@ public class TravelsService_Impl implements TravelsService_I{
 
   @Override
   public List<Travels> search(Boolean available, Integer desiredCapacity, String place, Integer minDays, Integer maxDays) {
-    Query query = new Query();
-
-    if (available != null) {
-      query.addCriteria(Criteria.where("isAvailable").is(available));
-    }
-    if (desiredCapacity != null) {
-      query.addCriteria(Criteria.expr(() ->
-        new Document("$lte", List.of(
-          desiredCapacity, 
-          new Document("$subtract", List.of("$maxCapacity", "$currentCapacity"))
-        ))
-      ));
-    }
-    if (place != null && !place.isBlank()) {
-      query.addCriteria(Criteria.where("destinies.place").regex(".*" + place + ".*", "i")); // Búsqueda por lugar
-    }
-    if (minDays != null) {
-      query.addCriteria(Criteria.where("longInDays").gte(minDays));
-    }
-    if (maxDays != null) {
-      query.addCriteria(Criteria.where("longInDays").lte(maxDays));
-    }
-
-    return mongoTemplate.find(query, Travels.class);
+    return customRepo.search(available, desiredCapacity, place, minDays, maxDays);
   }
 
   @Override
