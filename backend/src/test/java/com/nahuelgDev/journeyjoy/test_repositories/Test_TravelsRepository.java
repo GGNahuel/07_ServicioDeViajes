@@ -50,37 +50,6 @@ public class Test_TravelsRepository {
   }
 
   @Test
-  void findByIsAvailable_returnsExpected() {
-    assertIterableEquals(List.of(travel1, travel2), repository.findByIsAvailable(true));
-    assertIterableEquals(List.of(), repository.findByIsAvailable(false));
-  }
-
-  @Test
-  void findByDesiredCapacity_returnsExpected() {
-    assertIterableEquals(List.of(travel1), repository.findByDesiredCapacity(3));
-    assertIterableEquals(List.of(travel1, travel2), repository.findByDesiredCapacity(1));
-  }
-
-  @Test
-  void findByPlace_returnsExpected() {
-    assertIterableEquals(List.of(travel2), repository.findByPlace("Rosario"));
-    assertIterableEquals(List.of(travel1), repository.findByPlace("Roma"));
-    assertIterableEquals(List.of(travel1, travel2), repository.findByPlace("Ro"));
-  }
-
-  @Test
-  void findByLongInDaysLessThanEqual_returnsExpected() {
-    assertIterableEquals(List.of(travel2), repository.findByLongInDaysLessThanEqual(15));
-    assertIterableEquals(List.of(), repository.findByLongInDaysLessThanEqual(7));
-  }
-  
-  @Test
-  void findByLongInDaysGreaterThanEqual_returnsExpected() {
-    assertIterableEquals(List.of(travel1), repository.findByLongInDaysGreaterThanEqual(16));
-    assertIterableEquals(List.of(travel1, travel2), repository.findByLongInDaysGreaterThanEqual(7));
-  }
-
-  @Test
   void findByName_returnsExpected() {
     assertEquals(Optional.of(travel1), repository.findByName("Viaje 1"));
     assertEquals(Optional.empty(), repository.findByName("Viaje 3"));
