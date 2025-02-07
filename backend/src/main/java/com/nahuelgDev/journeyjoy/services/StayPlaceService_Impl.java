@@ -17,7 +17,7 @@ import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
 
 @Service
-public class StayPlaceService implements StayPlacesService_I {
+public class StayPlaceService_Impl implements StayPlacesService_I {
   @Autowired StayPlacesRepository stayPlaceRepo;
   @Autowired ModelMapper modelMapper;
 

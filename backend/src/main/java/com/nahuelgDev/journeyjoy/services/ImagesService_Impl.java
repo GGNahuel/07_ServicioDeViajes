@@ -15,7 +15,7 @@ import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
 import java.io.IOException;
 
 @Service
-public class ImagesService implements ImagesService_I {
+public class ImagesService_Impl implements ImagesService_I {
   @Autowired ImagesRepository imageRepo;
 
   @Override

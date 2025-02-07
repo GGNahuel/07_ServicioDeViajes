@@ -26,7 +26,7 @@ import com.nahuelgDev.journeyjoy.utilities.constants.EmailContents;
 import lombok.AllArgsConstructor;
 
 @Service
-public class RequestsService implements RequestsService_I {
+public class RequestsService_Impl implements RequestsService_I {
   @Autowired RequestsRepository requestsRepo;
   @Autowired TravelsRepository travelsRepo;
   @Autowired EmailsRepository emailsRepo;

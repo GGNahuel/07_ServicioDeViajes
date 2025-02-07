@@ -28,8 +28,8 @@ import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
 import com.nahuelgDev.journeyjoy.repositories.ReviewsRepository;
-import com.nahuelgDev.journeyjoy.services.ImagesService;
-import com.nahuelgDev.journeyjoy.services.ReviewsService;
+import com.nahuelgDev.journeyjoy.services.ImagesService_Impl;
+import com.nahuelgDev.journeyjoy.services.ReviewsService_Impl;
 
 @ExtendWith(MockitoExtension.class)
 public class Test_ReviewsService {
@@ -38,10 +38,10 @@ public class Test_ReviewsService {
   private ReviewsRepository repository;
 
   @Mock
-  private ImagesService imagesService;
+  private ImagesService_Impl imagesService;
 
   @InjectMocks
-  private ReviewsService service;
+  private ReviewsService_Impl service;
 
   private Reviews review1, review2;
   private Images image;

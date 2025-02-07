@@ -27,7 +27,7 @@ import com.nahuelgDev.journeyjoy.dtos.StayPlacesDto;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
 import com.nahuelgDev.journeyjoy.repositories.StayPlacesRepository;
-import com.nahuelgDev.journeyjoy.services.StayPlaceService;
+import com.nahuelgDev.journeyjoy.services.StayPlaceService_Impl;
 
 @ExtendWith(MockitoExtension.class)
 public class Test_StayPlacesService {
@@ -38,7 +38,7 @@ public class Test_StayPlacesService {
   private ModelMapper modelMapper;
 
   @InjectMocks
-  private StayPlaceService stayPlaceService;
+  private StayPlaceService_Impl stayPlaceService;
 
   private StayPlaces stayPlace;
   private StayPlacesDto stayPlaceDto;

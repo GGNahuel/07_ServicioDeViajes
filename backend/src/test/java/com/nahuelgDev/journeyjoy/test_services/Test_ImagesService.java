@@ -25,13 +25,13 @@ import com.nahuelgDev.journeyjoy.collections.Images;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
 import com.nahuelgDev.journeyjoy.repositories.ImagesRepository;
-import com.nahuelgDev.journeyjoy.services.ImagesService;
+import com.nahuelgDev.journeyjoy.services.ImagesService_Impl;
 
 @ExtendWith(MockitoExtension.class)
 class Test_ImagesService {
 
   @Mock private ImagesRepository imagesRepo;
-  @InjectMocks private ImagesService imagesService;
+  @InjectMocks private ImagesService_Impl imagesService;
 
   private MultipartFile file = mock(MultipartFile.class);
   private Images imageFromFile = new Images();

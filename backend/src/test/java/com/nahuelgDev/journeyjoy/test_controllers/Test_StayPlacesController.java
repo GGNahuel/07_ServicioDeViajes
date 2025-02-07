@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nahuelgDev.journeyjoy.configurations.SecurityConfig;
 import com.nahuelgDev.journeyjoy.controllers.StayPlacesController;
 import com.nahuelgDev.journeyjoy.dtos.StayPlacesDto;
-import com.nahuelgDev.journeyjoy.services.StayPlaceService;
+import com.nahuelgDev.journeyjoy.services.interfaces.StayPlacesService_I;
 
 @WebMvcTest(StayPlacesController.class)
 @AutoConfigureMockMvc(addFilters = true)
@@ -47,7 +47,7 @@ public class Test_StayPlacesController {
   @Autowired ApplicationContext applicationContext;
 
   @SuppressWarnings("removal")
-  @MockBean StayPlaceService service;
+  @MockBean StayPlacesService_I service;
 
   @Test
   void securityConfigIsActive() {

@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
-import com.nahuelgDev.journeyjoy.services.ReviewsService;
+import com.nahuelgDev.journeyjoy.services.interfaces.ReviewsService_I;
 
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewsController {
-  @Autowired ReviewsService reviewsService;
+  @Autowired ReviewsService_I reviewsService;
 
   @GetMapping("")
   public List<Reviews> getAll() {

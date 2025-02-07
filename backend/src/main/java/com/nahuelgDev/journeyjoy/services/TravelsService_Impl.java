@@ -2,7 +2,11 @@ package com.nahuelgDev.journeyjoy.services;
 
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
@@ -16,8 +20,9 @@ import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
 
 @Service
-public class TravelsService implements TravelsService_I{
+public class TravelsService_Impl implements TravelsService_I{
   @Autowired TravelsRepository travelsRepo;
+  @Autowired MongoTemplate mongoTemplate;
   
   @Override
   public List<Travels> getAll() {
@@ -41,39 +46,30 @@ public class TravelsService implements TravelsService_I{
 
   @Override
   public List<Travels> search(Boolean available, Integer desiredCapacity, String place, Integer minDays, Integer maxDays) {
-    List<Travels> listToReturn = List.of();
+    Query query = new Query();
 
     if (available != null) {
-      listToReturn = travelsRepo.findByIsAvailable(available);
+      query.addCriteria(Criteria.where("isAvailable").is(available));
     }
     if (desiredCapacity != null) {
-      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByDesiredCapacity(desiredCapacity) :
-        listToReturn.stream().filter(
-          travel -> desiredCapacity <= (travel.getMaxCapacity() - travel.getCurrentCapacity())
-        ).toList();
+      query.addCriteria(Criteria.expr(() ->
+        new Document("$lte", List.of(
+          desiredCapacity, 
+          new Document("$subtract", List.of("$maxCapacity", "$currentCapacity"))
+        ))
+      ));
     }
     if (place != null && !place.isBlank()) {
-      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByPlace(place) :
-        listToReturn.stream().filter(
-          travel -> travel.getDestinies().stream().anyMatch(
-            destiny -> destiny.getPlace().contains(place)
-          )
-        ).toList();
+      query.addCriteria(Criteria.where("destinies.place").regex(".*" + place + ".*", "i")); // Búsqueda por lugar
     }
     if (minDays != null) {
-      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByLongInDaysGreaterThanEqual(minDays) :
-        listToReturn.stream().filter(
-          travel -> travel.getLongInDays() >= minDays
-        ).toList();
+      query.addCriteria(Criteria.where("longInDays").gte(minDays));
     }
     if (maxDays != null) {
-      listToReturn = listToReturn.isEmpty() ? travelsRepo.findByLongInDaysLessThanEqual(maxDays) :
-        listToReturn.stream().filter(
-          travel -> travel.getLongInDays() <= maxDays
-        ).toList();
+      query.addCriteria(Criteria.where("longInDays").lte(maxDays));
     }
 
-    return listToReturn.isEmpty() ? travelsRepo.findAll() : listToReturn;
+    return mongoTemplate.find(query, Travels.class);
   }
 
   @Override

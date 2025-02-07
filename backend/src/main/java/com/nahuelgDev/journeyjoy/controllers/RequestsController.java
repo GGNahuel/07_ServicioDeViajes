@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
-import com.nahuelgDev.journeyjoy.services.RequestsService;
+import com.nahuelgDev.journeyjoy.services.RequestsService_Impl;
+import com.nahuelgDev.journeyjoy.services.interfaces.RequestsService_I;
 
 @RestController
 @RequestMapping("/api/request")
 public class RequestsController {
-  @Autowired RequestsService requestsService;
+  @Autowired RequestsService_I requestsService;
 
   @GetMapping("")
   // @PreAuthorize("authenticated()")

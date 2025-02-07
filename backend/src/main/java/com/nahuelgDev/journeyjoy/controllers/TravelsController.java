@@ -3,7 +3,6 @@ package com.nahuelgDev.journeyjoy.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
-import com.nahuelgDev.journeyjoy.services.TravelsService;
+import com.nahuelgDev.journeyjoy.services.interfaces.TravelsService_I;
 
 @RestController
 @RequestMapping("/api/travels")
 public class TravelsController {
-  @Autowired TravelsService travelsService;
+  @Autowired TravelsService_I travelsService;
 
   @GetMapping("")
   public List<Travels> getAll() {

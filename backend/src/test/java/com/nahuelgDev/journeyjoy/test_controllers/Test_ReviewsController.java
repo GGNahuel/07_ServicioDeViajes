@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.configurations.SecurityConfig;
 import com.nahuelgDev.journeyjoy.controllers.ReviewsController;
-import com.nahuelgDev.journeyjoy.services.ReviewsService;
+import com.nahuelgDev.journeyjoy.services.interfaces.ReviewsService_I;
 
 @WebMvcTest(ReviewsController.class)
 @AutoConfigureMockMvc(addFilters = true)
@@ -44,7 +44,7 @@ public class Test_ReviewsController {
   @Autowired ObjectMapper objectMapper;
 
   @SuppressWarnings("removal")
-  @MockBean ReviewsService service;
+  @MockBean ReviewsService_I service;
 
   @Test
   void getAll_returnsExpectedList() throws Exception {

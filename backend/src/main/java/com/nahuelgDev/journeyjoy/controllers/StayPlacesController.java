@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nahuelgDev.journeyjoy.dtos.StayPlacesDto;
-import com.nahuelgDev.journeyjoy.services.StayPlaceService;
+import com.nahuelgDev.journeyjoy.services.interfaces.StayPlacesService_I;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
 @RequestMapping("/api/stayplaces")
 public class StayPlacesController {
-  @Autowired StayPlaceService stayPlaceService;
+  @Autowired StayPlacesService_I stayPlaceService;
 
   @GetMapping("")
   public List<StayPlacesDto> getAll() {

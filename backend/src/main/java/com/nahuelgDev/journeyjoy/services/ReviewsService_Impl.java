@@ -15,9 +15,9 @@ import com.nahuelgDev.journeyjoy.repositories.ReviewsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.ReviewsService_I;
 
 @Service
-public class ReviewsService implements ReviewsService_I {
+public class ReviewsService_Impl implements ReviewsService_I {
   @Autowired ReviewsRepository reviewsRepo;
-  @Autowired ImagesService imageService;
+  @Autowired ImagesService_Impl imageService;
 
   public List<Reviews> getAll() {
     return reviewsRepo.findAll();
