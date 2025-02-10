@@ -23,7 +23,6 @@ public class TravelsService_Impl implements TravelsService_I{
   
   @Override
   public List<Travels> getAll() {
-    
     return travelsRepo.findAll();
   }
   
@@ -37,7 +36,8 @@ public class TravelsService_Impl implements TravelsService_I{
   }
 
   @Override
-  public List<Travels> getByCapacityLeft(boolean wantCapacity) {
+  public List<Travels> getByCapacityLeft(Boolean wantCapacity) {
+    checkFieldsHasContent(new Field("valor del filtro de capacidad", wantCapacity));
     return wantCapacity ? travelsRepo.findByHasCapacityLeft() : travelsRepo.findByNoCapacityLeft();
   }
 
@@ -48,6 +48,7 @@ public class TravelsService_Impl implements TravelsService_I{
 
   @Override
   public Travels create(Travels travelToCreate) {
+    checkFieldsHasContent(new Field("viaje", travelToCreate));
     checkFieldsHasContent(
       new Field("nombre", travelToCreate.getName()),
       new Field("capacidad máxima", travelToCreate.getMaxCapacity()),
@@ -57,47 +58,28 @@ public class TravelsService_Impl implements TravelsService_I{
       new Field("planes de pago", travelToCreate.getPayPlans())
     );
 
-    travelToCreate.setIsAvailable(true);
-    travelToCreate.setCurrentCapacity(0);
+    Travels newTravel = travelToCreate;
+    newTravel.setIsAvailable(true);
+    newTravel.setCurrentCapacity(0);
 
-    return travelsRepo.save(travelToCreate);
+    return travelsRepo.save(newTravel);
   }
 
   @Override
   public Travels update(Travels updatedTravel) {
+    checkFieldsHasContent(new Field("viaje a actualizar", updatedTravel));
     checkFieldsHasContent(new Field("id", updatedTravel.getId()));
 
-    Travels travelToUpdate = travelsRepo.findById(updatedTravel.getId()).orElseThrow(
+    travelsRepo.findById(updatedTravel.getId()).orElseThrow(
       () -> new DocumentNotFoundException("plan de viaje", updatedTravel.getId(), "id")
     );
-
-    updatedTravel.setId(travelToUpdate.getId());
 
     return travelsRepo.save(updatedTravel);
   }
 
   @Override
-  public String changeCurrentCapacity(String travelId, Integer relativeCapacity) {
-    checkFieldsHasContent(new Field("id del viaje", travelId), new Field("cambio en capacidad", relativeCapacity));
-
-    Travels travel = travelsRepo.findById(travelId).orElseThrow(
-      () -> new DocumentNotFoundException("plan de viaje", travelId, "id")
-    );
-
-    int currentCapacity = travel.getCurrentCapacity();
-    int newCapacity = currentCapacity + relativeCapacity;
-
-    if (newCapacity > travel.getMaxCapacity()) return "No hay cupo para la cantidad solicitada";
-    if (newCapacity < 0) return "Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"; 
-    // Esto en realidad sería un log (al cliente retornaría otro msg)
-
-    travel.setCurrentCapacity(newCapacity);
-    travelsRepo.save(travel);
-    return "Solicitud procesada con éxito";
-  }
-
-  @Override
   public String addReview(String travelId, Reviews newReview) {
+    checkFieldsHasContent(new Field("reseña", newReview));
     checkFieldsHasContent(
       new Field("id del viaje", travelId), 
       new Field("nombre del autor de la reseña", newReview.getUserName()),
