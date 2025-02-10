@@ -3,7 +3,6 @@ package com.nahuelgDev.journeyjoy.test_controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -73,8 +72,6 @@ public class Test_StayPlacesController {
 
     // verifying
     assertNotNull(actualResponse);
-    assertEquals(expectedResponse.size(), actualResponse.size());
-    assertTrue(actualResponse.stream().allMatch(element -> element instanceof StayPlacesDto));
     assertIterableEquals(expectedResponse, actualResponse);
     verify(service, times(1)).getAll();
   }
