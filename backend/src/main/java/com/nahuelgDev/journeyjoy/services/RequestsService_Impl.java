@@ -125,10 +125,10 @@ public class RequestsService_Impl implements RequestsService_I {
   }
 
   @Override 
-  public List<Requests> getByTravelName(String travelName) {
-    checkFieldsHasContent(new Field("nombre del viaje asociado", travelName));
+  public List<Requests> getByTravelId(String travelId) {
+    checkFieldsHasContent(new Field("nombre del viaje asociado", travelId));
 
-    return requestsRepo.findByAssociatedTravelName(travelName);
+    return requestsRepo.findByAssociatedTravelId(travelId);
   }
 
   @Override
@@ -263,7 +263,7 @@ public class RequestsService_Impl implements RequestsService_I {
     requestsRepo.save(request);
     emailsService.sendEmail(request.getEmail().getEmail(), "Cancelación de solicitud - Journey Joy", EmailContents.cancelRequest(request));
 
-    List<Requests> requestsInWaitList = requestsRepo.findByAssociatedTravelNameAndState(request.getAssociatedTravel().getName(), RequestState.inWaitList);
+    List<Requests> requestsInWaitList = requestsRepo.findByAssociatedTravelIdAndState(request.getAssociatedTravel().getName(), RequestState.inWaitList);
 
     requestsInWaitList.forEach(requestInWaitList -> {
       emailsService.sendEmail(

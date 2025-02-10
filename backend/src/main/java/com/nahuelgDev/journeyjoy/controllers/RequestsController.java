@@ -38,8 +38,8 @@ public class RequestsController {
 
   @GetMapping("/travel")
   // @PreAuthorize("authenticated()")
-  public List<Requests> getByTravelName(@RequestParam String name) {
-    return requestsService.getByTravelName(name);
+  public List<Requests> getByTravelId(@RequestParam String id) {
+    return requestsService.getByTravelId(id);
   }
 
   @GetMapping("/email")

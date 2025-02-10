@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.nahuelgDev.journeyjoy.collections.Requests;
@@ -12,11 +11,12 @@ import com.nahuelgDev.journeyjoy.enums.RequestState;
 
 @Repository
 public interface RequestsRepository extends MongoRepository<Requests, String> {
-  @Query("{associatedTravel.name: :#{travelName}}")
-  List<Requests> findByAssociatedTravelName(@Param("travelName") String travelName);
+  @Query("{associatedTravel: ?0}")
+  List<Requests> findByAssociatedTravelId(String travelId);
 
-  @Query("{$and: [ {associatedTravel.name: :#{travelName}}, {state: :#{state}} ]}")
-  List<Requests> findByAssociatedTravelNameAndState(@Param("travelName") String travelName,@Param("state") RequestState state);
+  @Query("{$and: [ {associatedTravel: ?0}, {state: ?1} ]}")
+  List<Requests> findByAssociatedTravelIdAndState(String travelId, RequestState state);
 
+  @Query("{'email.email': ?0}")
   List<Requests> findByEmail(String email);
 }
