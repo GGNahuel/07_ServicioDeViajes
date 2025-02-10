@@ -125,6 +125,7 @@ public class Test_ReviewsService {
     MultipartFile file = mock(MultipartFile.class);
 
     assertAll(
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(null, file)),
       () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutAutor, file)),
       () -> assertThrows(EmptyFieldException.class, () -> service.create(emptyAutor, file)),
       () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutRating, file)),
@@ -162,6 +163,7 @@ public class Test_ReviewsService {
     Reviews withoutImage = Reviews.builder().id("1").userImage(null).build();
 
     assertAll(
+      () -> assertThrows(EmptyFieldException.class, () -> service.update(null, mock(MultipartFile.class))),
       () -> assertThrows(EmptyFieldException.class, () -> service.update(withoutId, mock(MultipartFile.class))),
       () -> assertThrows(EmptyFieldException.class, () -> service.update(emptyId, mock(MultipartFile.class))),
       () -> assertThrows(EmptyFieldException.class, () -> service.update(withoutImage, mock(MultipartFile.class))),

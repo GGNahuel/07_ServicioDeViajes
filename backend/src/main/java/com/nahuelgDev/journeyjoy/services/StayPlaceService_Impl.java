@@ -48,6 +48,7 @@ public class StayPlaceService_Impl implements StayPlacesService_I {
 
   @Override @Transactional
   public StayPlacesDto create(StayPlacesDto placeToCreate) {
+    checkFieldsHasContent(new Field("lugar de estadía", placeToCreate));
     checkFieldsHasContent(
       new Field("lugar", placeToCreate.getFrom()),
       new Field("nombre del establecimiento", placeToCreate.getName())
@@ -60,6 +61,7 @@ public class StayPlaceService_Impl implements StayPlacesService_I {
 
   @Override @Transactional
   public StayPlacesDto update(StayPlacesDto updatedPlace) {
+    checkFieldsHasContent(new Field("lugar de estadía", updatedPlace));
     checkFieldsHasContent(new Field("id", updatedPlace.getId()));
 
     stayPlaceRepo.findById(updatedPlace.getId()).orElseThrow(

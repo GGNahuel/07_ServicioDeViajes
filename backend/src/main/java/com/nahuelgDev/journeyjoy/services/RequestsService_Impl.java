@@ -140,6 +140,7 @@ public class RequestsService_Impl implements RequestsService_I {
 
   @Override
   public Requests create(Requests requestToCreate) {
+    checkFieldsHasContent(new Field("solicitud de viaje", requestToCreate));
     checkFieldsHasContent(
       new Field("plan seleccionado", requestToCreate.getSelectedPlan()),
       new Field("personas en el plan", requestToCreate.getPersons()),
@@ -190,6 +191,7 @@ public class RequestsService_Impl implements RequestsService_I {
 
   @Override
   public Requests update(RequestsUpdateDto updatedRequest) {
+    checkFieldsHasContent(new Field("solicitud de viaje", updatedRequest));
     checkFieldsHasContent(new Field("id", updatedRequest.getId()));
 
     Requests requestToUpdate = requestsRepo.findById(updatedRequest.getId()).orElseThrow(

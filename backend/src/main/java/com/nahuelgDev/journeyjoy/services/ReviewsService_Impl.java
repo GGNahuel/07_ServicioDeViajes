@@ -32,6 +32,7 @@ public class ReviewsService_Impl implements ReviewsService_I {
   }
 
   public Reviews create(Reviews reviewToCreate, MultipartFile image) throws IOException {
+    checkFieldsHasContent(new Field("reseña", reviewToCreate));
     checkFieldsHasContent(
       new Field("autor", reviewToCreate.getUserName()),
       new Field("puntaje", reviewToCreate.getRating()),
@@ -44,6 +45,7 @@ public class ReviewsService_Impl implements ReviewsService_I {
   }
   
   public Reviews update(Reviews updatedReview, MultipartFile image) throws IOException {
+    checkFieldsHasContent(new Field("reseña", updatedReview));
     checkFieldsHasContent(
       new Field("id", updatedReview.getId()),
       new Field("foto previa", updatedReview.getUserImage()),

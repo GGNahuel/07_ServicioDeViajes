@@ -1,6 +1,10 @@
 package com.nahuelgDev.journeyjoy.test_services;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
 import com.nahuelgDev.journeyjoy.services.EmailsService;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,5 +45,15 @@ public class Test_EmailsService {
     SimpleMailMessage actual = messageCaptor.getValue();
     assertEquals("nahuel.gg.dev@gmail.com", actual.getFrom());
     assertEquals(expected, actual);
+  }
+
+  @Test
+  void sendEmail_throwsEmptyFieldException() {
+    assertAll(
+      () -> assertThrows(EmptyFieldException.class, () -> service.sendEmail("", "asd", "asd")),
+      () -> assertThrows(EmptyFieldException.class, () -> service.sendEmail("asd", "", "asd")),
+      () -> assertThrows(EmptyFieldException.class, () -> service.sendEmail("asd", "asd", ""))
+    );
+    verify(sender, times(0)).send(any(SimpleMailMessage.class));
   }
 }

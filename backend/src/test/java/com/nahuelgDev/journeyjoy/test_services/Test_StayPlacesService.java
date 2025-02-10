@@ -1,5 +1,6 @@
 package com.nahuelgDev.journeyjoy.test_services;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
@@ -137,8 +138,11 @@ public class Test_StayPlacesService {
     StayPlacesDto successCase = StayPlacesDto.builder().name("name").from("from").build();
     when(modelMapper.map(successCase, StayPlaces.class)).thenReturn(new StayPlaces());
 
-    assertThrows(EmptyFieldException.class, () -> stayPlaceService.create(emptyName));
-    assertThrows(EmptyFieldException.class, () -> stayPlaceService.create(emptyFrom));
+    assertAll(
+      () -> assertThrows(EmptyFieldException.class, () -> stayPlaceService.create(null)),
+      () -> assertThrows(EmptyFieldException.class, () -> stayPlaceService.create(emptyName)),
+      () -> assertThrows(EmptyFieldException.class, () -> stayPlaceService.create(emptyFrom))
+    );
     assertDoesNotThrow(() -> stayPlaceService.create(successCase));
     verify(stayPlaceRepo, times(1)).save(any());
   }
@@ -159,18 +163,21 @@ public class Test_StayPlacesService {
   }
 
   @Test
+  void update_throwsEmptyFieldExceptionForId() {
+    assertAll(
+      () -> assertThrows(EmptyFieldException.class, () -> stayPlaceService.update(null)),
+      () -> assertThrows(EmptyFieldException.class, () -> stayPlaceService.update(StayPlacesDto.builder().build()))
+    );
+    verify(stayPlaceRepo, times(0)).findById(anyString());
+    verify(stayPlaceRepo, times(0)).save(any());
+  }
+
+  @Test
   void update_throwsDocumentNotFoundException() {
     when(stayPlaceRepo.findById("1")).thenReturn(Optional.empty());
 
     assertThrows(DocumentNotFoundException.class, () -> stayPlaceService.update(stayPlaceDto));
     verify(stayPlaceRepo).findById("1");
-    verify(stayPlaceRepo, times(0)).save(any());
-  }
-
-  @Test
-  void update_throwsEmptyFieldExceptionForId() {
-    assertThrows(EmptyFieldException.class, () -> stayPlaceService.delete(""));
-    assertThrows(EmptyFieldException.class, () -> stayPlaceService.delete(null));
     verify(stayPlaceRepo, times(0)).save(any());
   }
 
@@ -187,18 +194,21 @@ public class Test_StayPlacesService {
   }
 
   @Test
+  void delete_throwsEmptyFieldExceptionForId() {
+    assertAll(
+      () -> assertThrows(EmptyFieldException.class, () -> stayPlaceService.delete(null)),
+      () -> assertThrows(EmptyFieldException.class, () -> stayPlaceService.delete(""))
+    );
+    verify(stayPlaceRepo, times(0)).findById(anyString());
+    verify(stayPlaceRepo, times(0)).deleteById(anyString());
+  }
+
+  @Test
   void delete_throwsDocumentNotFoundException() {
     when(stayPlaceRepo.findById("1")).thenReturn(Optional.empty());
 
     assertThrows(DocumentNotFoundException.class, () -> stayPlaceService.delete("1"));
     verify(stayPlaceRepo).findById("1");
-    verify(stayPlaceRepo, times(0)).deleteById(anyString());
-  }
-
-  @Test
-  void delete_throwsEmptyFieldExceptionForId() {
-    assertThrows(EmptyFieldException.class, () -> stayPlaceService.delete(null));
-    assertThrows(EmptyFieldException.class, () -> stayPlaceService.delete(""));
     verify(stayPlaceRepo, times(0)).deleteById(anyString());
   }
 }
