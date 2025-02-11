@@ -12,6 +12,7 @@ import com.nahuelgDev.journeyjoy.collections.Emails;
 import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
+import com.nahuelgDev.journeyjoy.enums.EmailSubjects;
 import com.nahuelgDev.journeyjoy.enums.RequestState;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.InvalidFieldValueException;
@@ -46,7 +47,10 @@ public class RequestsService_Impl implements RequestsService_I {
 
   private void checkSelectedDateIsInTravel(Travels associatedTravel, Requests requestToCompare) {
     associatedTravel.getAvailableDates().stream().filter(
-      date -> date == requestToCompare.getSelectedDate()
+      date -> {
+        System.out.println(date + "_____" + requestToCompare.getSelectedDate());
+        return date.equals(requestToCompare.getSelectedDate());
+      }
     ).findFirst().orElseThrow(
       () -> new InvalidFieldValueException("La fecha enviada no coincide con ninguna de las fechas disponibles para el viaje")
     );
@@ -81,7 +85,6 @@ public class RequestsService_Impl implements RequestsService_I {
 
     if (newCapacity > associatedTravel.getMaxCapacity()) return new CheckCapacityFunctionReturn(null, false);
     if (newCapacity < 0) throw new InvalidOperationException("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
-    // Esto en realidad sería un log (al cliente retornaría otro msg)
 
     return new CheckCapacityFunctionReturn(newCapacity, true);
   }
@@ -155,7 +158,7 @@ public class RequestsService_Impl implements RequestsService_I {
     CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, requestToCreate, false);
 
     Double totalPrice = associatedTravelInDB.getPayPlans().stream().filter(
-      plan -> plan.getPlanFor() == requestToCreate.getSelectedPlan().getPlanFor()
+      plan -> plan.equals(requestToCreate.getSelectedPlan())
     ).findFirst().orElseThrow(
       () -> new InvalidFieldValueException("El plan de pago enviado no existe en los disponibles para el viaje seleccionado")
     ).getPrice();
@@ -185,8 +188,9 @@ public class RequestsService_Impl implements RequestsService_I {
       travelsRepo.save(associatedTravelInDB);      
     }
 
-    emailsService.sendEmail(associatedEmail, "Solicitud de viaje realizada - Journey Joy", EmailContents.requestNotification(requestToCreate));
-    return requestsRepo.save(requestToCreate);
+    emailsService.sendEmail(associatedEmail, EmailContents.setSubject(EmailSubjects.CreatedRequest), EmailContents.requestNotification(requestToCreate));
+    requestsRepo.save(requestToCreate);
+    return requestToCreate;
   }
 
   @Override
@@ -211,7 +215,11 @@ public class RequestsService_Impl implements RequestsService_I {
       travelsRepo.save(associatedTravelInDB);
     }
 
-    emailsService.sendEmail(requestToUpdate.getEmail().getEmail(), "Solicitud de viaje actualizada - Journey Joy", EmailContents.updatedRequestNotification(mappedUpdatedRequest));
+    emailsService.sendEmail(
+      requestToUpdate.getEmail().getEmail(), 
+      EmailContents.setSubject(EmailSubjects.UpdatedRequest),
+      EmailContents.updatedRequestNotification(mappedUpdatedRequest)
+    );
     return requestsRepo.save(mappedUpdatedRequest);
   }
 
@@ -235,7 +243,11 @@ public class RequestsService_Impl implements RequestsService_I {
     
     request.setAmountPaid(updatedPayment);
     requestsRepo.save(request);
-    emailsService.sendEmail(request.getEmail().getEmail(), "Pago realizado - Journey Joy", EmailContents.paymentNotification(amount, request));
+    emailsService.sendEmail(
+      request.getEmail().getEmail(),
+      EmailContents.setSubject(EmailSubjects.AddedPayment),
+      EmailContents.paymentNotification(amount, request)
+    );
     return String.format("Pago realizado con éxito. Total pagado: %s. Falta pagar: %s", updatedPayment, remainingPay);
   }
 
@@ -261,14 +273,14 @@ public class RequestsService_Impl implements RequestsService_I {
     // here should be the connection with the payment gateway to make the refund if it's applicable
 
     requestsRepo.save(request);
-    emailsService.sendEmail(request.getEmail().getEmail(), "Cancelación de solicitud - Journey Joy", EmailContents.cancelRequest(request));
+    emailsService.sendEmail(request.getEmail().getEmail(), EmailContents.setSubject(EmailSubjects.CanceledRequest), EmailContents.cancelRequest(request));
 
     List<Requests> requestsInWaitList = requestsRepo.findByAssociatedTravelIdAndState(request.getAssociatedTravel().getName(), RequestState.inWaitList);
 
     requestsInWaitList.forEach(requestInWaitList -> {
       emailsService.sendEmail(
         requestInWaitList.getEmail().getEmail(), 
-        "Posible confirmación de viaje - Journey Joy", 
+        EmailContents.setSubject(EmailSubjects.NotificationForInWaitList), 
         EmailContents.travelNowHasCapacityNotification(request)
       );
     });

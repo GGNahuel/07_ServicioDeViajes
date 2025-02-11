@@ -6,10 +6,24 @@ import java.util.Map;
 
 import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.dataClasses.Person;
+import com.nahuelgDev.journeyjoy.enums.EmailSubjects;
 import com.nahuelgDev.journeyjoy.enums.PayPlansType;
 import com.nahuelgDev.journeyjoy.enums.RequestState;
 
 public class EmailContents {
+  // subjects
+
+  public static String setSubject(EmailSubjects subject) {
+    Map<EmailSubjects, String> subjectValues = new HashMap<>();
+    subjectValues.put(EmailSubjects.CreatedRequest, "Solicitud de viaje realizada - Journey Joy");
+    subjectValues.put(EmailSubjects.UpdatedRequest, "Solicitud de viaje actualizada - Journey Joy");
+    subjectValues.put(EmailSubjects.AddedPayment, "Pago realizado - Journey Joy");
+    subjectValues.put(EmailSubjects.CanceledRequest, "Cancelación de solicitud - Journey Joy");
+    subjectValues.put(EmailSubjects.NotificationForInWaitList, "Posible confirmación de viaje - Journey Joy");
+
+    return subjectValues.get(subject);
+  }
+
   // info generators
 
   private static String getPeopleData(List<Person> list) {
