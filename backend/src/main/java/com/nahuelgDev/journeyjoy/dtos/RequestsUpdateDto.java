@@ -7,9 +7,13 @@ import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.dataClasses.PayPlans;
 import com.nahuelgDev.journeyjoy.dataClasses.Person;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class RequestsUpdateDto {
   private String id;
   private PayPlans selectedPlan;

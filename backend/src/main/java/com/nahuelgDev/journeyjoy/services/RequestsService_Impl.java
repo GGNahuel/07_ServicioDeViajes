@@ -47,10 +47,7 @@ public class RequestsService_Impl implements RequestsService_I {
 
   private void checkSelectedDateIsInTravel(Travels associatedTravel, Requests requestToCompare) {
     associatedTravel.getAvailableDates().stream().filter(
-      date -> {
-        System.out.println(date + "_____" + requestToCompare.getSelectedDate());
-        return date.equals(requestToCompare.getSelectedDate());
-      }
+      date -> date.equals(requestToCompare.getSelectedDate())
     ).findFirst().orElseThrow(
       () -> new InvalidFieldValueException("La fecha enviada no coincide con ninguna de las fechas disponibles para el viaje")
     );
@@ -70,12 +67,12 @@ public class RequestsService_Impl implements RequestsService_I {
   }
 
   private CheckCapacityFunctionReturn checkAssociatedTravelHasCapacity(
-    Travels associatedTravel, Requests requestToCompare, Boolean requestCapacityHasChange
+    Travels associatedTravel, Requests requestToCompare, Boolean updatingRequest
   ) {
     int currentCapacity = associatedTravel.getCurrentCapacity();
     int newCapacity = currentCapacity + requestToCompare.getPersons().size() * (requestToCompare.getState() == RequestState.canceled ? -1 : 1);
 
-    if (requestCapacityHasChange) {
+    if (updatingRequest) {
       Requests previousStateOfRequest = requestsRepo.findById(requestToCompare.getId()).orElseThrow(
         () -> new DocumentNotFoundException("solicitud de viaje", requestToCompare.getId(), "id")
       );
