@@ -16,28 +16,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
-import com.nahuelgDev.journeyjoy.services.RequestsService_Impl;
 import com.nahuelgDev.journeyjoy.services.interfaces.RequestsService_I;
 
 @RestController
 @RequestMapping("/api/request")
 public class RequestsController {
+
   @Autowired RequestsService_I requestsService;
 
   @GetMapping("")
-  // @PreAuthorize("authenticated()")
+  @PreAuthorize("isAuthenticated()")
   public List<Requests> getAll() {
     return requestsService.getAll();
   }
 
   @GetMapping("/{id}")
-  // @PreAuthorize("authenticated()")
+  @PreAuthorize("isAuthenticated()")
   public Requests getById(@PathVariable String id) {
     return requestsService.getById(id);
   }
 
   @GetMapping("/travel")
-  // @PreAuthorize("authenticated()")
+  @PreAuthorize("isAuthenticated()")
   public List<Requests> getByTravelId(@RequestParam String id) {
     return requestsService.getByTravelId(id);
   }
