@@ -27,4 +27,9 @@ public class ExceptionsHandler {
   public ResponseEntity<String> invalidOperation(InvalidOperationException ex) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
   }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<String> exception(Exception ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 }
