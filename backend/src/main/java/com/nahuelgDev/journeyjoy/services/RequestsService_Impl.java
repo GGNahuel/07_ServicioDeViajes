@@ -7,6 +7,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.nahuelgDev.journeyjoy.collections.Emails;
 import com.nahuelgDev.journeyjoy.collections.Requests;
@@ -81,28 +82,23 @@ public class RequestsService_Impl implements RequestsService_I {
     }
 
     if (newCapacity > associatedTravel.getMaxCapacity()) return new CheckCapacityFunctionReturn(null, false);
-    if (newCapacity < 0) throw new InvalidOperationException("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
+    if (newCapacity < 0) throw new RuntimeException("Ocurrió un error al dar de baja. La nueva cantidad es menor a 0"); 
 
     return new CheckCapacityFunctionReturn(newCapacity, true);
   }
 
   // others
 
-  private void makeRequestInWaitListConfirmed(Double updatedPayment, Requests request) {
+  private void makeRequestInWaitListConfirmed(Double updatedPayment, Requests request, Travels associatedTravelInDB) {
     if (updatedPayment < (request.getTotalPrice() * 0.16))
       throw new InvalidFieldValueException("Para que la solicitud sea confirmada debe recibirse como pago al menos la sexta parte del total");
-    
-    Travels associatedTravelInDB = getAssociatedTravel(request);
-    
+       
     CheckCapacityFunctionReturn capacityFnReturn = checkAssociatedTravelHasCapacity(associatedTravelInDB, request, false);
     if (!capacityFnReturn.hasCapacityForNew) 
       throw new InvalidOperationException(
         "En estos momentos no hay cupo disponible para validar el pago de su solicitud. \n" + 
         "Si usted ha recibido un mail indicando lo contrario es probable que alguien en lista de espera ya haya hecho el pago requerido"
       );
-
-    RequestState state = getNewState(capacityFnReturn.hasCapacityForNew, updatedPayment, request.getTotalPrice());
-    request.setState(state);
     
     associatedTravelInDB.setCurrentCapacity(capacityFnReturn.newCapacity);
     travelsRepo.save(associatedTravelInDB);
@@ -220,7 +216,7 @@ public class RequestsService_Impl implements RequestsService_I {
     return requestsRepo.save(mappedUpdatedRequest);
   }
 
-  @Override
+  @Override @Transactional
   public String addPayment(String id, Double amount) {
     checkFieldsHasContent(new Field("id de la solicitud", id), new Field("monto a pagar", amount));
 
@@ -235,9 +231,12 @@ public class RequestsService_Impl implements RequestsService_I {
       throw new InvalidFieldValueException("El valor ingresado como pago, sumado a lo pagado anteriormente, excede al total de lo requerido");
 
     if (request.getState() == RequestState.inWaitList) {
-      makeRequestInWaitListConfirmed(updatedPayment, request);
+      Travels associatedTravelInDB = getAssociatedTravel(request);
+      makeRequestInWaitListConfirmed(updatedPayment, request, associatedTravelInDB);
     }
     
+    RequestState state = getNewState(true, updatedPayment, request.getTotalPrice());
+    request.setState(state);
     request.setAmountPaid(updatedPayment);
     requestsRepo.save(request);
     emailsService.sendEmail(
@@ -257,9 +256,7 @@ public class RequestsService_Impl implements RequestsService_I {
     );
     request.setState(RequestState.canceled);
 
-    Travels associatedTravel = travelsRepo.findById(request.getAssociatedTravel().getId()).orElseThrow(
-      () -> new DocumentNotFoundException("viaje", id, "id")
-    );
+    Travels associatedTravel = getAssociatedTravel(request);
     CheckCapacityFunctionReturn check = checkAssociatedTravelHasCapacity(associatedTravel, request, false);
     if (check.hasCapacityForNew) {
       associatedTravel.setCurrentCapacity(check.newCapacity);
@@ -272,7 +269,7 @@ public class RequestsService_Impl implements RequestsService_I {
     requestsRepo.save(request);
     emailsService.sendEmail(request.getEmail().getEmail(), EmailContents.setSubject(EmailSubjects.CanceledRequest), EmailContents.cancelRequest(request));
 
-    List<Requests> requestsInWaitList = requestsRepo.findByAssociatedTravelIdAndState(request.getAssociatedTravel().getName(), RequestState.inWaitList);
+    List<Requests> requestsInWaitList = requestsRepo.findByAssociatedTravelIdAndState(request.getAssociatedTravel().getId(), RequestState.inWaitList);
 
     requestsInWaitList.forEach(requestInWaitList -> {
       emailsService.sendEmail(

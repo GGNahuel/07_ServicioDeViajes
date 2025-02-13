@@ -36,6 +36,7 @@ import com.nahuelgDev.journeyjoy.enums.RequestState;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
 import com.nahuelgDev.journeyjoy.exceptions.InvalidFieldValueException;
+import com.nahuelgDev.journeyjoy.exceptions.InvalidOperationException;
 import com.nahuelgDev.journeyjoy.repositories.EmailsRepository;
 import com.nahuelgDev.journeyjoy.repositories.RequestsRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
@@ -55,7 +56,8 @@ public class Test_RequestsService {
   @InjectMocks RequestsService_Impl service;
 
   private Requests request1, request2;
-  private Travels travel1, travel2;
+  private Travels travel1;
+  private List<Person> persons;
 
   @BeforeEach
   void setUp() {
@@ -65,20 +67,21 @@ public class Test_RequestsService {
       .availableDates(List.of(LocalDate.of(2025, 3, 15)))
       .maxCapacity(20).currentCapacity(15)
     .build();
-    travel2 = Travels.builder().id("2").name("travel2").build();
+
+    persons = List.of(Person.builder().name("person").age(25).contactPhone(140).build());
 
     request1 = Requests.builder()
       .id("1").amountPaid(200.0)
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
-      .state(RequestState.completePayment)
+      .state(RequestState.completePayment).persons(persons)
       .email(Emails.builder().email("email@gmail.com").build())
     .build();
     request2 = Requests.builder()
       .id("2").amountPaid(0.0)
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
-      .associatedTravel(travel2)
-      .state(RequestState.inWaitList)
+      .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
+      .state(RequestState.inWaitList).persons(persons)
       .email(Emails.builder().email("email@gmail.com").build())
     .build();
   }
@@ -151,14 +154,14 @@ public class Test_RequestsService {
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email@gmail.com").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
     Requests expected = Requests.builder()
       .id("1").amountPaid(200.0)
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email@gmail.com").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
       .totalPrice(200.0).state(RequestState.completePayment)
     .build();
 
@@ -187,7 +190,7 @@ public class Test_RequestsService {
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email@gmail.com").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
 
     when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
@@ -212,7 +215,7 @@ public class Test_RequestsService {
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email(email).build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
 
     when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
@@ -237,7 +240,7 @@ public class Test_RequestsService {
       .amountPaid(0.0)
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
     Requests withoutPeople = Requests.builder()
       .amountPaid(0.0)
@@ -249,19 +252,19 @@ public class Test_RequestsService {
       .amountPaid(0.0)
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .email(Emails.builder().email("email").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
     Requests withoutAmountPaid = Requests.builder()
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
     Requests withoutEmail = Requests.builder()
       .amountPaid(0.0)
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
 
     assertAll(
@@ -287,7 +290,7 @@ public class Test_RequestsService {
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
 
     when(travelsRepo.findByName("travel1")).thenReturn(Optional.empty());
@@ -305,14 +308,21 @@ public class Test_RequestsService {
       .selectedPlan(PayPlans.builder().price(50.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
     .build();
     Requests invalidAmountPaid = Requests.builder()
       .id("1").amountPaid(200.0)
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
+    .build();
+    Requests invalidDate = Requests.builder()
+      .id("1").amountPaid(200.0)
+      .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
+      .associatedTravel(travel1).selectedDate(LocalDate.of(2026, 3, 15))
+      .email(Emails.builder().email("email").build())
+      .persons(persons)
     .build();
 
     when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
@@ -322,7 +332,8 @@ public class Test_RequestsService {
       () -> assertThrows(InvalidFieldValueException.class, () -> {
         travel1.setCurrentCapacity(20);
         service.create(invalidAmountPaid);
-      })
+      }),
+      () -> assertThrows(InvalidFieldValueException.class, () -> service.create(invalidDate))
     );
     verify(repository, times(0)).save(any(Requests.class));
     verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
@@ -332,14 +343,14 @@ public class Test_RequestsService {
   void update_returnsExpectedAndSaveNewTravelCapacity() {
     RequestsUpdateDto input = RequestsUpdateDto.builder()
       .id("1").associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
-      .persons(List.of(Person.builder().name("asd").age(23).contactPhone(342).build()))
+      .persons(persons)
     .build();
     Requests saved = Requests.builder()
       .id("1").amountPaid(200.0)
       .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
       .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
       .email(Emails.builder().email("email@gmail.com").build())
-      .persons(List.of(Person.builder().name("person").age(25).contactPhone(140).build()))
+      .persons(persons)
       .totalPrice(200.0).state(RequestState.completePayment)
     .build();
     when(repository.findById("1")).thenReturn(Optional.of(saved));
@@ -356,6 +367,8 @@ public class Test_RequestsService {
     ArgumentCaptor<Travels> travelSaved = ArgumentCaptor.forClass(Travels.class);
     verify(travelsRepo).save(travelSaved.capture());
     assertEquals(travel1.getCurrentCapacity() + input.getPersons().size() - saved.getPersons().size(), travelSaved.getValue().getCurrentCapacity());
+
+    verify(emailsService).sendEmail("email@gmail.com", EmailContents.setSubject(EmailSubjects.UpdatedRequest), EmailContents.updatedRequestNotification(saved));
   }
 
   @Test
@@ -373,11 +386,11 @@ public class Test_RequestsService {
   void update_throwsDocumentNotFoundException() {
     RequestsUpdateDto input = RequestsUpdateDto.builder()
       .id("4").associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
-      .persons(List.of(Person.builder().name("asd").age(23).contactPhone(342).build()))
+      .persons(persons)
     .build();
     RequestsUpdateDto input2 = RequestsUpdateDto.builder()
       .id("1").associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
-      .persons(List.of(Person.builder().name("asd").age(23).contactPhone(342).build()))
+      .persons(persons)
     .build();
     when(repository.findById("4")).thenReturn(Optional.empty());
     when(repository.findById("1")).thenReturn(Optional.of(request1));
@@ -395,6 +408,194 @@ public class Test_RequestsService {
 
   @Test
   void update_throwsInvalidOperationException() {
+    request1.setState(RequestState.canceled);
+    RequestsUpdateDto input = RequestsUpdateDto.builder()
+      .id("1").associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
+      .persons(persons)
+    .build();
+    when(repository.findById("1")).thenReturn(Optional.of(request1));
+
+    assertThrows(InvalidOperationException.class, () -> service.update(input));
+    verify(repository).findById("1");
+    verify(repository, times(0)).save(any(Requests.class));
+    verify(travelsRepo, times(0)).save(any(Travels.class));
+    verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
+  }
+
+  @Test
+  void update_throwsInvalidFieldValueException() {
+    RequestsUpdateDto input = RequestsUpdateDto.builder()
+      .id("1").associatedTravel(travel1).selectedDate(LocalDate.of(2026, 3, 15))
+      .persons(persons)
+    .build();
+    request1.setSelectedDate(LocalDate.of(2026, 3, 15));
+    when(repository.findById("1")).thenReturn(Optional.of(request1));
+    when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
+    when(modelMapper.map(input, Requests.class)).thenReturn(request1);
+
+    assertThrows(InvalidFieldValueException.class, () -> service.update(input));
+    verify(repository).findById("1");
+    verify(repository, times(0)).save(any(Requests.class));
+    verify(travelsRepo, times(0)).save(any(Travels.class));
+    verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
+  }
+
+  @Test
+  void addPayment_makeRightChanges() {
+    request1.setAmountPaid(100.0);
+    request1.setState(RequestState.parcialPayment);
+    request1.setTotalPrice(200.0);
+    when(repository.findById("1")).thenReturn(Optional.of(request1));
+
+    service.addPayment("1", 100.0);
+
+    verify(repository).findById("1");
+    verify(travelsRepo, times(0)).findByName(anyString());
+    verify(travelsRepo, times(0)).save(any(Travels.class));
+    verify(emailsService, times(1)).sendEmail("email@gmail.com", EmailContents.setSubject(EmailSubjects.AddedPayment), EmailContents.paymentNotification(100.0, request1));
+
+    ArgumentCaptor<Requests> requestSaved = ArgumentCaptor.forClass(Requests.class);
+    verify(repository).save(requestSaved.capture());
+
+    assertEquals(200.0, requestSaved.getValue().getAmountPaid());
+    assertEquals(RequestState.completePayment, requestSaved.getValue().getState());
+  }
+
+  @Test
+  void addPayment_changeWaitListState() {
+    request2.setTotalPrice(200.0);
+    when(repository.findById("1")).thenReturn(Optional.of(request2));
+    when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
+
+    service.addPayment("1", 100.0);
+
+    verify(repository).findById("1");
+    verify(travelsRepo).findByName("travel1");
+    verify(travelsRepo).save(any(Travels.class));
+    verify(emailsService).sendEmail(
+      "email@gmail.com", 
+      EmailContents.setSubject(EmailSubjects.AddedPayment), 
+      EmailContents.paymentNotification(100.0, request2)
+    );
+
+    ArgumentCaptor<Requests> requestSaved = ArgumentCaptor.forClass(Requests.class);
+    verify(repository).save(requestSaved.capture());
+
+    assertEquals(100.0, requestSaved.getValue().getAmountPaid());
+    assertEquals(RequestState.parcialPayment, requestSaved.getValue().getState());
+  }
+
+  @Test
+  void addPayment_throwsEmptyFieldException() {
+    assertAll(
+      () -> assertThrows(EmptyFieldException.class, () -> service.addPayment("", 100.0)),
+      () -> assertThrows(EmptyFieldException.class, () -> service.addPayment("1", null))
+    );
+    verify(repository, times(0)).findById(anyString());
+    verify(travelsRepo, times(0)).findByName(anyString());
+    verify(repository, times(0)).save(any(Requests.class));
+    verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
+  }
+
+  @Test
+  void addPayment_throwsDocumentNotFoundException() {
+    Requests requestInWaitList = Requests.builder()
+      .id("1").amountPaid(0.0)
+      .selectedPlan(PayPlans.builder().price(200.0).planFor(PayPlansType.individual).build())
+      .associatedTravel(travel1).selectedDate(LocalDate.of(2025, 3, 15))
+      .email(Emails.builder().email("email@gmail.com").build())
+      .persons(persons)
+      .totalPrice(200.0).state(RequestState.inWaitList)
+    .build();
+    when(repository.findById("1")).thenReturn(Optional.of(requestInWaitList));
+    when(repository.findById("4")).thenReturn(Optional.empty());
+    when(travelsRepo.findByName("travel1")).thenReturn(Optional.empty());
+
+    assertThrows(DocumentNotFoundException.class, () -> service.addPayment("1", 100.0));
+    assertThrows(DocumentNotFoundException.class, () -> service.addPayment("4", 100.0));
+    verify(repository, times(2)).findById(anyString());
+    verify(travelsRepo).findByName("travel1");
+  }
+
+  @Test
+  void addPayment_throwsInvalidFieldValueException() {
+    request1.setTotalPrice(200.0);
+    when(repository.findById("1")).thenReturn(Optional.of(request1));
+
+    assertThrows(InvalidFieldValueException.class, () -> service.addPayment("1", 200.0));
+    verify(repository).findById("1");
+    verify(repository, times(0)).save(any(Requests.class));
+    verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
+  }
+
+  @Test
+  void addPayment_throwsInvalidOperationException_WhenChangeWaitListState() {
+    request2.setTotalPrice(200.0);
+    travel1.setCurrentCapacity(20);
+    when(repository.findById("2")).thenReturn(Optional.of(request2));
+    when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
+
+    assertThrows(InvalidOperationException.class, () -> service.addPayment("2", 100.0));
+    verify(repository).findById("2");
+    verify(repository, times(0)).save(any(Requests.class));
+    verify(travelsRepo).findByName("travel1");
+    verify(travelsRepo, times(0)).save(any(Travels.class));
+    verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
+  }
+
+  @Test
+  void cancelRequest_saveRequestAndTravelChanges() {
+    when(repository.findById("1")).thenReturn(Optional.of(request1));
+    when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
+
+    service.cancelRequest("1");
     
+    verify(repository).findById("1");
+    verify(travelsRepo).findByName("travel1");
+    ArgumentCaptor<Requests> requestSaved = ArgumentCaptor.forClass(Requests.class);
+    ArgumentCaptor<Travels> travelSaved = ArgumentCaptor.forClass(Travels.class);
+    verify(repository).save(requestSaved.capture());
+    verify(travelsRepo).save(travelSaved.capture());
+
+    assertEquals(RequestState.canceled, requestSaved.getValue().getState());
+    assertEquals(14, travelSaved.getValue().getCurrentCapacity());
+  }
+
+  @Test
+  void cancelRequest_sendEmails_toRequestOwnerAndWaitListRequest() {
+    request1.setTotalPrice(200.0);
+    request2.setTotalPrice(200.0);
+    when(repository.findById("1")).thenReturn(Optional.of(request1));
+    when(travelsRepo.findByName("travel1")).thenReturn(Optional.of(travel1));
+    when(repository.findByAssociatedTravelIdAndState("1", RequestState.inWaitList)).thenReturn(List.of(request2));
+
+    service.cancelRequest("1");
+
+    verify(emailsService).sendEmail("email@gmail.com", EmailContents.setSubject(EmailSubjects.CanceledRequest), EmailContents.cancelRequest(request1));
+    verify(emailsService).sendEmail("email@gmail.com", EmailContents.setSubject(EmailSubjects.NotificationForInWaitList), EmailContents.travelNowHasCapacityNotification(request1));
+  }
+
+  @Test 
+  void cancelRequest_throwsEmptyFieldException() {
+    assertThrows(EmptyFieldException.class, () -> service.cancelRequest(null));
+    verify(repository, times(0)).findById(anyString());
+    verify(repository, times(0)).save(any(Requests.class));
+    verify(travelsRepo, times(0)).save(any(Travels.class));
+    verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
+  }
+
+  @Test
+  void cancelRequest_throwsDocumentNotFoundException() {
+    when(repository.findById("1")).thenReturn(Optional.of(request1));
+    when(repository.findById("4")).thenReturn(Optional.empty());
+    when(travelsRepo.findByName("travel1")).thenReturn(Optional.empty());
+  
+    assertThrows(DocumentNotFoundException.class, () -> service.cancelRequest("1"));
+    assertThrows(DocumentNotFoundException.class, () -> service.cancelRequest("4"));
+    verify(repository, times(2)).findById(anyString());
+    verify(repository, times(0)).save(any(Requests.class));
+    verify(travelsRepo).findByName("travel1");
+    verify(travelsRepo, times(0)).save(any(Travels.class));
+    verify(emailsService, times(0)).sendEmail(anyString(), anyString(), anyString());
   }
 }
