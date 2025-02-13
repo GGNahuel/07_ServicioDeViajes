@@ -3,6 +3,8 @@ package com.nahuelgDev.journeyjoy.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +42,8 @@ public class StayPlacesController {
 
   @PostMapping("")
   @PreAuthorize("isAuthenticated()")
-  public StayPlacesDto create(@RequestBody StayPlacesDto stayPlace) {
-    return stayPlaceService.create(stayPlace);
+  public ResponseEntity<StayPlacesDto> create(@RequestBody StayPlacesDto stayPlace) {
+    return new ResponseEntity<>(stayPlaceService.create(stayPlace), HttpStatus.CREATED);
   }
 
   @PutMapping("")

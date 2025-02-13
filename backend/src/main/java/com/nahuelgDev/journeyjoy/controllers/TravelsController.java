@@ -3,6 +3,8 @@ package com.nahuelgDev.journeyjoy.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +47,8 @@ public class TravelsController {
 
   @PostMapping("")
   @PreAuthorize("isAuthenticated()")
-  public Travels create(@RequestBody Travels travel) {
-    return travelsService.create(travel);
+  public ResponseEntity<Travels> create(@RequestBody Travels travel) {
+    return new ResponseEntity<>(travelsService.create(travel), HttpStatus.CREATED);
   }
 
   @PutMapping("")

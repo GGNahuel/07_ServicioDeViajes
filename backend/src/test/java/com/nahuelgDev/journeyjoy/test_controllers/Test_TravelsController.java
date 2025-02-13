@@ -108,7 +108,7 @@ public class Test_TravelsController {
 
     MvcResult response = mockMvc.perform(post("/api/travels")
       .contentType(MediaType.APPLICATION_JSON).content(inputJson)
-    ).andExpect(status().isOk()).andReturn();
+    ).andExpect(status().isCreated()).andReturn();
     String responseString = response.getResponse().getContentAsString();
     Travels actual = objectMapper.readValue(responseString, Travels.class);
 

@@ -7,6 +7,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -27,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nahuelgDev.journeyjoy.collections.Requests;
 import com.nahuelgDev.journeyjoy.configurations.SecurityConfig;
 import com.nahuelgDev.journeyjoy.controllers.RequestsController;
+import com.nahuelgDev.journeyjoy.dtos.RequestsUpdateDto;
 import com.nahuelgDev.journeyjoy.services.interfaces.RequestsService_I;
 
 @WebMvcTest(RequestsController.class)
@@ -102,5 +107,59 @@ public class Test_RequestsController {
   void getByTravelId_shouldDenyAccess() throws Exception {
     mockMvc.perform(get("/api/request/travel?id=1")).andExpect(status().isUnauthorized());
     verify(service, times(0)).getByTravelId("1");
+  }
+
+  @Test
+  void create_returnsRequest() throws Exception {
+    String inputJson = objectMapper.writeValueAsString(request1);
+    when(service.create(request1)).thenReturn(request1);
+
+    MvcResult response = mockMvc.perform(post("/api/request")
+      .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+    ).andExpect(status().isCreated()).andReturn();
+    String responseJson = response.getResponse().getContentAsString();
+    Requests actual = objectMapper.readValue(responseJson, Requests.class);
+
+    assertEquals(request1, actual);
+    verify(service).create(request1);
+  }
+
+  @Test
+  void update_returnsRequest() throws Exception {
+    RequestsUpdateDto input = RequestsUpdateDto.builder().id("1").build();
+    String inputJson = objectMapper.writeValueAsString(input);
+    when(service.update(input)).thenReturn(request1);
+
+    MvcResult response = mockMvc.perform(put("/api/request")
+      .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+    ).andExpect(status().isOk()).andReturn();
+    String responseJson = response.getResponse().getContentAsString();
+    Requests actual = objectMapper.readValue(responseJson, Requests.class);
+
+    assertEquals(request1, actual);
+    verify(service).update(input);
+  }
+
+  @Test
+  void addPayment_passRightArgumentsToService() throws Exception {
+    when(service.addPayment("1", 100.0)).thenReturn("Success");
+
+    MvcResult response = mockMvc.perform(patch("/api/request/update_pay")
+      .param("id", "1")
+      .param("amount", "100.0")
+    ).andExpect(status().isOk()).andReturn();
+    
+    assertEquals("Success", response.getResponse().getContentAsString());
+    verify(service).addPayment("1", 100.0);
+  }
+
+  @Test
+  void cancel_passRightArgsToService() throws Exception {
+    when(service.cancelRequest("1")).thenReturn("Success");
+
+    MvcResult response = mockMvc.perform(patch("/api/request/cancel/1")).andExpect(status().isOk()).andReturn();
+
+    assertEquals("Success", response.getResponse().getContentAsString());
+    verify(service).cancelRequest("1");
   }
 }

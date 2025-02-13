@@ -88,7 +88,7 @@ public class Test_ReviewsController {
         .file(file)
         .file(reviewPart) 
         .contentType(MediaType.MULTIPART_FORM_DATA)
-    ).andExpect(status().isOk()).andReturn();
+    ).andExpect(status().isCreated()).andReturn();
 
     String response = request.getResponse().getContentAsString();
     Reviews actual = objectMapper.readValue(response, Reviews.class);

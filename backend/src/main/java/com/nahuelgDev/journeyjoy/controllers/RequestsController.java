@@ -3,6 +3,8 @@ package com.nahuelgDev.journeyjoy.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -48,8 +50,8 @@ public class RequestsController {
   }
 
   @PostMapping("")
-  public Requests create(@RequestBody Requests requestToCreate) {
-    return requestsService.create(requestToCreate);
+  public ResponseEntity<Requests> create(@RequestBody Requests requestToCreate) {
+    return new ResponseEntity<>(requestsService.create(requestToCreate), HttpStatus.CREATED);
   }
 
   @PutMapping("")

@@ -106,7 +106,7 @@ public class Test_StayPlacesController {
     MvcResult response = mockMvc.perform(post("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
       .content(inputInJson))
-      .andExpect(status().isOk()).andReturn();
+      .andExpect(status().isCreated()).andReturn();
 
     String responseInJson = response.getResponse().getContentAsString();
     StayPlacesDto actual = objectMapper.readValue(responseInJson, StayPlacesDto.class);
