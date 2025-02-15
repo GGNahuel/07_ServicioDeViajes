@@ -3,6 +3,7 @@ package com.nahuelgDev.journeyjoy.utilities;
 import java.util.List;
 
 import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
+import com.nahuelgDev.journeyjoy.exceptions.InvalidFieldValueException;
 
 import lombok.Getter;
 
@@ -41,5 +42,25 @@ public class Verifications {
         }
       }
     }
+  }
+
+  public static void checkStringIsAlphaNumeric(Field... fields) throws Exception {
+    for (int i = 0; i < fields.length; i++) {
+      if (fields[i].value == null) continue;
+
+      if (!(fields[i].value instanceof String)) 
+        throw new Exception("Los campos ingresados para comprobar solo deben ser una secuencia de caracteres");
+      
+      String value = (String) fields[i].value;
+      value = value.replaceAll("\\s+", "");
+      String fieldName = fields[i].name;
+      if (!value.isEmpty() && !value.matches("[\\p{L}0-9¿?¡!.,:\\-]+"))
+        throw new InvalidFieldValueException("El campo " + fieldName + " solo puede contener números, letras y algunos signos de puntuación. " + value);
+    }
+  }
+
+  public static void checkEmailHasCorrectFormat(String email) {
+    if (!email.matches("[a-zA-Z0-9]+@[a-z]{1,}\\.[a-z]{2,4}"))
+      throw new InvalidFieldValueException("El email ingresado no cumple con el formato requerido");
   }
 }
