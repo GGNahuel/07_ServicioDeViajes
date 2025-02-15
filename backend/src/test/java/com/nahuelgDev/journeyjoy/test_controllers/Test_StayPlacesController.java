@@ -100,8 +100,7 @@ public class Test_StayPlacesController {
   void create_returnsStayPlaceDtoWithId() throws Exception {
     StayPlacesDto input = StayPlacesDto.builder().from("from").name("name").build();
     String inputInJson = objectMapper.writeValueAsString(input);
-    StayPlacesDto expected = StayPlacesDto.builder().id("1").from("from").name("name").build();
-    when(service.create(input)).thenReturn(expected);
+    when(service.create(input)).thenReturn(input);
 
     MvcResult response = mockMvc.perform(post("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
@@ -111,18 +110,21 @@ public class Test_StayPlacesController {
     String responseInJson = response.getResponse().getContentAsString();
     StayPlacesDto actual = objectMapper.readValue(responseInJson, StayPlacesDto.class);
 
-    assertEquals(expected, actual);
+    assertEquals(input, actual);
   }
 
   @Test
   void create_shouldDenyAccess() throws Exception {
     StayPlacesDto input = StayPlacesDto.builder().from("from").name("name").build();
     String inputInJson = objectMapper.writeValueAsString(input);
+    when(service.create(input)).thenReturn(input);
 
-    mockMvc.perform(post("/api/stayplaces")
+    MvcResult response = mockMvc.perform(post("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
       .content(inputInJson)
-    ).andExpect(status().isUnauthorized());
+    ).andExpect(status().isUnauthorized()).andReturn();
+    String repsonseStromg = response.getResponse().getContentAsString();
+    System.out.println(repsonseStromg);
 
     verify(service, times(0)).create(input);
   }

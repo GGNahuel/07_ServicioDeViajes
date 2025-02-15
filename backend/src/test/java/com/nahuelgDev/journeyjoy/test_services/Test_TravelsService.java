@@ -122,7 +122,7 @@ public class Test_TravelsService {
   }
 
   @Test
-  void search_returnsListFromRepository() {
+  void search_returnsListFromRepository() throws Exception {
     List<Travels> listOfBoth = List.of(travel1, travel2);
     List<Travels> listOfFirst = List.of(travel1);
     when(customRepo.search(null, null, "ro", null, null)).thenReturn(listOfBoth);
@@ -135,7 +135,7 @@ public class Test_TravelsService {
   }
 
   @Test
-  void create_returnsCreatedDocument() {
+  void create_returnsCreatedDocument() throws Exception {
     Travels travelToCreate = Travels.builder()
       .id("3").name("create").maxCapacity(20)
       .destinies(List.of(mock(Destinies.class)))
@@ -212,7 +212,7 @@ public class Test_TravelsService {
   }
 
   @Test
-  void update_returnsUpdatedDocument() {
+  void update_returnsUpdatedDocument() throws Exception {
     Travels newTravel1 = Travels.builder()
       .id("1").name("Viaje 1").longInDays(21)
       .maxCapacity(20).currentCapacity(18).isAvailable(true)
@@ -270,7 +270,7 @@ public class Test_TravelsService {
   }
 
   @Test
-  void addReview_addReviewToListOfReviews() {
+  void addReview_addReviewToListOfReviews() throws Exception {
     travel1.setReviews(new ArrayList<>());
     when(repository.findById("1")).thenReturn(Optional.of(travel1));
     Reviews review = Reviews.builder().userName("username").rating(2.5).build();

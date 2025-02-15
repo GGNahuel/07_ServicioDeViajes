@@ -36,7 +36,7 @@ public class TravelsController {
     @RequestParam(required = false) Boolean available, @RequestParam(required = false) Integer desiredCapacity, 
     @RequestParam(required = false) String place, 
     @RequestParam(required = false) Integer minDays, @RequestParam(required = false) Integer maxDays
-  ) {
+  ) throws Exception {
     return travelsService.search(available, desiredCapacity, place, minDays, maxDays);
   }
 
@@ -47,18 +47,18 @@ public class TravelsController {
 
   @PostMapping("")
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<Travels> create(@RequestBody Travels travel) {
+  public ResponseEntity<Travels> create(@RequestBody Travels travel) throws Exception {
     return new ResponseEntity<>(travelsService.create(travel), HttpStatus.CREATED);
   }
 
   @PutMapping("")
   @PreAuthorize("isAuthenticated()")
-  public Travels update(@RequestBody Travels updatedTravel) {
+  public Travels update(@RequestBody Travels updatedTravel) throws Exception {
     return travelsService.update(updatedTravel);
   }
 
   @PatchMapping("/addReview")
-  public String addReview(@RequestParam String travelId, @RequestBody Reviews newReview) {
+  public String addReview(@RequestParam String travelId, @RequestBody Reviews newReview) throws Exception {
     return travelsService.addReview(travelId, newReview);
   }
 

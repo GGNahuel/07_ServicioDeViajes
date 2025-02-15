@@ -106,7 +106,7 @@ public class Test_StayPlacesService {
   }
 
   @Test
-  void searchByNameAndFrom_returnsMappedList() {
+  void searchByNameAndFrom_returnsMappedList() throws Exception {
     when(stayPlaceRepo.searchByNameAndFromAttr(anyString(), anyString())).thenReturn(List.of(stayPlace));
     when(modelMapper.map(stayPlace, StayPlacesDto.class)).thenReturn(stayPlaceDto);
 
@@ -118,7 +118,7 @@ public class Test_StayPlacesService {
   }
 
   @Test
-  void create_returnsTheCreatedDto() {
+  void create_returnsTheCreatedDto() throws Exception {
     when(modelMapper.map(stayPlaceDto, StayPlaces.class)).thenReturn(stayPlace);
     when(stayPlaceRepo.save(stayPlace)).thenReturn(stayPlace);
     when(modelMapper.map(stayPlace, StayPlacesDto.class)).thenReturn(stayPlaceDto);
@@ -148,7 +148,7 @@ public class Test_StayPlacesService {
   }
 
   @Test
-  void update_success() {
+  void update_success() throws Exception {
     when(stayPlaceRepo.findById("1")).thenReturn(Optional.of(stayPlace));
     when(modelMapper.map(stayPlaceDto, StayPlaces.class)).thenReturn(stayPlace);
     when(stayPlaceRepo.save(stayPlace)).thenReturn(stayPlace);

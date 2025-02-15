@@ -1,6 +1,5 @@
 package com.nahuelgDev.journeyjoy.controllers;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,12 @@ public class ReviewsController {
   }
 
   @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Reviews> create(@RequestPart("review") Reviews reviewToCreate, @RequestPart("file") MultipartFile image) throws IOException {
+  public ResponseEntity<Reviews> create(@RequestPart("review") Reviews reviewToCreate, @RequestPart("file") MultipartFile image) throws Exception {
     return new ResponseEntity<>(reviewsService.create(reviewToCreate, image), HttpStatus.CREATED);
   }
 
   @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public Reviews update(@RequestPart("review") Reviews updatedReview, @RequestPart("file") MultipartFile image) throws IOException {
+  public Reviews update(@RequestPart("review") Reviews updatedReview, @RequestPart("file") MultipartFile image) throws Exception {
     return reviewsService.update(updatedReview, image);
   }
 

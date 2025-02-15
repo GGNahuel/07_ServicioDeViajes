@@ -35,20 +35,20 @@ public class StayPlacesController {
   public List<StayPlacesDto> searchByNameAndFrom(
     @RequestParam(required = false, defaultValue = "") String name, 
     @RequestParam(required = false, defaultValue = "") String from
-  ) {
+  ) throws Exception {
     return stayPlaceService.searchByNameAndFrom(name, from);
   }
   
 
   @PostMapping("")
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<StayPlacesDto> create(@RequestBody StayPlacesDto stayPlace) {
+  public ResponseEntity<StayPlacesDto> create(@RequestBody StayPlacesDto stayPlace) throws Exception {
     return new ResponseEntity<>(stayPlaceService.create(stayPlace), HttpStatus.CREATED);
   }
 
   @PutMapping("")
   @PreAuthorize("isAuthenticated()")
-  public StayPlacesDto update(@RequestBody StayPlacesDto updatedPlace) {
+  public StayPlacesDto update(@RequestBody StayPlacesDto updatedPlace) throws Exception {
     return stayPlaceService.update(updatedPlace);
   }
 

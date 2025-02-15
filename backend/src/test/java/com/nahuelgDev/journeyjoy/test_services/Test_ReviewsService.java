@@ -100,7 +100,7 @@ public class Test_ReviewsService {
   }
 
   @Test
-  void create_returnsExpected() throws IOException {
+  void create_returnsExpected() throws Exception {
     Reviews input = Reviews.builder()
       .userName(review1.getUserName())
       .rating(review1.getRating())
@@ -118,7 +118,7 @@ public class Test_ReviewsService {
   }
 
   @Test
-  void create_throwsEmptyFieldException() throws IOException {
+  void create_throwsEmptyFieldException() throws Exception {
     Reviews withoutAutor = Reviews.builder().rating(2.5).build();
     Reviews emptyAutor = Reviews.builder().userName("").rating(2.0).build();
     Reviews withoutRating = Reviews.builder().userName("juan").build();
@@ -136,7 +136,7 @@ public class Test_ReviewsService {
   }
 
   @Test
-  void update_returnsExpected() throws IOException {
+  void update_returnsExpected() throws Exception {
     Reviews expected = review1;
     expected.setUserName("ivan");
     when(repository.findById("1")).thenReturn(Optional.of(review1));

@@ -1,8 +1,8 @@
 package com.nahuelgDev.journeyjoy.services;
 
-import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasContent;
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkStringIsAlphaNumeric;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.repositories.ReviewsRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.ReviewsService_I;
+import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
 @Service
 public class ReviewsService_Impl implements ReviewsService_I {
@@ -31,8 +32,14 @@ public class ReviewsService_Impl implements ReviewsService_I {
     );
   }
 
-  public Reviews create(Reviews reviewToCreate, MultipartFile image) throws IOException {
+  public Reviews create(Reviews reviewToCreate, MultipartFile image) throws Exception {
     checkFieldsHasContent(new Field("reseña", reviewToCreate));
+  
+    checkStringIsAlphaNumeric(
+      new Field("autor", reviewToCreate.getUserName()),
+      new Field("comentario", reviewToCreate.getComment())
+    );
+
     checkFieldsHasContent(
       new Field("autor", reviewToCreate.getUserName()),
       new Field("puntaje", reviewToCreate.getRating()),
@@ -44,8 +51,14 @@ public class ReviewsService_Impl implements ReviewsService_I {
     return reviewsRepo.save(reviewToCreate);
   }
   
-  public Reviews update(Reviews updatedReview, MultipartFile image) throws IOException {
+  public Reviews update(Reviews updatedReview, MultipartFile image) throws Exception {
     checkFieldsHasContent(new Field("reseña", updatedReview));
+    
+    checkStringIsAlphaNumeric(
+      new Field("autor", updatedReview.getUserName()),
+      new Field("comentario", updatedReview.getComment())
+    );
+
     checkFieldsHasContent(
       new Field("id", updatedReview.getId()),
       new Field("foto previa", updatedReview.getUserImage()),

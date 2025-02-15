@@ -1,6 +1,7 @@
 package com.nahuelgDev.journeyjoy.services;
 
 import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasContent;
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkStringIsAlphaNumeric;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
+import com.nahuelgDev.journeyjoy.dataClasses.Destinies;
 import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.exceptions.InvalidOperationException;
 import com.nahuelgDev.journeyjoy.repositories.Custom_TravelRepository;
@@ -42,17 +44,27 @@ public class TravelsService_Impl implements TravelsService_I{
   }
 
   @Override
-  public List<Travels> search(Boolean available, Integer desiredCapacity, String place, Integer minDays, Integer maxDays) {
+  public List<Travels> search(Boolean available, Integer desiredCapacity, String place, Integer minDays, Integer maxDays) throws Exception {
+    checkStringIsAlphaNumeric(new Field("lugar", place));
+
     return customRepo.search(available, desiredCapacity, place, minDays, maxDays);
   }
 
   @Override
-  public Travels create(Travels travelToCreate) {
+  public Travels create(Travels travelToCreate) throws Exception {
     checkFieldsHasContent(new Field("viaje", travelToCreate));
+    checkFieldsHasContent(new Field("lugar/es", travelToCreate.getDestinies()));
+
+    checkStringIsAlphaNumeric(
+      new Field("nombre", travelToCreate.getName())
+    );
+    for (Destinies destiny : travelToCreate.getDestinies()) {
+      checkStringIsAlphaNumeric(new Field("nombre del lugar", destiny.getPlace()));
+    }
+
     checkFieldsHasContent(
       new Field("nombre", travelToCreate.getName()),
       new Field("capacidad máxima", travelToCreate.getMaxCapacity()),
-      new Field("lugar/es", travelToCreate.getDestinies()),
       new Field("duración en días", travelToCreate.getLongInDays()),
       new Field("fechas disponibles", travelToCreate.getAvailableDates()),
       new Field("planes de pago", travelToCreate.getPayPlans())
@@ -66,8 +78,17 @@ public class TravelsService_Impl implements TravelsService_I{
   }
 
   @Override
-  public Travels update(Travels updatedTravel) {
+  public Travels update(Travels updatedTravel) throws Exception {
     checkFieldsHasContent(new Field("viaje a actualizar", updatedTravel));
+    checkFieldsHasContent(new Field("lugar/es", updatedTravel.getDestinies()));
+
+    checkStringIsAlphaNumeric(
+      new Field("nombre", updatedTravel.getName())
+    );
+    for (Destinies destiny : updatedTravel.getDestinies()) {
+      checkStringIsAlphaNumeric(new Field("nombre del lugar", destiny.getPlace()));
+    }
+
     checkFieldsHasContent(new Field("id", updatedTravel.getId()));
 
     travelsRepo.findById(updatedTravel.getId()).orElseThrow(
@@ -78,8 +99,14 @@ public class TravelsService_Impl implements TravelsService_I{
   }
 
   @Override
-  public String addReview(String travelId, Reviews newReview) {
+  public String addReview(String travelId, Reviews newReview) throws Exception {
     checkFieldsHasContent(new Field("reseña", newReview));
+
+    checkStringIsAlphaNumeric(
+      new Field("autor", newReview.getUserName()),
+      new Field("comentario", newReview.getComment())
+    );
+
     checkFieldsHasContent(
       new Field("id del viaje", travelId), 
       new Field("nombre del autor de la reseña", newReview.getUserName()),

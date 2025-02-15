@@ -40,15 +40,24 @@ public class StayPlaceService_Impl implements StayPlacesService_I {
   }
 
   @Override @Transactional(readOnly = true)
-  public List<StayPlacesDto> searchByNameAndFrom(String name, String from) {
+  public List<StayPlacesDto> searchByNameAndFrom(String name, String from) throws Exception {
+    checkStringIsAlphaNumeric(new Field("nombre del establecimiento", name), new Field("origen", from));
+
     return stayPlaceRepo.searchByNameAndFromAttr(name, from).stream().map(
       element -> modelMapper.map(element, StayPlacesDto.class)
     ).toList();
   }
 
   @Override @Transactional
-  public StayPlacesDto create(StayPlacesDto placeToCreate) {
+  public StayPlacesDto create(StayPlacesDto placeToCreate) throws Exception{
     checkFieldsHasContent(new Field("lugar de estadía", placeToCreate));
+    
+    checkStringIsAlphaNumeric(
+      new Field("nombre del establecimiento", placeToCreate.getName()),
+      new Field("origen", placeToCreate.getFrom()),
+      new Field("descripción", placeToCreate.getDescription())
+    );
+
     checkFieldsHasContent(
       new Field("lugar", placeToCreate.getFrom()),
       new Field("nombre del establecimiento", placeToCreate.getName())
@@ -60,8 +69,16 @@ public class StayPlaceService_Impl implements StayPlacesService_I {
   }
 
   @Override @Transactional
-  public StayPlacesDto update(StayPlacesDto updatedPlace) {
+  
+  public StayPlacesDto update(StayPlacesDto updatedPlace) throws Exception {
     checkFieldsHasContent(new Field("lugar de estadía", updatedPlace));
+
+    checkStringIsAlphaNumeric(
+      new Field("nombre del establecimiento", updatedPlace.getName()),
+      new Field("origen", updatedPlace.getFrom()),
+      new Field("descripción", updatedPlace.getDescription())
+    );
+    
     checkFieldsHasContent(new Field("id", updatedPlace.getId()));
 
     stayPlaceRepo.findById(updatedPlace.getId()).orElseThrow(
