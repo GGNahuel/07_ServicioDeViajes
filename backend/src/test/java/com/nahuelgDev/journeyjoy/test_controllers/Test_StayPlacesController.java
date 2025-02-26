@@ -119,12 +119,10 @@ public class Test_StayPlacesController {
     String inputInJson = objectMapper.writeValueAsString(input);
     when(service.create(input)).thenReturn(input);
 
-    MvcResult response = mockMvc.perform(post("/api/stayplaces")
+    mockMvc.perform(post("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
       .content(inputInJson)
     ).andExpect(status().isUnauthorized()).andReturn();
-    String repsonseStromg = response.getResponse().getContentAsString();
-    System.out.println(repsonseStromg);
 
     verify(service, times(0)).create(input);
   }

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -28,7 +28,7 @@ import com.nahuelgDev.journeyjoy.configurations.SecurityConfig;
 import com.nahuelgDev.journeyjoy.repositories.AdminRepository;
 import com.nahuelgDev.journeyjoy.services.AdminService;
 
-@WebMvcTest
+@SpringBootTest
 @AutoConfigureMockMvc
 @Import({ SecurityConfig.class, AdminService.class }) // Importamos la seguridad y UserDetailsService
 public class Test_SecurityConfig {

@@ -46,11 +46,18 @@ public class SecurityConfig {
         .key(Generators.generateKey(16))
         .tokenValiditySeconds(60 * 60)
       )
-      .exceptionHandling(exceptionHandling -> exceptionHandling
+      /* .exceptionHandling(exceptionHandling -> exceptionHandling
         .authenticationEntryPoint((request, response, authEx) -> {
+          System.out.println("Auth Error________________________________________");
           response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         })
-      );
+        .accessDeniedHandler((request, response, accessDeniedException) -> {
+          System.out.println("No perms ______________________________________");
+          response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+          response.setContentType("application/json");
+          response.getWriter().write("{\"error\": \"No tiene permisos para realizar esta acción.\"}");
+        })
+      ) */;
 
     return httpSecurity.build();
   }

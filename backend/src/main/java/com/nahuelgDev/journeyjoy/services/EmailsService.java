@@ -1,16 +1,17 @@
 package com.nahuelgDev.journeyjoy.services;
 
-import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasContent;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+
+import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
 @Service
 public class EmailsService {
-  @Autowired
-  private JavaMailSender mailSender;
+  JavaMailSender mailSender = new JavaMailSenderImpl();
 
   public void sendEmail(String to, String subject, String body) {
     checkFieldsHasContent(new Field("destinatario", to), new Field("asunto", subject), new Field("contenido", body));
