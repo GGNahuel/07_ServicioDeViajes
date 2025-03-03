@@ -42,7 +42,7 @@ public class Test_SecurityConfig {
   @MockBean AdminService adminService;
   
   @Test
-  void givenSecurityConfig_whenPasswordEncoder_thenBCryptIsUsed() {
+  void passwordIsEncoded() {
     String rawPassword = "mySecret";
     String encodedPassword = passwordEncoder.encode(rawPassword);
     
@@ -50,7 +50,7 @@ public class Test_SecurityConfig {
   }
 
   @Test
-  void givenValidUser_whenLogin_thenReturn200() throws Exception {
+  void login_success() throws Exception {
     Admin admin = new Admin();
     admin.setUsername("adminUser");
     admin.setPassword(new BCryptPasswordEncoder().encode("securePassword"));
@@ -70,19 +70,19 @@ public class Test_SecurityConfig {
   }
 
   @Test
-  void givenInvalidUser_whenLogin_thenReturn401() throws Exception {
+  void login_userNotFound() throws Exception {
     when(adminRepo.findByUsername("invalidUser")).thenReturn(Optional.empty());
 
     mockMvc.perform(post("/logincheck")
       .param("username", "adminUser")
       .param("password", "securePassword")
-    ).andExpect(status().isUnauthorized());
+    ).andExpect(status().isNotFound());
   }
 
   @Test
   void givenSecurityConfig_whenLogout_thenReturn200() throws Exception {
     mockMvc.perform(post("/logout"))
-        .andExpect(status().isOk());
+      .andExpect(status().isOk());
   }
 
   @Test
@@ -90,5 +90,4 @@ public class Test_SecurityConfig {
     mockMvc.perform(get("/any-route"))
         .andExpect(status().isOk());
   }
-
 }
