@@ -82,7 +82,13 @@
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<version>4.18.1</version>
 			<scope>test</scope>
-    </dependency>
+    	</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>6.2.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
