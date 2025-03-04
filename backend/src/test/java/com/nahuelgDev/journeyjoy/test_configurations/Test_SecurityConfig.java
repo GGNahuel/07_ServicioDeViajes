@@ -54,7 +54,7 @@ public class Test_SecurityConfig {
   void login_success() throws Exception {
     Admin admin = new Admin();
     admin.setUsername("adminUser");
-    admin.setPassword(new BCryptPasswordEncoder().encode("securePassword"));
+    admin.setPassword(new BCryptPasswordEncoder().encode("password"));
 
     when(adminRepo.findByUsername("adminUser")).thenReturn(Optional.of(admin));
     when(adminService.loadUserByUsername("adminUser")).thenAnswer(invocation -> {
@@ -88,7 +88,7 @@ public class Test_SecurityConfig {
   }
 
   @Test
-  void givenSecurityConfig_whenAccessingAnyRoute_thenPermitAll() throws Exception {
+  void permitAnyRoute() throws Exception {
     mockMvc.perform(get("/api/travels"))
         .andExpect(status().isOk());
   }
