@@ -16,13 +16,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.nahuelgDev.journeyjoy.collections.Admin;
 import com.nahuelgDev.journeyjoy.configurations.SecurityConfig;
@@ -57,12 +54,7 @@ public class Test_SecurityConfig {
     admin.setPassword(new BCryptPasswordEncoder().encode("password"));
 
     when(adminRepo.findByUsername("adminUser")).thenReturn(Optional.of(admin));
-    when(adminService.loadUserByUsername("adminUser")).thenAnswer(invocation -> {
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-      
-      return new User(admin.getUsername(), admin.getPassword(), new ArrayList<>());
-    });
+    when(adminService.loadUserByUsername("adminUser")).thenReturn(new User(admin.getUsername(), admin.getPassword(), new ArrayList<>()));
 
     mockMvc.perform(post("/logincheck")
       .param("username", "adminUser")
