@@ -2,6 +2,7 @@ package com.nahuelgDev.journeyjoy.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,8 +30,12 @@ public class SecurityConfig {
         .successHandler((request, response, auth) -> {
           response.setStatus(HttpServletResponse.SC_OK);
         })
-        .failureHandler((request, response, authEx) -> {
-          response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // cambiar status
+        .failureHandler((request, response, authEx) -> {        
+          if (authEx instanceof BadCredentialsException) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+          }
         })
         .permitAll()
       )

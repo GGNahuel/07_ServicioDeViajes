@@ -14,7 +14,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.nahuelgDev.journeyjoy.collections.Admin;
-import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.repositories.AdminRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,7 +25,7 @@ public class AdminService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Admin user = adminRepo.findByUsername(username).orElseThrow(
-      () -> new DocumentNotFoundException("usuario-admin", username, "nombre de usuario")
+      () -> new UsernameNotFoundException("No existe una cuenta con ese nombre de usuario")
     );
 
     List<GrantedAuthority> permissions = new ArrayList<GrantedAuthority>();

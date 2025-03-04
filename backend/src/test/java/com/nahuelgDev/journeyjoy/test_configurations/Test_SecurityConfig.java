@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -65,29 +66,30 @@ public class Test_SecurityConfig {
 
     mockMvc.perform(post("/logincheck")
       .param("username", "adminUser")
-      .param("password", "securePassword")
+      .param("password", "password")
     ).andExpect(status().isOk());
   }
 
   @Test
   void login_userNotFound() throws Exception {
     when(adminRepo.findByUsername("invalidUser")).thenReturn(Optional.empty());
+    when(adminService.loadUserByUsername("invalidUser")).thenThrow(UsernameNotFoundException.class);
 
     mockMvc.perform(post("/logincheck")
-      .param("username", "adminUser")
-      .param("password", "securePassword")
-    ).andExpect(status().isNotFound());
+      .param("username", "invalidUser")
+      .param("password", "password")
+    ).andExpect(status().isBadRequest());
   }
 
   @Test
-  void givenSecurityConfig_whenLogout_thenReturn200() throws Exception {
+  void logout_return200() throws Exception {
     mockMvc.perform(post("/logout"))
       .andExpect(status().isOk());
   }
 
   @Test
   void givenSecurityConfig_whenAccessingAnyRoute_thenPermitAll() throws Exception {
-    mockMvc.perform(get("/any-route"))
+    mockMvc.perform(get("/api/travels"))
         .andExpect(status().isOk());
   }
 }

@@ -16,11 +16,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.nahuelgDev.journeyjoy.collections.Admin;
-import com.nahuelgDev.journeyjoy.exceptions.DocumentNotFoundException;
 import com.nahuelgDev.journeyjoy.repositories.AdminRepository;
 import com.nahuelgDev.journeyjoy.services.AdminService;
 
@@ -64,7 +64,7 @@ public class Test_AdminService {
   void loadUserByUsername_throwsException() {
     when(adminRepo.findByUsername("notFoundUser")).thenReturn(Optional.empty());
 
-    assertThrows(DocumentNotFoundException.class, () -> adminService.loadUserByUsername("notFoundUser"));
+    assertThrows(UsernameNotFoundException.class, () -> adminService.loadUserByUsername("notFoundUser"));
     verify(session, times(0)).setAttribute(anyString(), any(Admin.class));
   }
 }
