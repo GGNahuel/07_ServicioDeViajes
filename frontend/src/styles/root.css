@@ -51,8 +51,3 @@ h3 { font-size: 1.6rem; }
 .icon {
   width: 32px;
 }
-
-#benefitsSection  .cards {
-  background: rgb(24,62,175);
-  background: linear-gradient(0deg, rgba(24,62,175,1) 15%, rgba(32,80,222,1) 35%, rgba(32,80,222,1) 65%, rgba(43,106,231,1) 85%);
-}
