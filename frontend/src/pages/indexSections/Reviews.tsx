@@ -20,19 +20,23 @@ export function Reviews() {
 }
 
 function ReviewCard({imgSrc, text} : {imgSrc: string, text: string}) {
+  const style= css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    & > img {
+      width: 100%;
+      object-fit: cover;
+      aspect-ratio: 1;
+      border-radius: 100%;
+    }
+  `
+
   return (
-    <Card styles={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: "1rem"
-    }}>
-      <img src={imgSrc} alt="" style={{
-        width: "100%",
-        objectFit: "cover",
-        aspectRatio: 1,
-        borderRadius: "100%"
-      }}/>
+    <Card additionalStyles={style}>
+      <img src={imgSrc} alt="Foto del rostro de uno de los clientes" />
       <p>{text}</p>
     </Card>
   )

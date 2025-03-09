@@ -1,17 +1,20 @@
+import { css } from "@emotion/react"
 import { Card } from "../../components/Card"
 
 export function Plans(): JSX.Element {
+  const cardsContainerStyle = css`
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    flex-wrap: wrap;
+  `
+
   return (
     <section id="paymentPlans">
       <h2>Planes para que puedas disfrutar en grupo, pareja o individualmente</h2>
-      <div style={{
-        marginTop: "2rem",
-        display: "flex",
-        width: "100%",
-        justifyContent: "space-evenly",
-        alignItems: "stretch",
-        flexWrap: "wrap",
-      }}>
+      <div css={cardsContainerStyle}>
         <PlanCard imgSrc="/personUiFamily.webp" name="Plan familiar"/>
         <PlanCard imgSrc="/personUiFriends.webp" name="Plan para grupo de amigos" />
         <PlanCard imgSrc="/personUiCouple.webp" name="Plan en pareja" />
@@ -22,19 +25,23 @@ export function Plans(): JSX.Element {
 }
 
 function PlanCard({imgSrc, name} : {imgSrc: string, name: string}): JSX.Element {
+  const style = css`
+    display: flex;
+    width: 15ch;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    & > img {
+      width: 100%;
+      aspect-ratio: 1;
+      filter: drop-shadow(3px 3px 1px rgba(57,57,57,0.6));
+    }
+  `
+
   return (
-    <Card styles={{
-      display: "flex",
-      width: "15ch",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-    }}>
-      <img src={imgSrc} alt="" style={{
-        width: "100%",
-        aspectRatio: "1",
-        filter: "drop-shadow(3px 3px 1px rgba(57,57,57,0.6))"
-      }} />
+    <Card additionalStyles={style}>
+      <img src={imgSrc} alt="Siluetas de personas representativa del plan" />
       <h3>{name}</h3>
     </Card>
   )
