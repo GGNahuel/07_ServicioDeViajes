@@ -1,11 +1,11 @@
-import { CarrouselAuto } from "../components/CarrouselAuto"
+import { CarrouselAuto } from "../../components/CarrouselAuto"
 import "../styles/indexPage.css"
-import { Benefits } from "./indexSections/Benefits"
-import { MakeYourTravel } from "./indexSections/MakeYourTravel"
-import { Map } from "./indexSections/Map"
-import { PlaneCTA } from "./indexSections/PlaneCTA"
-import { Plans } from "./indexSections/Plans"
-import { Reviews } from "./indexSections/Reviews"
+import { Benefits } from "./sections/Benefits"
+import { MakeYourTravel } from "./sections/MakeYourTravel"
+import { Map } from "./sections/Map"
+import { PlaneCTA } from "./sections/PlaneCTA"
+import { Plans } from "./sections/Plans"
+import { Reviews } from "./sections/Reviews"
 
 export function IndexPage() {
   return (

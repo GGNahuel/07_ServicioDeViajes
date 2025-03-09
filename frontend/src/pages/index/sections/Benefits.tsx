@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
-import { Card } from "../../components/Card"
-import { useWindowProps } from "../../hooks/useWindowsProps"
+import { Card } from "../../../components/Card"
+import { useWindowProps } from "../../../hooks/useWindowsProps"
 import { css } from "@emotion/react"
 
 export function Benefits() {

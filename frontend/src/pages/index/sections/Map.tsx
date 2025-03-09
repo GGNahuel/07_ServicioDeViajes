@@ -1,7 +1,7 @@
 import { offset, shift, size, useFloating, useFocus, useHover, useInteractions } from "@floating-ui/react";
 import { useState } from "react";
-import { LocationSvg } from "../../components/SvgIcons";
-import mapPlaces from "../../const/mapPlaces";
+import { LocationSvg } from "../../../components/SvgIcons";
+import mapPlaces from "../../../const/mapPlaces";
 
 export type mapPlaceType = {
   pinPositionPercentage: {x: number, y: number},

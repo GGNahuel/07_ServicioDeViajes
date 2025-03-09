@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { Card } from "../../components/Card"
+import { Card } from "../../../components/Card"
 
 export function Plans(): JSX.Element {
   const cardsContainerStyle = css`

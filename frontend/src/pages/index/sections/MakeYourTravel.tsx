@@ -1,5 +1,5 @@
 import { css } from "@emotion/react"
-import { useWindowProps } from "../../hooks/useWindowsProps"
+import { useWindowProps } from "../../../hooks/useWindowsProps"
 
 export function MakeYourTravel() {
   const {width} = useWindowProps()

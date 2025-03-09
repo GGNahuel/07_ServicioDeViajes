@@ -1,4 +1,4 @@
-import { mapPlaceType } from "../pages/indexSections/Map"
+import { mapPlaceType } from "../pages/index/sections/Map"
 
 const mapPlaces: mapPlaceType[] = [
   {
