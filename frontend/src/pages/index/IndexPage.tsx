@@ -6,6 +6,7 @@ import { MakeYourTravel } from "./sections/MakeYourTravel"
 import { Map } from "./sections/Map"
 import { PlaneCTA } from "./sections/PlaneCTA"
 import { Plans } from "./sections/Plans"
+import { PopularOnes } from "./sections/PopularOnes"
 import { Reviews } from "./sections/Reviews"
 
 export function IndexPage() {
@@ -31,52 +32,7 @@ export function IndexPage() {
           <a href=""><Button variant="default">Sobre nosotros</Button></a>
           <a href=""><Button variant="main">Tenemos el plan perfecto para vos</Button></a>
         </section>
-        <section id="popularTravelsSection">
-          <h2>Viajes populares</h2>
-          <section>
-            <article className="travelPostal" style={{rotate: "-4deg"}}>
-              <img src="asd.png" alt="img" />
-              <div>
-              <h3>Nombre viaje</h3>
-                <p>texto</p>
-                <div>
-                  planes diponibles
-                </div>
-              </div>
-            </article>
-            <article className="travelPostal" style={{rotate: "-12deg"}}>
-              <img src="" alt="" />
-              <div>
-              <h3>Nombre viaje</h3>
-                <p>texto</p>
-                <div>
-                  planes diponibles
-                </div>
-              </div>
-            </article>
-            <article className="travelPostal" style={{rotate: "8deg"}}>
-              <img src="" alt="" />
-              <div>
-              <h3>Nombre viaje</h3>
-                <p>texto</p>
-                <div>
-                  planes diponibles
-                </div>
-              </div>
-            </article>
-            <article className="travelPostal" style={{rotate: "-4deg"}}>
-              <img src="" alt="" />
-              <div>
-              <h3>Nombre viaje</h3>
-                <p>texto</p>
-                <div>
-                  planes diponibles
-                </div>
-              </div>
-            </article>
-          </section>
-          <a href=""><Button variant="default">ver todos</Button></a>
-        </section>
+        <PopularOnes />
         <CarrouselAuto />
         <Map />
         <Plans />
