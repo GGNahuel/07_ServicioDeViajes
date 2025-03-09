@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import { useWindowProps } from "../../../hooks/useWindowsProps"
+import { Button } from "../../../components/Button"
 
 export function MakeYourTravel() {
   const {width} = useWindowProps()
@@ -71,7 +72,7 @@ export function MakeYourTravel() {
           </div>
           <div>
             <h4>¡Haz de tu próximo viaje una aventura a tú medida!</h4>
-            <a href=""><button>Conoce más</button></a>
+            <a href=""><Button variant="default">Conoce más</Button></a>
           </div>
         </div>
       </section>

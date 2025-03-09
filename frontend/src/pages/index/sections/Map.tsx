@@ -2,6 +2,7 @@ import { offset, shift, size, useFloating, useFocus, useHover, useInteractions }
 import { useState } from "react";
 import { LocationSvg } from "../../../components/SvgIcons";
 import mapPlaces from "../../../const/mapPlaces";
+import { Button } from "../../../components/Button";
 
 export type mapPlaceType = {
   pinPositionPercentage: {x: number, y: number},
@@ -17,7 +18,7 @@ export function Map() {
     <section id="mapSection">
       <header>
         <h2>Mapa de lugares</h2>
-        <a href=""><button>a página de viajes parte de búsqueda</button></a>
+        <a href=""><Button variant="default">a página de viajes parte de búsqueda</Button></a>
       </header>
       <section id="map">
         <img src="/map.jpg" alt="" />

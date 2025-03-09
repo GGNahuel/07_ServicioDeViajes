@@ -1,5 +1,6 @@
+import { Button } from "../../components/Button"
 import { CarrouselAuto } from "../../components/CarrouselAuto"
-import "../styles/indexPage.css"
+import "../../styles/indexPage.css"
 import { Benefits } from "./sections/Benefits"
 import { MakeYourTravel } from "./sections/MakeYourTravel"
 import { Map } from "./sections/Map"
@@ -27,8 +28,8 @@ export function IndexPage() {
           <div><h2>Viajes inolvidables, felicidad en el camino</h2></div>
         </section>
         <section className="blank">
-          <button><a href="">Sobre nosotros</a></button>
-          <button><a href="">Tenemos el plan perfecto para vos</a></button>
+          <a href=""><Button variant="default">Sobre nosotros</Button></a>
+          <a href=""><Button variant="main">Tenemos el plan perfecto para vos</Button></a>
         </section>
         <section id="popularTravelsSection">
           <h2>Viajes populares</h2>
@@ -74,7 +75,7 @@ export function IndexPage() {
               </div>
             </article>
           </section>
-          <a href=""><button>ver todos</button></a>
+          <a href=""><Button variant="default">ver todos</Button></a>
         </section>
         <CarrouselAuto />
         <Map />
@@ -86,13 +87,13 @@ export function IndexPage() {
         <section id="contactSection">
           <h2>Escríbanos</h2>
           <div>
-            <a href=""><button>Sobre nosotros</button></a>
-            <a href=""><button>Nuestro contrato</button></a>
+            <a href=""><Button variant="default">Sobre nosotros</Button></a>
+            <a href=""><Button variant="default">Nuestro contrato</Button></a>
           </div>
           <form action="">
             <label>texto<input type="text" /></label>
             <label>texto<input type="text" /></label>
-            <button type="submit">enviar</button>
+            <Button variant="default" otherType="submit">enviar</Button>
           </form>
         </section>
       </main>
