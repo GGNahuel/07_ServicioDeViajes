@@ -33,43 +33,6 @@
   }
 }
 
-#presentationSection + section.blank {
-  min-height: 128px;
-}
-
-#carrouselSection {
-  padding: 0;
-  overflow-x: hidden;
-  
-  .carrouselContainer {
-    display: flex;
-    align-items: center;
-  }
-  
-  img {
-    width: 200px;
-  }
-}
-
-#mapSection {
-  padding: 1rem;
-  
-  #map {
-    width: 100%;
-    position: relative;
-
-    img {
-      max-width: 100%;
-    }
-
-    .pin {
-      display: flex;
-      position: absolute;
-      transform: translate(-50%, -100%);
-    }
-  }
-}
-
 .hoveredPlace {
   /* width: auto; */
   max-width: 100%;

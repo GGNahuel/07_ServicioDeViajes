@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import { Card } from "../../../components/Card"
+import { MainSection } from "../../../components/MainSection"
 
 export function Reviews() {
   const reviewsSectionStyles = css`
@@ -10,12 +11,12 @@ export function Reviews() {
   `
 
   return (
-    <section id="reviewsSection" css={reviewsSectionStyles}>
+    <MainSection id="reviewsSection" styles={reviewsSectionStyles}>
       <ReviewCard imgSrc="/reviews/person1.webp" text="Muy buen servicio" />
       <ReviewCard imgSrc="/reviews/person2.webp" text="Una opción diferente que vale totalmente darle la oportunidad" />
       <ReviewCard imgSrc="/reviews/person3.webp" text="Muy buena organización durante el viaje y muy buena atención" />
       <ReviewCard imgSrc="/reviews/person4.png" text="La pasamos genial en familia" />
-    </section>
+    </MainSection>
   )
 }
 

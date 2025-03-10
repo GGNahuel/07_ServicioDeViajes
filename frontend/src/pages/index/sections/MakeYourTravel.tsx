@@ -1,6 +1,7 @@
 import { css } from "@emotion/react"
 import { useWindowProps } from "../../../hooks/useWindowsProps"
 import { Button } from "../../../components/Button"
+import { MainSection } from "../../../components/MainSection"
 
 export function MakeYourTravel() {
   const {width} = useWindowProps()
@@ -56,7 +57,7 @@ export function MakeYourTravel() {
   `
 
   return (
-    <section id="makeYourOwnTravelSection" css={makeYourTravelStyles} className="blank">
+    <MainSection id="makeYourOwnTravelSection" styles={makeYourTravelStyles} variant="row">
       <section>
         <img src="/bus.webp" alt="" />
         <div>
@@ -76,6 +77,6 @@ export function MakeYourTravel() {
           </div>
         </div>
       </section>
-    </section>
+    </MainSection>
   )
 }

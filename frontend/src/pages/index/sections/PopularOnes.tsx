@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { Button } from "../../../components/Button";
 import { PopularTravel } from "../../../types/ApiTypes";
 import { Card } from "../../../components/Card";
+import { MainSection } from "../../../components/MainSection";
 
 const dataFromApi: (PopularTravel & {angle: number})[] = [
   {
@@ -46,13 +47,13 @@ export function PopularOnes() {
   `
 
   return (
-    <section id="popularTravelsSection" css={style}>
+    <MainSection id="popularTravelsSection" styles={style}>
       <h2>Viajes populares</h2>
       <section>
         {dataFromApi.map(element => <PostalCard key={element.name} angle={element.angle} travel={element} />)}
       </section>
       <a href=""><Button variant="default">ver todos</Button></a>
-    </section>
+    </MainSection>
   )
 }
 

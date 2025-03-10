@@ -1,4 +1,5 @@
 import { css } from "@emotion/react"
+import { MainSection } from "../../../components/MainSection"
 
 export function PlaneCTA() {
   const planeCtaStyles = css`
@@ -21,9 +22,9 @@ export function PlaneCTA() {
   `
 
   return (
-    <section css={planeCtaStyles} className="blank">
+    <MainSection styles={planeCtaStyles} variant="row">
       <img src="/plane.webp" alt="" />
       <a href="">Te asesoramos en lo que necesites</a>
-    </section>
+    </MainSection>
   )
 }

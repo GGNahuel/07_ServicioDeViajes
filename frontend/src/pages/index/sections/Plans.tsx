@@ -1,5 +1,6 @@
 import { css } from "@emotion/react"
 import { Card } from "../../../components/Card"
+import { MainSection } from "../../../components/MainSection"
 
 export function Plans(): JSX.Element {
   const cardsContainerStyle = css`
@@ -12,7 +13,7 @@ export function Plans(): JSX.Element {
   `
 
   return (
-    <section id="paymentPlans">
+    <MainSection id="paymentPlans">
       <h2>Planes para que puedas disfrutar en grupo, pareja o individualmente</h2>
       <div css={cardsContainerStyle}>
         <PlanCard imgSrc="/personUiFamily.webp" name="Plan familiar"/>
@@ -20,7 +21,7 @@ export function Plans(): JSX.Element {
         <PlanCard imgSrc="/personUiCouple.webp" name="Plan en pareja" />
         <PlanCard imgSrc="/personUiSolo.webp" name="Plan individual" />
       </div>
-    </section>
+    </MainSection>
   )
 }
 

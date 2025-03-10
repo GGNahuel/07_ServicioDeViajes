@@ -3,6 +3,8 @@ import { useState } from "react";
 import { LocationSvg } from "../../../components/SvgIcons";
 import mapPlaces from "../../../const/mapPlaces";
 import { Button } from "../../../components/Button";
+import { MainSection } from "../../../components/MainSection";
+import { css } from "@emotion/react";
 
 export type mapPlaceType = {
   pinPositionPercentage: {x: number, y: number},
@@ -14,19 +16,34 @@ export type mapPlaceType = {
 export function Map() {
   const [hoveredPin, setHoveredPin] = useState<mapPlaceType | null>(null)
 
+  const mapStyles = css`
+    width: 100%;
+    position: relative;
+
+    img {
+      max-width: 100%;
+    }
+
+    .pin {
+      display: flex;
+      position: absolute;
+      transform: translate(-50%, -100%);
+    }
+  `
+
   return (
-    <section id="mapSection">
+    <MainSection id="mapSection">
       <header>
         <h2>Mapa de lugares</h2>
         <a href=""><Button variant="default">a página de viajes parte de búsqueda</Button></a>
       </header>
-      <section id="map">
+      <section id="map" css={mapStyles}>
         <img src="/map.jpg" alt="" />
         {mapPlaces.map(place => (
           <PlacePin key={place.name} place={place} isHovered={hoveredPin?.name == place.name} onHover={setHoveredPin} />
         ))}
       </section>
-    </section>
+    </MainSection>
   )
 }
 
@@ -51,45 +68,45 @@ function PlacePin({place, isHovered, onHover} : {
   const byFocus = useFocus(context)
 
   const {getReferenceProps, getFloatingProps} = useInteractions([byHover, byFocus])
+  
+  const style = css`
+    left: ${place.pinPositionPercentage.x}%;
+    top: ${place.pinPositionPercentage.y}%;
+  `
 
   return (
     <>
       <div className="pin" 
         ref={refs.setReference}
+        css={style}
         {...getReferenceProps()}
-        style={{
-          left: place.pinPositionPercentage.x + "%",
-          top: place.pinPositionPercentage.y + "%"
-        }}
       >
         <LocationSvg />
       </div>
 
-      {isHovered && 
-        <article className="hoveredPlace" 
-          ref={refs.setFloating} 
-          {...getFloatingProps()} 
-          style={{
-            ...floatingStyles,
-          }}
-        >
-            <div>
-              <img src="" alt="" />
-              <h3>{place.name}</h3>
-            </div>
-            <div>
-              <p>{place.text}</p>
-              <ul>
-                {place.hotels.map(hotel => (
-                  <li key={hotel.name}>
-                    <p>{hotel.name}</p>
-                    <img src={hotel.img} alt="" />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </article>
-      }
+      {isHovered && <article className="hoveredPlace" 
+        ref={refs.setFloating} 
+        {...getFloatingProps()} 
+        style={{
+          ...floatingStyles,
+        }}
+      >
+        <div>
+          <img src="" alt="" />
+          <h3>{place.name}</h3>
+        </div>
+        <div>
+          <p>{place.text}</p>
+          <ul>
+            {place.hotels.map(hotel => (
+              <li key={hotel.name}>
+                <p>{hotel.name}</p>
+                <img src={hotel.img} alt="" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>}
     </>
   )
 }

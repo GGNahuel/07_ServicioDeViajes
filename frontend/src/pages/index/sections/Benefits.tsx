@@ -2,12 +2,13 @@ import { ReactNode } from "react"
 import { Card } from "../../../components/Card"
 import { useWindowProps } from "../../../hooks/useWindowsProps"
 import { css } from "@emotion/react"
+import { MainSection } from "../../../components/MainSection"
 
 export function Benefits() {
   const {width} = useWindowProps()
 
   return (
-    <section id="benefitsSection">
+    <MainSection id="benefitsSection">
       <h2>Beneficios</h2>
       <section className="valija" style={{
         width: "100%",
@@ -30,7 +31,7 @@ export function Benefits() {
           <BenefitCard name="Reservas Seguras y Rápidas" />
         </BenefitCardContainer>}
       </section>
-    </section>
+    </MainSection>
   )
 }
 

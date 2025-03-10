@@ -1,5 +1,7 @@
+import { css } from "@emotion/react"
 import { Button } from "../../components/Button"
 import { CarrouselAuto } from "../../components/CarrouselAuto"
+import { MainSection } from "../../components/MainSection"
 import "../../styles/indexPage.css"
 import { Benefits } from "./sections/Benefits"
 import { MakeYourTravel } from "./sections/MakeYourTravel"
@@ -23,15 +25,15 @@ export function IndexPage() {
         </nav>
       </header>
       <main>
-       <section id="presentationSection">
+       <MainSection id="presentationSection">
           <div><h1>Journey Joy</h1></div>
           <video src="indexVideo2.mp4" autoPlay muted loop></video>
           <div><h2>Viajes inolvidables, felicidad en el camino</h2></div>
-        </section>
-        <section className="blank">
+        </MainSection>
+        <MainSection variant="row" styles={css`min-height: 128px; gap: 1rem;`}>
           <a href=""><Button variant="default">Sobre nosotros</Button></a>
           <a href=""><Button variant="main">Tenemos el plan perfecto para vos</Button></a>
-        </section>
+        </MainSection>
         <PopularOnes />
         <CarrouselAuto />
         <Map />
@@ -40,7 +42,7 @@ export function IndexPage() {
         <PlaneCTA />
         <MakeYourTravel />
         <Reviews />
-        <section id="contactSection">
+        <MainSection id="contactSection">
           <h2>Escríbanos</h2>
           <div>
             <a href=""><Button variant="default">Sobre nosotros</Button></a>
@@ -51,7 +53,7 @@ export function IndexPage() {
             <label>texto<input type="text" /></label>
             <Button variant="default" otherType="submit">enviar</Button>
           </form>
-        </section>
+        </MainSection>
       </main>
     </>
   )

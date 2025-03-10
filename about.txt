@@ -42,7 +42,7 @@ Tecnologías a usar:
 Páginas
   Vista principal
   Vista de viajes y promociones en general
-  Vistas de los viajes en específico (una para c/u)
+  Vistas de los viajes en específico (una para c/u) / MODAL EN VISTA DE VIAJES
   Vista de pago/ reserva
   Viaje personalizado
   Contacto/Sobre nosotros

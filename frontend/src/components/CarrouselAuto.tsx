@@ -1,11 +1,26 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import { MainSection } from "./MainSection";
+import { css } from "@emotion/react";
 
 export function CarrouselAuto() {
   const images = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-  const containerRef = useRef<HTMLDivElement>(null)
-  const sectionRef = useRef<HTMLDivElement>(null)
 
   const [containerPosition, setContainerPosition] = useState<number>(0)
+
+  const styles = css`
+    padding: 0;
+    overflow-x: hidden;
+    justify-content: flex-start;
+    
+    .carrouselContainer {
+      display: flex;
+      align-items: center;
+    }
+    
+    img {
+      width: 200px;
+    }
+  `
 
   useEffect(() => {
     let animationFrame: number;
@@ -33,14 +48,9 @@ export function CarrouselAuto() {
   }, [images.length]);
 
   return (
-    <section
-      className="blank justifyStart"
-      id="carrouselSection"
-      ref={sectionRef}
-    >
+    <MainSection variant="row" id="carrouselSection" styles={styles}>
       <div
         className="carrouselContainer"
-        ref={containerRef}
         style={{
           transform: `translateX(${containerPosition}px)`
         }}
@@ -54,6 +64,6 @@ export function CarrouselAuto() {
           />
         ))}
       </div>
-    </section>
+    </MainSection>
   )
 }
