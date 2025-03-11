@@ -10,20 +10,12 @@ import { PlaneCTA } from "./sections/PlaneCTA"
 import { Plans } from "./sections/Plans"
 import { PopularOnes } from "./sections/PopularOnes"
 import { Reviews } from "./sections/Reviews"
+import { Navbar } from "../../components/Navbar"
 
 export function IndexPage() {
   return (
     <>
-      <header className="defaultPadding navbar">
-        <div className="hidden">
-          <h2>Spacing text</h2>
-        </div>
-        <nav className="fixed">
-          <div>
-            <h2>Navbar</h2>
-          </div>
-        </nav>
-      </header>
+      <Navbar />
       <main>
        <MainSection id="presentationSection">
           <div><h1>Journey Joy</h1></div>
