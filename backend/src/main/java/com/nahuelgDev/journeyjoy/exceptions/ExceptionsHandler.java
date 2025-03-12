@@ -41,8 +41,6 @@ public class ExceptionsHandler {
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<String> exception(Exception ex) {
-    System.out.println("asdsadsa_____________");
-    System.out.println(ex.getClass());
     if (ex instanceof AuthenticationException) throw (AuthenticationException) ex;
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
   }
