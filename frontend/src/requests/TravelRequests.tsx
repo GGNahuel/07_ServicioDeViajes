@@ -30,7 +30,6 @@ export function useTravelSearcher() {
       maxDays: form.maxDays.value
     }
     const queryParamsRouteValue = generateQueryParamsRoute(paramsValues)
-    console.log(queryParamsRouteValue, paramsValues)
 
     const fetchResponse = await handleRequest(TRAVEL_API_PREFIX + "/search" + queryParamsRouteValue, "GET", {}, setValue)
     setResponse(fetchResponse as Travel[])

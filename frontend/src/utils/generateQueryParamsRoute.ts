@@ -3,7 +3,11 @@ export function generateQueryParamsRoute(params: object): string {
   const entries = Object.entries(params)
   const values = Object.values(params)
 
-  if (values.some(value => value && value != "")) {
+  const valueIsNotNullOrEmpty = (value: unknown) => {
+    return value != null && value !== ""
+  }
+
+  if (values.some(value => valueIsNotNullOrEmpty(value))) {
     result += "?"
     let hasPreviousQueryValue = false
   
@@ -11,7 +15,7 @@ export function generateQueryParamsRoute(params: object): string {
       const [key, value] = entry
       const keyValueFormatted = `${key}=${value}`
       
-      result += (value && value != "") ? 
+      result += (valueIsNotNullOrEmpty(value)) ? 
         (hasPreviousQueryValue) ?
           "&" + keyValueFormatted : 
           keyValueFormatted : 
