@@ -19,6 +19,6 @@ public class Reviews {
   private String comment;
   private Double rating;
 
-  @DBRef
+  @DBRef(lazy = false)
   private Images userImage;
 }

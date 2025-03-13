@@ -19,5 +19,5 @@ public class Destinies {
   private Transports transport;
 
   @DBRef
-  private StayPlaces stayPlace;
+  private StayPlaces stayPlaceId;
 }
