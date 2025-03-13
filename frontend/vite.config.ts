@@ -6,4 +6,10 @@ export default defineConfig({
   plugins: [react({
     jsxImportSource: '@emotion/react',
   })],
+  server: {
+    watch: {
+      usePolling: true
+    },
+    host: true
+  }
 })

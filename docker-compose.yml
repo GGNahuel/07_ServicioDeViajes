@@ -9,7 +9,7 @@ services:
       - journeyjoy_network
     volumes:
       - ./frontend:/frontend
-      - /frontend/node_modules
+      - /frontend/node_modules # This is to solve a bug with optional dependencies like @rollup/rollup-linux-x64-gnu
 
   journeyjoyapp_backend:
     container_name: journeyjoy_backend_c
