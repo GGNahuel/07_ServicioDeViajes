@@ -1,6 +1,9 @@
 package com.nahuelgDev.journeyjoy.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasContent;
+
+import java.io.IOException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,13 +13,13 @@ import com.nahuelgDev.journeyjoy.repositories.ImagesRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.ImagesService_I;
 import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
-import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
-
-import java.io.IOException;
-
 @Service
 public class ImagesService_Impl implements ImagesService_I {
-  @Autowired ImagesRepository imageRepo;
+  private final ImagesRepository imageRepo;
+
+  public ImagesService_Impl(ImagesRepository imageRepo) {
+    this.imageRepo = imageRepo;
+  }
 
   @Override
   public Images getById(String id) {

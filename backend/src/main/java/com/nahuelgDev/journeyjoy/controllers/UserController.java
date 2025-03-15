@@ -1,6 +1,5 @@
 package com.nahuelgDev.journeyjoy.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -17,7 +16,11 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-  @Autowired AdminService adminService;
+  private final AdminService adminService;
+
+  public UserController(AdminService adminService) {
+    this.adminService = adminService;
+  }
 
   @GetMapping("/csrf-token")
   public CsrfToken csrf(HttpServletRequest servlet) {

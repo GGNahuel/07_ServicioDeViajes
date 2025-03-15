@@ -2,7 +2,6 @@ package com.nahuelgDev.journeyjoy.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,11 @@ import com.nahuelgDev.journeyjoy.services.interfaces.TravelsService_I;
 @RestController
 @RequestMapping("/api/travels")
 public class TravelsController {
-  @Autowired TravelsService_I travelsService;
+  private final TravelsService_I travelsService;
+
+  public TravelsController(TravelsService_I travelsService) {
+    this.travelsService = travelsService;
+  }
 
   @GetMapping("")
   public List<Travels> getAll() {

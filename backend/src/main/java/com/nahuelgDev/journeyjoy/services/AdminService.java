@@ -3,7 +3,6 @@ package com.nahuelgDev.journeyjoy.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +19,11 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class AdminService implements UserDetailsService {
-  @Autowired AdminRepository adminRepo;
+  private final AdminRepository adminRepo;
+
+  public AdminService(AdminRepository adminRepo) {
+    this.adminRepo = adminRepo;
+  }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -5,7 +5,6 @@ import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkStringIsAlp
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,8 +16,13 @@ import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
 @Service
 public class ReviewsService_Impl implements ReviewsService_I {
-  @Autowired ReviewsRepository reviewsRepo;
-  @Autowired ImagesService_Impl imageService;
+  private final ReviewsRepository reviewsRepo;
+  private final ImagesService_Impl imageService;
+
+  public ReviewsService_Impl(ReviewsRepository repository, ImagesService_Impl imageService) {
+    this.reviewsRepo = repository;
+    this.imageService = imageService;
+  }
 
   public List<Reviews> getAll() {
     return reviewsRepo.findAll();

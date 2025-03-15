@@ -5,7 +5,6 @@ import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasCo
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,11 +28,20 @@ import lombok.AllArgsConstructor;
 
 @Service
 public class RequestsService_Impl implements RequestsService_I {
-  @Autowired RequestsRepository requestsRepo;
-  @Autowired TravelsRepository travelsRepo;
-  @Autowired EmailsRepository emailsRepo;
-  @Autowired EmailsService emailsService;
-  @Autowired ModelMapper modelMapper;
+
+  private final RequestsRepository requestsRepo;
+  private final TravelsRepository travelsRepo;
+  private final EmailsRepository emailsRepo;
+  private final EmailsService emailsService;
+  private final ModelMapper modelMapper;
+
+  public RequestsService_Impl(RequestsRepository requestsRepository, TravelsRepository travelsRepository, EmailsRepository emailsRepository, EmailsService emailsService, ModelMapper modelMapper) {
+    this.requestsRepo = requestsRepository;
+    this.travelsRepo = travelsRepository;
+    this.emailsRepo = emailsRepository;
+    this.emailsService = emailsService;
+    this.modelMapper = modelMapper;
+  }
 
   //check methods
   

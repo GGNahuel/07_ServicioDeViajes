@@ -2,7 +2,6 @@ package com.nahuelgDev.journeyjoy.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,11 @@ import com.nahuelgDev.journeyjoy.services.interfaces.RequestsService_I;
 @RequestMapping("/api/request")
 public class RequestsController {
 
-  @Autowired RequestsService_I requestsService;
+  private final RequestsService_I requestsService;
+
+  public RequestsController(RequestsService_I requestsService) {
+    this.requestsService = requestsService;
+  }
 
   @GetMapping("")
   @PreAuthorize("isAuthenticated()")

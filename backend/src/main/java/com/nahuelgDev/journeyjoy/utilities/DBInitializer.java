@@ -1,6 +1,5 @@
 package com.nahuelgDev.journeyjoy.utilities;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +17,22 @@ import jakarta.annotation.PostConstruct;
 
 @Component
 public class DBInitializer {
-  @Autowired TravelsRepository travelsRepo;
-  @Autowired StayPlacesRepository stayPlacesRepo;
-  @Autowired ReviewsRepository reviewsRepo;
-  @Autowired AdminRepository adminRepo;
+  private final TravelsRepository travelsRepo;
+  private final StayPlacesRepository stayPlacesRepo;
+  private final ReviewsRepository reviewsRepo;
+  private final AdminRepository adminRepo;
 
-  @Autowired ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
+
+  public DBInitializer(TravelsRepository travelsRepo, StayPlacesRepository stayPlacesRepo,
+    ReviewsRepository reviewsRepo, AdminRepository adminRepo, ObjectMapper objectMapper
+  ) {
+    this.travelsRepo = travelsRepo;
+    this.stayPlacesRepo = stayPlacesRepo;
+    this.reviewsRepo = reviewsRepo;
+    this.adminRepo = adminRepo;
+    this.objectMapper = objectMapper;
+  }
 
   @PostConstruct
   public void init() throws Exception {

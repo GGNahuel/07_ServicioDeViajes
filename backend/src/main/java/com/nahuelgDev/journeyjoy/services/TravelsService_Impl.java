@@ -5,7 +5,6 @@ import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkStringIsAlp
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
@@ -20,8 +19,13 @@ import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
 @Service
 public class TravelsService_Impl implements TravelsService_I{
-  @Autowired TravelsRepository travelsRepo;
-  @Autowired Custom_TravelRepository customRepo;
+  private final TravelsRepository travelsRepo;
+  private final Custom_TravelRepository customRepo;
+
+  public TravelsService_Impl(TravelsRepository repository, Custom_TravelRepository customRepo) {
+    this.travelsRepo = repository;
+    this.customRepo = customRepo;
+  }
   
   @Override
   public List<Travels> getAll() {

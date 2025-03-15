@@ -2,7 +2,6 @@ package com.nahuelgDev.journeyjoy.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,11 @@ import com.nahuelgDev.journeyjoy.services.interfaces.ReviewsService_I;
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewsController {
-  @Autowired ReviewsService_I reviewsService;
+  private final ReviewsService_I reviewsService;
+
+  public ReviewsController(ReviewsService_I reviewsService) {
+    this.reviewsService = reviewsService;
+  }
 
   @GetMapping("")
   public List<Reviews> getAll() {

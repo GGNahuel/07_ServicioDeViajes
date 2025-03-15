@@ -1,9 +1,11 @@
 package com.nahuelgDev.journeyjoy.services;
 
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkFieldsHasContent;
+import static com.nahuelgDev.journeyjoy.utilities.Verifications.checkStringIsAlphaNumeric;
+
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +16,15 @@ import com.nahuelgDev.journeyjoy.repositories.StayPlacesRepository;
 import com.nahuelgDev.journeyjoy.services.interfaces.StayPlacesService_I;
 import com.nahuelgDev.journeyjoy.utilities.Verifications.Field;
 
-import static com.nahuelgDev.journeyjoy.utilities.Verifications.*;
-
 @Service
 public class StayPlaceService_Impl implements StayPlacesService_I {
-  @Autowired StayPlacesRepository stayPlaceRepo;
-  @Autowired ModelMapper modelMapper;
+  private final StayPlacesRepository stayPlaceRepo;
+  private final ModelMapper modelMapper;
+
+  public StayPlaceService_Impl(StayPlacesRepository repository, ModelMapper mapper) {
+    this.stayPlaceRepo = repository;
+    this.modelMapper = mapper;
+  }
 
   @Override @Transactional(readOnly = true)
   public List<StayPlacesDto> getAll() {
