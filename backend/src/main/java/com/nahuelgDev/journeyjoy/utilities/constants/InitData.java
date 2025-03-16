@@ -28,12 +28,8 @@ public class InitData {
               "leaveDay": 1,
               "returnDay": 3,
               "transport": "BUS",
-              "stayPlace": {
-                "id": "101",
-                "from": "Bariloche",
-                "name": "Hotel Los Andes",
-                "description": "Hotel 4 estrellas con vista al lago Nahuel Huapi.",
-                "rating": 4.7
+              "stayPlaceId": {
+                "id": "101"
               }
             },
             {
@@ -41,12 +37,8 @@ public class InitData {
               "leaveDay": 4,
               "returnDay": 6,
               "transport": "PLANE",
-              "stayPlace": {
-                "id": "102",
-                "from": "El Calafate",
-                "name": "Hostel Glaciar",
-                "description": "Albergue económico cercano al glaciar Perito Moreno.",
-                "rating": 4.3
+              "stayPlaceId": {
+                "id": "102"
               }
             },
             {
@@ -54,12 +46,8 @@ public class InitData {
               "leaveDay": 7,
               "returnDay": 10,
               "transport": "PLANE",
-              "stayPlace": {
-                "id": "103",
-                "from": "Ushuaia",
-                "name": "Cabañas del Fin del Mundo",
-                "description": "Cabañas rústicas con vistas al canal Beagle.",
-                "rating": 4.8
+              "stayPlaceId": {
+                "id": "103"
               }
             }
           ],
@@ -84,12 +72,8 @@ public class InitData {
               "leaveDay": 1,
               "returnDay": 2,
               "transport": "PLANE",
-              "stayPlace": {
-                "id": "201",
-                "from": "Salta",
-                "name": "Hotel Colonial Salta",
-                "description": "Hotel boutique en el centro histórico.",
-                "rating": 4.5
+              "stayPlaceId": {
+                "id": "201"
               }
             },
             {
@@ -97,12 +81,8 @@ public class InitData {
               "leaveDay": 3,
               "returnDay": 4,
               "transport": "BUS",
-              "stayPlace": {
-                "id": "202",
-                "from": "Tilcara",
-                "name": "Hostería Quebrada",
-                "description": "Pequeño hotel en la quebrada de Humahuaca.",
-                "rating": 4.6
+              "stayPlaceId": {
+                "id": "202"
               }
             },
             {
@@ -110,12 +90,8 @@ public class InitData {
               "leaveDay": 5,
               "returnDay": 7,
               "transport": "TRAIN",
-              "stayPlace": {
-                "id": "203",
-                "from": "Jujuy",
-                "name": "Eco Lodge Puna",
-                "description": "Alojamiento sostenible con vistas panorámicas.",
-                "rating": 4.4
+              "stayPlaceId": {
+                "id": "203"
               }
             }
           ],
@@ -140,12 +116,8 @@ public class InitData {
               "leaveDay": 1,
               "returnDay": 3,
               "transport": "PLANE",
-              "stayPlace": {
-                "id": "301",
-                "from": "Cancún",
-                "name": "Resort Playa Azul",
-                "description": "Resort todo incluido frente a la playa.",
-                "rating": 4.9
+              "stayPlaceId": {
+                "id": "301"
               }
             },
             {
@@ -153,12 +125,8 @@ public class InitData {
               "leaveDay": 4,
               "returnDay": 5,
               "transport": "BUS",
-              "stayPlace": {
-                "id": "302",
-                "from": "Playa del Carmen",
-                "name": "Hotel Riviera Maya",
-                "description": "Elegante hotel boutique cercano a la 5ta Avenida.",
-                "rating": 4.7
+              "stayPlaceId": {
+                "id": "302"
               }
             },
             {
@@ -166,12 +134,8 @@ public class InitData {
               "leaveDay": 6,
               "returnDay": 8,
               "transport": "BOAT",
-              "stayPlace": {
-                "id": "303",
-                "from": "Cozumel",
-                "name": "Villa Cozumel",
-                "description": "Villas privadas en la isla.",
-                "rating": 4.8
+              "stayPlaceId": {
+                "id": "303"
               }
             }
           ],
@@ -196,12 +160,8 @@ public class InitData {
               "leaveDay": 1,
               "returnDay": 4,
               "transport": "PLANE",
-              "stayPlace": {
-                "id": "401",
-                "from": "París",
-                "name": "Hotel Eiffel",
-                "description": "Hotel cercano a la torre Eiffel.",
-                "rating": 4.7
+              "stayPlaceId": {
+                "id": "401"
               }
             },
             {
@@ -209,12 +169,8 @@ public class InitData {
               "leaveDay": 5,
               "returnDay": 9,
               "transport": "TRAIN",
-              "stayPlace": {
-                "id": "402",
-                "from": "Roma",
-                "name": "Hostal Coliseo",
-                "description": "Hostal económico con desayuno incluido.",
-                "rating": 4.3
+              "stayPlaceId": {
+                "id": "402"
               }
             },
             {
@@ -222,12 +178,8 @@ public class InitData {
               "leaveDay": 10,
               "returnDay": 15,
               "transport": "PLANE",
-              "stayPlace": {
-                "id": "403",
-                "from": "Madrid",
-                "name": "Hotel Gran Vía",
-                "description": "Hotel céntrico con vistas a la Gran Vía.",
-                "rating": 4.6
+              "stayPlaceId": {
+                "id": "403"
               }
             }
           ],
@@ -252,12 +204,8 @@ public class InitData {
               "leaveDay": 1,
               "returnDay": 3,
               "transport": "PLANE",
-              "stayPlace": {
-                "id": "601",
-                "from": "Dubrovnik",
-                "name": "Hotel Mura",
-                "description": "Hotel con vista al casco antiguo de Dubrovnik.",
-                "rating": 4.7
+              "stayPlaceId": {
+                "id": "601"
               }
             },
             {
@@ -265,12 +213,8 @@ public class InitData {
               "leaveDay": 4,
               "returnDay": 6,
               "transport": "BUS",
-              "stayPlace": {
-                "id": "602",
-                "from": "Mostar",
-                "name": "Hostal Stari Most",
-                "description": "Hostal cercano al emblemático puente de Mostar.",
-                "rating": 4.5
+              "stayPlaceId": {
+                "id": "602"
               }
             },
             {
@@ -278,12 +222,8 @@ public class InitData {
               "leaveDay": 7,
               "returnDay": 9,
               "transport": "BOAT",
-              "stayPlace": {
-                "id": "603",
-                "from": "Kotor",
-                "name": "Villa Adriática",
-                "description": "Villa con vistas espectaculares a la bahía de Kotor.",
-                "rating": 4.8
+              "stayPlaceId": {
+                "id": "603"
               }
             },
             {
@@ -291,12 +231,8 @@ public class InitData {
               "leaveDay": 10,
               "returnDay": 12,
               "transport": "TRAIN",
-              "stayPlace": {
-                "id": "604",
-                "from": "Belgrado",
-                "name": "Hotel Danubio",
-                "description": "Hotel moderno a orillas del río Danubio.",
-                "rating": 4.6
+              "stayPlaceId": {
+                "id": "604"
               }
             }
           ],
