@@ -1,7 +1,9 @@
 import { css, SerializedStyles } from "@emotion/react";
 import { ReactNode } from "react";
 
-export function Card({children, additionalStyles, onHover} : {children: ReactNode, additionalStyles?: SerializedStyles, onHover?: () => void}) {
+export function Card({children, additionalStyles, onHover, whenClicked} : 
+  {children: ReactNode, additionalStyles?: SerializedStyles, onHover?: () => void, whenClicked?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void}
+) {
   const style = css`
     box-shadow: 3px 3px 3px rgba(57, 57, 57, 0.5), -1px -1px 3px rgba(57, 57, 57,0.5);
     border-radius: 16px;
@@ -20,6 +22,7 @@ export function Card({children, additionalStyles, onHover} : {children: ReactNod
       onMouseEnter={() => {
         if (onHover) onHover()
       }} 
+      onClick={(e) => {if (whenClicked) whenClicked(e)}}
       css={style}
     >
       {children}

@@ -2,8 +2,11 @@ import { css, SerializedStyles } from "@emotion/react";
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
 export function Button(
-  {variant, children, additionalStyles, otherType} : 
-  {variant: "default" | "main" | "secondary", children: ReactNode, additionalStyles?: SerializedStyles, otherType?: ButtonHTMLAttributes<HTMLButtonElement>["type"]}
+  {variant, children, additionalStyles, otherType, onClick} : 
+  {variant: "default" | "main" | "secondary", children: ReactNode, 
+    additionalStyles?: SerializedStyles, otherType?: ButtonHTMLAttributes<HTMLButtonElement>["type"],
+    onClick?: () => void
+  }
 ) {
   const style = css`
     appearance: none;
@@ -30,7 +33,7 @@ export function Button(
   `
 
   return (
-    <button css={style} type={otherType || "button"}>
+    <button css={style} type={otherType || "button"} onClick={onClick}>
       {children}
     </button>
   )
