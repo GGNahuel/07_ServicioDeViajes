@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.io.IOException;
 import java.util.List;
@@ -88,6 +89,7 @@ public class Test_ReviewsController {
         .file(file)
         .file(reviewPart) 
         .contentType(MediaType.MULTIPART_FORM_DATA)
+        .with(csrf())
     ).andExpect(status().isCreated()).andReturn();
 
     String response = request.getResponse().getContentAsString();
@@ -120,6 +122,7 @@ public class Test_ReviewsController {
         .file(file)
         .file(reviewPart) 
         .contentType(MediaType.MULTIPART_FORM_DATA)
+        .with(csrf())
     ).andExpect(status().isOk()).andReturn();
 
     String response = request.getResponse().getContentAsString();
@@ -135,7 +138,7 @@ public class Test_ReviewsController {
     String expected = "Operación realizada con éxito";
     when(service.delete("1")).thenReturn(expected);
 
-    MvcResult request = mockMvc.perform(delete("/api/reviews/1")).andExpect(status().isOk()).andReturn();
+    MvcResult request = mockMvc.perform(delete("/api/reviews/1").with(csrf())).andExpect(status().isOk()).andReturn();
     String actual = request.getResponse().getContentAsString();
 
     assertEquals(expected, actual);
@@ -144,7 +147,7 @@ public class Test_ReviewsController {
 
   @Test
   void delete_shouldDenyAccess() throws Exception {
-    mockMvc.perform(delete("/api/reviews/1")).andExpect(status().isUnauthorized());
+    mockMvc.perform(delete("/api/reviews/1").with(csrf())).andExpect(status().isUnauthorized());
     verify(service, times(0)).delete("1");
   }
 }

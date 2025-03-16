@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.util.List;
 
@@ -116,6 +117,7 @@ public class Test_RequestsController {
 
     MvcResult response = mockMvc.perform(post("/api/request")
       .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+      .with(csrf())
     ).andExpect(status().isCreated()).andReturn();
     String responseJson = response.getResponse().getContentAsString();
     Requests actual = objectMapper.readValue(responseJson, Requests.class);
@@ -132,6 +134,7 @@ public class Test_RequestsController {
 
     MvcResult response = mockMvc.perform(put("/api/request")
       .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+      .with(csrf())
     ).andExpect(status().isOk()).andReturn();
     String responseJson = response.getResponse().getContentAsString();
     Requests actual = objectMapper.readValue(responseJson, Requests.class);
@@ -147,6 +150,7 @@ public class Test_RequestsController {
     MvcResult response = mockMvc.perform(patch("/api/request/update_pay")
       .param("id", "1")
       .param("amount", "100.0")
+      .with(csrf())
     ).andExpect(status().isOk()).andReturn();
     
     assertEquals("Success", response.getResponse().getContentAsString());
@@ -157,7 +161,7 @@ public class Test_RequestsController {
   void cancel_passRightArgsToService() throws Exception {
     when(service.cancelRequest("1")).thenReturn("Success");
 
-    MvcResult response = mockMvc.perform(patch("/api/request/cancel/1")).andExpect(status().isOk()).andReturn();
+    MvcResult response = mockMvc.perform(patch("/api/request/cancel/1").with(csrf())).andExpect(status().isOk()).andReturn();
 
     assertEquals("Success", response.getResponse().getContentAsString());
     verify(service).cancelRequest("1");

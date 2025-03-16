@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.util.List;
 
@@ -104,8 +104,9 @@ public class Test_StayPlacesController {
 
     MvcResult response = mockMvc.perform(post("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
-      .content(inputInJson))
-      .andExpect(status().isCreated()).andReturn();
+      .content(inputInJson)
+      .with(csrf())
+    ).andExpect(status().isCreated()).andReturn();
 
     String responseInJson = response.getResponse().getContentAsString();
     StayPlacesDto actual = objectMapper.readValue(responseInJson, StayPlacesDto.class);
@@ -122,6 +123,7 @@ public class Test_StayPlacesController {
     mockMvc.perform(post("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
       .content(inputInJson)
+      .with(csrf())
     ).andExpect(status().isUnauthorized()).andReturn();
 
     verify(service, times(0)).create(input);
@@ -136,8 +138,9 @@ public class Test_StayPlacesController {
 
     MvcResult response = mockMvc.perform(put("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
-      .content(inputInJson))
-      .andExpect(status().isOk()).andReturn();
+      .content(inputInJson)
+      .with(csrf())
+      ).andExpect(status().isOk()).andReturn();
 
     String responseInJson = response.getResponse().getContentAsString();
     StayPlacesDto actual = objectMapper.readValue(responseInJson, StayPlacesDto.class);
@@ -153,6 +156,7 @@ public class Test_StayPlacesController {
     mockMvc.perform(put("/api/stayplaces")
       .contentType(MediaType.APPLICATION_JSON)
       .content(inputInJson)
+      .with(csrf())
     ).andExpect(status().isUnauthorized());
 
     verify(service, times(0)).update(input);
@@ -163,12 +167,12 @@ public class Test_StayPlacesController {
   void delete_returnString() throws Exception {
     when(service.delete("1")).thenReturn("Operación realizada con éxito");
 
-    mockMvc.perform(delete("/api/stayplaces/1")).andExpect(status().isOk());
+    mockMvc.perform(delete("/api/stayplaces/1").with(csrf())).andExpect(status().isOk());
   }
 
   @Test
   void delete_shouldDenyAccess() throws Exception {
-    mockMvc.perform(delete("/api/stayplaces/1")).andExpect(status().isUnauthorized());
+    mockMvc.perform(delete("/api/stayplaces/1").with(csrf())).andExpect(status().isUnauthorized());
 
     verify(service, times(0)).delete("1");
   }

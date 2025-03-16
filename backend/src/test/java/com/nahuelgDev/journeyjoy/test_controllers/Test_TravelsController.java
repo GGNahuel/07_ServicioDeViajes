@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.util.List;
 
@@ -108,6 +109,7 @@ public class Test_TravelsController {
 
     MvcResult response = mockMvc.perform(post("/api/travels")
       .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+      .with(csrf())
     ).andExpect(status().isCreated()).andReturn();
     String responseString = response.getResponse().getContentAsString();
     Travels actual = objectMapper.readValue(responseString, Travels.class);
@@ -122,6 +124,7 @@ public class Test_TravelsController {
 
     mockMvc.perform(post("/api/travels")
       .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+      .with(csrf())
     ).andExpect(status().isUnauthorized());
 
     verify(service, times(0)).create(any(Travels.class));
@@ -135,6 +138,7 @@ public class Test_TravelsController {
 
     MvcResult response = mockMvc.perform(put("/api/travels")
       .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+      .with(csrf())
     ).andExpect(status().isOk()).andReturn();
     String responseString = response.getResponse().getContentAsString();
     Travels actual = objectMapper.readValue(responseString, Travels.class);
@@ -149,6 +153,7 @@ public class Test_TravelsController {
 
     mockMvc.perform(put("/api/travels")
       .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+      .with(csrf())
     ).andExpect(status().isUnauthorized());
 
     verify(service, times(0)).update(any(Travels.class));
@@ -164,6 +169,7 @@ public class Test_TravelsController {
     MvcResult response = mockMvc.perform(
       patch("/api/travels/addReview?travelId=1")
       .contentType(MediaType.APPLICATION_JSON).content(reviewString)
+      .with(csrf())
     ).andExpect(status().isOk()).andReturn();
     String actual = response.getResponse().getContentAsString();
 
@@ -177,7 +183,7 @@ public class Test_TravelsController {
     String expected = "asd";
     when(service.delete("1")).thenReturn(expected);
 
-    MvcResult response = mockMvc.perform(delete("/api/travels/1")).andExpect(status().isOk()).andReturn();
+    MvcResult response = mockMvc.perform(delete("/api/travels/1").with(csrf())).andExpect(status().isOk()).andReturn();
     String actual = response.getResponse().getContentAsString();
 
     assertEquals(expected, actual);
@@ -186,7 +192,7 @@ public class Test_TravelsController {
 
   @Test
   void delete_shouldDenyAccess() throws Exception {
-    mockMvc.perform(delete("/api/travels/1")).andExpect(status().isUnauthorized());
+    mockMvc.perform(delete("/api/travels/1").with(csrf())).andExpect(status().isUnauthorized());
     verify(service, times(0)).delete(anyString());
   }
 }
