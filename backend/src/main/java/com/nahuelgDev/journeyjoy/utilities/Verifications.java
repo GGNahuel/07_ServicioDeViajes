@@ -1,5 +1,6 @@
 package com.nahuelgDev.journeyjoy.utilities;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
@@ -37,6 +38,19 @@ public class Verifications {
         
         for (int j = 0; j < list.size(); j++) {
           Object object = list.get(j);
+          Integer ji = j + 1;
+          checkFieldsHasContent(new Field(String.format("%s' en la posición '%s", name, ji.toString()), object));
+        }
+      }
+
+      if (value instanceof Array) {
+        Object[] array = (Object[]) value;
+
+        if (array.length == 0)
+          throw new EmptyFieldException(name);
+
+        for (int j = 0; j < array.length; j++) {
+          Object object = array[j];
           Integer ji = j + 1;
           checkFieldsHasContent(new Field(String.format("%s' en la posición '%s", name, ji.toString()), object));
         }
