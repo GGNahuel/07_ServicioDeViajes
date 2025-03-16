@@ -2,6 +2,8 @@ package com.nahuelgDev.journeyjoy.services.interfaces;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 
@@ -10,8 +12,8 @@ public interface TravelsService_I {
   Travels getById(String id);
   List<Travels> search(Boolean available, Integer desiredCapacity, String place, Integer minDays, Integer maxDays) throws Exception;
   List<Travels> getByCapacityLeft(Boolean wantCapacity);
-  Travels create(Travels travelToCreate) throws Exception;
-  Travels update(Travels updatedTravel) throws Exception;
+  Travels create(Travels travelToCreate, MultipartFile[] images) throws Exception;
+  Travels update(Travels updatedTravel, MultipartFile[] images) throws Exception;
   String addReview(String travelId, Reviews newReview) throws Exception;
   String delete(String id);
 }

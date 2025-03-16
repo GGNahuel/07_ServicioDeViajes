@@ -3,6 +3,7 @@ package com.nahuelgDev.journeyjoy.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
@@ -48,16 +51,16 @@ public class TravelsController {
     return travelsService.getByCapacityLeft(wantCapacity);
   }
 
-  @PostMapping("")
+  @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<Travels> create(@RequestBody Travels travel) throws Exception {
-    return new ResponseEntity<>(travelsService.create(travel), HttpStatus.CREATED);
+  public ResponseEntity<Travels> create(@RequestPart("body") Travels travel, @RequestPart("images") MultipartFile[] images) throws Exception {
+    return new ResponseEntity<>(travelsService.create(travel, images), HttpStatus.CREATED);
   }
 
-  @PutMapping("")
+  @PutMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public Travels update(@RequestBody Travels updatedTravel) throws Exception {
-    return travelsService.update(updatedTravel);
+  public Travels update(@RequestPart("body") Travels updatedTravel, @RequestPart("images") MultipartFile[] images) throws Exception {
+    return travelsService.update(updatedTravel, images);
   }
 
   @PatchMapping("/addReview")
