@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor @NoArgsConstructor
 @Document
 public class Images {
+// DEV NOTE: Es mejor práctica almacenar imágenes y archivos en general en servicios de almacenamiento externos o almacenamiento local
+// y no en la base de datos, no importa si es SQL o NOSQL. Esto por cuestiones de eficiencia en consultas, rendimiento, y tamaño de la BdD.
     @Id
     private String id;
     private String name;
