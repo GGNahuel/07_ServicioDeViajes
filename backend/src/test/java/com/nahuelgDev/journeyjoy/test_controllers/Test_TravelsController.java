@@ -7,13 +7,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.util.List;
 
@@ -24,7 +23,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -104,59 +105,104 @@ public class Test_TravelsController {
   @Test
   @WithMockUser
   void create_returnsExpected() throws Exception {
-    String inputJson = objectMapper.writeValueAsString(travel1);
-    when(service.create(travel1)).thenReturn(travel1);
+    MockMultipartFile imagePart = new MockMultipartFile(
+      "images", "image.jpg", MediaType.IMAGE_JPEG_VALUE ,"bytes".getBytes()
+    );
+    MockMultipartFile bodyPart = new MockMultipartFile(
+      "body", 
+      "", 
+      MediaType.APPLICATION_JSON_VALUE, 
+      objectMapper.writeValueAsBytes(travel1)
+    );
 
-    MvcResult response = mockMvc.perform(post("/api/travels")
-      .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+    when(service.create(any(Travels.class), any())).thenReturn(travel1);
+
+    MvcResult response = mockMvc.perform(
+      multipart("/api/travels")
+      .file(bodyPart)
+      .file(imagePart)
+      .contentType(MediaType.MULTIPART_FORM_DATA)
       .with(csrf())
     ).andExpect(status().isCreated()).andReturn();
     String responseString = response.getResponse().getContentAsString();
     Travels actual = objectMapper.readValue(responseString, Travels.class);
 
     assertEquals(travel1, actual);
-    verify(service).create(travel1);
+    verify(service).create(any(Travels.class), any());
   }
 
   @Test
   void create_shouldDenyAccess() throws Exception {
-    String inputJson = objectMapper.writeValueAsString(travel1);
+    MockMultipartFile imagePart = new MockMultipartFile(
+      "images", "image.jpg", MediaType.IMAGE_JPEG_VALUE ,"bytes".getBytes()
+    );
+    MockMultipartFile bodyPart = new MockMultipartFile(
+      "body", 
+      "", 
+      MediaType.APPLICATION_JSON_VALUE, 
+      objectMapper.writeValueAsBytes(travel1)
+    );
 
-    mockMvc.perform(post("/api/travels")
-      .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+    mockMvc.perform(
+      multipart("/api/travels")
+      .file(bodyPart)
+      .file(imagePart)
+      .contentType(MediaType.MULTIPART_FORM_DATA)
       .with(csrf())
     ).andExpect(status().isUnauthorized());
 
-    verify(service, times(0)).create(any(Travels.class));
+    verify(service, times(0)).create(any(Travels.class), any());
   }
 
   @Test
   @WithMockUser
   void update_returnsExpected() throws Exception {
-    String inputJson = objectMapper.writeValueAsString(travel1);
-    when(service.update(travel1)).thenReturn(travel1);
+    MockMultipartFile imagePart = new MockMultipartFile(
+      "images", "image.jpg", MediaType.IMAGE_JPEG_VALUE ,"bytes".getBytes()
+    );
+    MockMultipartFile bodyPart = new MockMultipartFile(
+      "body", 
+      "", 
+      MediaType.APPLICATION_JSON_VALUE, 
+      objectMapper.writeValueAsBytes(travel1)
+    );
+    when(service.update(any(Travels.class), any())).thenReturn(travel1);
 
-    MvcResult response = mockMvc.perform(put("/api/travels")
-      .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+    MvcResult response = mockMvc.perform(      
+      multipart(HttpMethod.PUT, "/api/travels")
+      .file(bodyPart)
+      .file(imagePart)
+      .contentType(MediaType.MULTIPART_FORM_DATA)
       .with(csrf())
     ).andExpect(status().isOk()).andReturn();
     String responseString = response.getResponse().getContentAsString();
     Travels actual = objectMapper.readValue(responseString, Travels.class);
 
     assertEquals(travel1, actual);
-    verify(service).update(travel1);
+    verify(service).update(any(Travels.class), any());
   }
 
   @Test
   void update_shouldDenyAccess() throws Exception {
-    String inputJson = objectMapper.writeValueAsString(travel1);
+    MockMultipartFile imagePart = new MockMultipartFile(
+      "images", "image.jpg", MediaType.IMAGE_JPEG_VALUE ,"bytes".getBytes()
+    );
+    MockMultipartFile bodyPart = new MockMultipartFile(
+      "body", 
+      "", 
+      MediaType.APPLICATION_JSON_VALUE, 
+      objectMapper.writeValueAsBytes(travel1)
+    );
 
-    mockMvc.perform(put("/api/travels")
-      .contentType(MediaType.APPLICATION_JSON).content(inputJson)
+    mockMvc.perform(      
+      multipart(HttpMethod.PUT, "/api/travels")
+      .file(bodyPart)
+      .file(imagePart)
+      .contentType(MediaType.MULTIPART_FORM_DATA)
       .with(csrf())
     ).andExpect(status().isUnauthorized());
 
-    verify(service, times(0)).update(any(Travels.class));
+    verify(service, times(0)).update(any(Travels.class), any());
   }
 
   @Test

@@ -14,6 +14,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.nahuelgDev.journeyjoy.collections.Images;
 import com.nahuelgDev.journeyjoy.collections.Reviews;
 import com.nahuelgDev.journeyjoy.collections.Travels;
 import com.nahuelgDev.journeyjoy.dataClasses.Destinies;
@@ -35,6 +38,7 @@ import com.nahuelgDev.journeyjoy.exceptions.EmptyFieldException;
 import com.nahuelgDev.journeyjoy.exceptions.InvalidOperationException;
 import com.nahuelgDev.journeyjoy.repositories.Custom_TravelRepository;
 import com.nahuelgDev.journeyjoy.repositories.TravelsRepository;
+import com.nahuelgDev.journeyjoy.services.ImagesService_Impl;
 import com.nahuelgDev.journeyjoy.services.TravelsService_Impl;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +46,7 @@ public class Test_TravelsService {
   
   @Mock TravelsRepository repository;
   @Mock Custom_TravelRepository customRepo;
+  @Mock ImagesService_Impl imagesService;
 
   @InjectMocks TravelsService_Impl service;
 
@@ -136,6 +141,9 @@ public class Test_TravelsService {
 
   @Test
   void create_returnsCreatedDocument() throws Exception {
+    MultipartFile file = mock(MultipartFile.class);
+    Images image = Images.builder().id("1").build();
+
     Travels travelToCreate = Travels.builder()
       .id("3").name("create").maxCapacity(20)
       .destinies(List.of(mock(Destinies.class)))
@@ -149,19 +157,24 @@ public class Test_TravelsService {
       .longInDays(15).availableDates(List.of(LocalDate.now()))
       .payPlans(List.of(mock(PayPlans.class)))
       .currentCapacity(0).isAvailable(true)
+      .images(List.of(image))
     .build();
 
     when(repository.save(any(Travels.class))).thenReturn(createdTravel);
+    when(imagesService.add(file)).thenReturn(image);
 
-    Travels actual = service.create(travelToCreate);
+    Travels actual = service.create(travelToCreate, new MultipartFile[]{file});
 
     assertNotEquals(travelToCreate, actual);
     assertEquals(createdTravel, actual);
     verify(repository).save(any(Travels.class));
+    verify(imagesService, times(1)).add(file);
   }
 
   @Test
-  void create_throwsEmptyFieldException() {
+  void create_throwsEmptyFieldException() throws IOException {
+    MultipartFile file = mock(MultipartFile.class);
+
     Travels withoutName = Travels.builder()
       .id("3").maxCapacity(20)
       .destinies(List.of(mock(Destinies.class)))
@@ -200,19 +213,25 @@ public class Test_TravelsService {
     .build();
 
     assertAll(
-      () -> assertThrows(EmptyFieldException.class, () -> service.create(null)),
-      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutName)),
-      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutMaxCapacity)),
-      () -> assertThrows(EmptyFieldException.class, () -> service.create(withEmptyDestinies)),
-      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutLongInDays)),
-      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutDates)),
-      () -> assertThrows(EmptyFieldException.class, () -> service.create(withEmptyPlans))
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(null, new MultipartFile[]{file})),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutName, new MultipartFile[]{file})),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutMaxCapacity, new MultipartFile[]{file})),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(withEmptyDestinies, new MultipartFile[]{file})),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutLongInDays, new MultipartFile[]{file})),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(withoutDates, new MultipartFile[]{file})),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(withEmptyPlans, new MultipartFile[]{file})),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(travel1, null)),
+      () -> assertThrows(EmptyFieldException.class, () -> service.create(travel1, new MultipartFile[]{}))
     );
+    verify(imagesService, times(0)).add(any(MultipartFile.class));
     verify(repository, times(0)).save(any(Travels.class));
   }
 
   @Test
   void update_returnsUpdatedDocument() throws Exception {
+    MultipartFile file = mock(MultipartFile.class);
+    Images image = Images.builder().id("1").build();
+
     Travels newTravel1 = Travels.builder()
       .id("1").name("Viaje 1").longInDays(21)
       .maxCapacity(20).currentCapacity(18).isAvailable(true)
@@ -224,16 +243,20 @@ public class Test_TravelsService {
     .build();
     when(repository.save(newTravel1)).thenReturn(newTravel1);
     when(repository.findById("1")).thenReturn(Optional.of(travel1));
+    when(imagesService.add(file)).thenReturn(image);
     
-    Travels actual = service.update(newTravel1);
+    Travels actual = service.update(newTravel1, new MultipartFile[]{file});
 
     assertEquals(newTravel1, actual);
     verify(repository).findById("1");
     verify(repository).save(newTravel1);
+    verify(imagesService, times(1)).add(file);
   }
 
   @Test
-  void update_throwsEmptyFieldException() {
+  void update_throwsEmptyFieldException() throws IOException {
+    MultipartFile file = mock(MultipartFile.class);
+
     Travels newTravel1 = Travels.builder()
       .name("Viaje 1").longInDays(21)
       .maxCapacity(20).currentCapacity(18).isAvailable(true)
@@ -244,14 +267,17 @@ public class Test_TravelsService {
       ))
     .build();
 
-    assertThrows(EmptyFieldException.class, () -> service.update(null));
-    assertThrows(EmptyFieldException.class, () -> service.update(newTravel1));
+    assertThrows(EmptyFieldException.class, () -> service.update(null, new MultipartFile[]{file}));
+    assertThrows(EmptyFieldException.class, () -> service.update(newTravel1, new MultipartFile[]{file}));
     verify(repository, times(0)).findById("1");
+    verify(imagesService, times(0)).add(file);
     verify(repository, times(0)).save(newTravel1);
   }
 
   @Test
-  void update_throwsDocumentNotFoundException() {
+  void update_throwsDocumentNotFoundException() throws IOException {
+    MultipartFile file = mock(MultipartFile.class);
+
     Travels newTravel1 = Travels.builder()
       .id("4").name("Viaje 1").longInDays(21)
       .maxCapacity(20).currentCapacity(18).isAvailable(true)
@@ -264,8 +290,9 @@ public class Test_TravelsService {
 
     when(repository.findById("4")).thenReturn(Optional.empty());
 
-    assertThrows(DocumentNotFoundException.class, () -> service.update(newTravel1));
+    assertThrows(DocumentNotFoundException.class, () -> service.update(newTravel1, new MultipartFile[]{file}));
     verify(repository).findById("4");
+    verify(imagesService, times(0)).add(file);
     verify(repository, times(0)).save(newTravel1);
   }
 
