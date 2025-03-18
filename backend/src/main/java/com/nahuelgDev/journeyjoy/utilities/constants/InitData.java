@@ -1,6 +1,19 @@
 package com.nahuelgDev.journeyjoy.utilities.constants;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.nahuelgDev.journeyjoy.collections.Images;
+import com.nahuelgDev.journeyjoy.collections.StayPlaces;
+import com.nahuelgDev.journeyjoy.collections.Travels;
+import com.nahuelgDev.journeyjoy.dataClasses.Destinies;
+import com.nahuelgDev.journeyjoy.dataClasses.PayPlans;
+import com.nahuelgDev.journeyjoy.enums.PayPlansType;
+import com.nahuelgDev.journeyjoy.enums.Transports;
 
 import lombok.AllArgsConstructor;
 
@@ -8,243 +21,182 @@ public class InitData {
   @AllArgsConstructor
   public static class ReturnType {
     public List<String> indexList;
-    public List<String> data;
+    public List<?> data;
   }
 
   public static ReturnType travels() {
     List<String> indexList = List.of("Ruta Patagónica", "Circuito Andino", "Caribe Mexicano", "Ruta Europea", "Ruta por los Balcanes");
-    List<String> data = List.of(
-      """
-        {
-          "name": "Ruta Patagónica",
-          "longInDays": 10,
-          "maxCapacity": 40,
-          "currentCapacity": 0,
-          "isAvailable": true,
-          "availableDates": ["2025-02-15", "2025-03-01"],
-          "destinies": [
-            {
-              "place": "Bariloche",
-              "leaveDay": 1,
-              "returnDay": 3,
-              "transport": "BUS",
-              "stayPlaceId": {
-                "id": "101"
-              }
-            },
-            {
-              "place": "El Calafate",
-              "leaveDay": 4,
-              "returnDay": 6,
-              "transport": "PLANE",
-              "stayPlaceId": {
-                "id": "102"
-              }
-            },
-            {
-              "place": "Ushuaia",
-              "leaveDay": 7,
-              "returnDay": 10,
-              "transport": "PLANE",
-              "stayPlaceId": {
-                "id": "103"
-              }
-            }
-          ],
-          "payPlans": [
-            { "price": 3500, "planFor": "family" },
-            { "price": 1200, "planFor": "individual" }
-          ]
-        }
-      """,
+    Travels travel1 = Travels.builder()
+      .name(indexList.get(0))
+      .longInDays(10)
+      .maxCapacity(40).currentCapacity(0)
+      .isAvailable(true)
+      .availableDates(List.of(LocalDate.parse("2025-02-15"), LocalDate.parse("2025-03-01")))
+      .destinies(List.of(
+        Destinies.builder()
+          .place("Bariloche")
+          .leaveDay(1).returnDay(3)
+          .transport(Transports.BUS)
+          .stayPlaceId(new StayPlaces("101"))
+        .build(),
+        Destinies.builder()
+          .place("El Calafate")
+          .leaveDay(4).returnDay(6)
+          .transport(Transports.PLANE)
+          .stayPlaceId(new StayPlaces("102"))
+        .build(),
+        Destinies.builder()
+          .place("Ushuaia")
+          .leaveDay(7).returnDay(10)
+          .transport(Transports.PLANE)
+          .stayPlaceId(new StayPlaces("103"))
+        .build()
+      ))
+      .payPlans(List.of(
+        PayPlans.builder().price(3500.0).planFor(PayPlansType.family).build(),
+        PayPlans.builder().price(1200.0).planFor(PayPlansType.individual).build()
+      ))
+    .build();
 
-      """
-        {
-          "name": "Circuito Andino",
-          "longInDays": 7,
-          "maxCapacity": 30,
-          "currentCapacity": 0,
-          "isAvailable": true,
-          "availableDates": ["2025-04-20", "2025-05-10"],
-          "destinies": [
-            {
-              "place": "Salta",
-              "leaveDay": 1,
-              "returnDay": 2,
-              "transport": "PLANE",
-              "stayPlaceId": {
-                "id": "201"
-              }
-            },
-            {
-              "place": "Tilcara",
-              "leaveDay": 3,
-              "returnDay": 4,
-              "transport": "BUS",
-              "stayPlaceId": {
-                "id": "202"
-              }
-            },
-            {
-              "place": "Jujuy",
-              "leaveDay": 5,
-              "returnDay": 7,
-              "transport": "TRAIN",
-              "stayPlaceId": {
-                "id": "203"
-              }
-            }
-          ],
-          "payPlans": [
-            { "price": 2000, "planFor": "couple" },
-            { "price": 1800, "planFor": "friends" }
-          ]
-        }
-      """,
+    Travels travel2 = Travels.builder()
+      .name(indexList.get(1))
+      .longInDays(7)
+      .maxCapacity(30)
+      .currentCapacity(0)
+      .isAvailable(true)
+      .availableDates(List.of(LocalDate.parse("2025-04-20"), LocalDate.parse("2025-05-10")))
+      .destinies(List.of(
+        Destinies.builder()
+          .place("Salta")
+          .leaveDay(1).returnDay(2)
+          .transport(Transports.PLANE)
+          .stayPlaceId(new StayPlaces("201"))
+        .build(),
+        Destinies.builder()
+          .place("Tilcara")
+          .leaveDay(3).returnDay(4)
+          .transport(Transports.BUS)
+          .stayPlaceId(new StayPlaces("202"))
+        .build(),
+        Destinies.builder()
+          .place("Jujuy")
+          .leaveDay(5).returnDay(7)
+          .transport(Transports.TRAIN)
+          .stayPlaceId(new StayPlaces("203"))
+        .build()
+      ))
+      .payPlans(List.of(
+        PayPlans.builder().price(2000.0).planFor(PayPlansType.couple).build(),
+        PayPlans.builder().price(1800.0).planFor(PayPlansType.friends).build()
+      ))
+    .build();
 
-      """
-        {
-          "name": "Caribe Mexicano",
-          "longInDays": 8,
-          "maxCapacity": 50,
-          "currentCapacity": 0,
-          "isAvailable": true,
-          "availableDates": ["2025-06-05", "2025-06-20"],
-          "destinies": [
-            {
-              "place": "Cancún",
-              "leaveDay": 1,
-              "returnDay": 3,
-              "transport": "PLANE",
-              "stayPlaceId": {
-                "id": "301"
-              }
-            },
-            {
-              "place": "Playa del Carmen",
-              "leaveDay": 4,
-              "returnDay": 5,
-              "transport": "BUS",
-              "stayPlaceId": {
-                "id": "302"
-              }
-            },
-            {
-              "place": "Cozumel",
-              "leaveDay": 6,
-              "returnDay": 8,
-              "transport": "BOAT",
-              "stayPlaceId": {
-                "id": "303"
-              }
-            }
-          ],
-          "payPlans": [
-            { "price": 4000, "planFor": "family" },
-            { "price": 3000, "planFor": "friends" }
-          ]
-        }
-      """,
+    Travels travel3 = Travels.builder()
+      .name(indexList.get(2))
+      .longInDays(8)
+      .maxCapacity(50)
+      .currentCapacity(0)
+      .isAvailable(true)
+      .availableDates(List.of(LocalDate.parse("2025-06-05"), LocalDate.parse("2025-06-20")))
+      .destinies(List.of(
+        Destinies.builder()
+          .place("Cancún")
+          .leaveDay(1).returnDay(3)
+          .transport(Transports.PLANE)
+          .stayPlaceId(new StayPlaces("301"))
+        .build(),
+        Destinies.builder()
+          .place("Playa del Carmen")
+          .leaveDay(4).returnDay(5)
+          .transport(Transports.BUS)
+          .stayPlaceId(new StayPlaces("302"))
+        .build(),
+        Destinies.builder()
+          .place("Cozumel")
+          .leaveDay(6).returnDay(8)
+          .transport(Transports.BOAT)
+          .stayPlaceId(new StayPlaces("303"))
+        .build()
+      ))
+      .payPlans(List.of(
+        PayPlans.builder().price(4000.0).planFor(PayPlansType.family).build(),
+        PayPlans.builder().price(3000.0).planFor(PayPlansType.friends).build()
+      ))
+    .build();
 
-      """
-        {
-          "name": "Ruta Europea",
-          "longInDays": 15,
-          "maxCapacity": 20,
-          "currentCapacity": 0,
-          "isAvailable": true,
-          "availableDates": ["2025-09-10"],
-          "destinies": [
-            {
-              "place": "París, Francia",
-              "leaveDay": 1,
-              "returnDay": 4,
-              "transport": "PLANE",
-              "stayPlaceId": {
-                "id": "401"
-              }
-            },
-            {
-              "place": "Roma, Italia",
-              "leaveDay": 5,
-              "returnDay": 9,
-              "transport": "TRAIN",
-              "stayPlaceId": {
-                "id": "402"
-              }
-            },
-            {
-              "place": "Madrid, España",
-              "leaveDay": 10,
-              "returnDay": 15,
-              "transport": "PLANE",
-              "stayPlaceId": {
-                "id": "403"
-              }
-            }
-          ],
-          "payPlans": [
-            { "price": 6000, "planFor": "couple" },
-            { "price": 3500, "planFor": "individual" }
-          ]
-        }
-      """,
+    Travels travel4 = Travels.builder()
+      .name(indexList.get(3))
+      .longInDays(15)
+      .maxCapacity(20)
+      .currentCapacity(0)
+      .isAvailable(true)
+      .availableDates(List.of(LocalDate.parse("2025-09-10")))
+      .destinies(List.of(
+        Destinies.builder()
+          .place("París, Francia")
+          .leaveDay(1).returnDay(4)
+          .transport(Transports.PLANE)
+          .stayPlaceId(new StayPlaces("401"))
+        .build(),
+        Destinies.builder()
+          .place("Roma, Italia")
+          .leaveDay(5).returnDay(9)
+          .transport(Transports.TRAIN)
+          .stayPlaceId(new StayPlaces("402"))
+          .build(),
+        Destinies.builder()
+          .place("Madrid, España")
+          .leaveDay(10).returnDay(15)
+          .transport(Transports.PLANE)
+          .stayPlaceId(new StayPlaces("403"))
+        .build()
+      ))
+      .payPlans(List.of(
+        PayPlans.builder().price(6000.0).planFor(PayPlansType.couple).build(),
+        PayPlans.builder().price(3500.0).planFor(PayPlansType.individual).build()
+      ))
+    .build();
 
-      """
-        {
-          "name": "Ruta por los Balcanes",
-          "longInDays": 12,
-          "maxCapacity": 30,
-          "currentCapacity": 0,
-          "isAvailable": true,
-          "availableDates": ["2025-10-05", "2025-11-01"],
-          "destinies": [
-            {
-              "place": "Dubrovnik, Croacia",
-              "leaveDay": 1,
-              "returnDay": 3,
-              "transport": "PLANE",
-              "stayPlaceId": {
-                "id": "601"
-              }
-            },
-            {
-              "place": "Mostar, Bosnia y Herzegovina",
-              "leaveDay": 4,
-              "returnDay": 6,
-              "transport": "BUS",
-              "stayPlaceId": {
-                "id": "602"
-              }
-            },
-            {
-              "place": "Kotor, Montenegro",
-              "leaveDay": 7,
-              "returnDay": 9,
-              "transport": "BOAT",
-              "stayPlaceId": {
-                "id": "603"
-              }
-            },
-            {
-              "place": "Belgrado, Serbia",
-              "leaveDay": 10,
-              "returnDay": 12,
-              "transport": "TRAIN",
-              "stayPlaceId": {
-                "id": "604"
-              }
-            }
-          ],
-          "payPlans": [
-            { "price": 3200, "planFor": "couple" },
-            { "price": 2800, "planFor": "friends" }
-          ]
-        }
-      """
-    );
+    Travels travel5 = Travels.builder()
+      .name(indexList.get(4))
+      .longInDays(12)
+      .maxCapacity(30)
+      .currentCapacity(0)
+      .isAvailable(true)
+      .availableDates(List.of(LocalDate.parse("2025-10-05"), LocalDate.parse("2025-11-01")))
+      .destinies(List.of(
+        Destinies.builder()
+          .place("Dubrovnik, Croacia")
+          .leaveDay(1).returnDay(3)
+          .transport(Transports.PLANE)
+          .stayPlaceId(new StayPlaces("601"))
+        .build(),
+        Destinies.builder()
+          .place("Mostar, Bosnia y Herzegovina")
+          .leaveDay(4).returnDay(6)
+          .transport(Transports.BUS)
+          .stayPlaceId(new StayPlaces("602"))
+        .build(),
+        Destinies.builder()
+          .place("Kotor, Montenegro")
+          .leaveDay(7).returnDay(9)
+          .transport(Transports.BOAT)
+          .stayPlaceId(new StayPlaces("603"))
+        .build(),
+        Destinies.builder()
+          .place("Belgrado, Serbia")
+          .leaveDay(10).returnDay(12)
+          .transport(Transports.TRAIN)
+          .stayPlaceId(new StayPlaces("604"))
+        .build()
+      ))
+      .payPlans(List.of(
+          PayPlans.builder().price(3200.0).planFor(PayPlansType.couple).build(),
+          PayPlans.builder().price(2800.0).planFor(PayPlansType.friends).build()
+      ))
+    .build();
 
-    return new ReturnType(indexList, data);
+    return new ReturnType(indexList, List.of(travel1, travel2, travel3, travel4, travel5));
   }
 
   public static ReturnType stayPlaces() {
@@ -255,168 +207,164 @@ public class InitData {
       "401", "402", "403",
       "601", "602", "603", "604"
     );
-    List<String> data = List.of(
-      """
-        {
-          "id": "101",
-          "from": "Bariloche",
-          "name": "Hotel Los Andes",
-          "description": "Hotel 4 estrellas con vista al lago Nahuel Huapi.",
-          "rating": 4.7
-        }
-      """,
 
-      """
-        {
-          "id": "102",
-          "from": "El Calafate",
-          "name": "Hostel Glaciar",
-          "description": "Albergue económico cercano al glaciar Perito Moreno.",
-          "rating": 4.3
-        }
-      """,
-          
-      """
-        {
-          "id": "103",
-          "from": "Ushuaia",
-          "name": "Cabañas del Fin del Mundo",
-          "description": "Cabañas rústicas con vistas al canal Beagle.",
-          "rating": 4.8
-        }
-      """,
+    StayPlaces stayPlace0 = StayPlaces.builder()
+      .id(indexes.get(0))
+      .from("Bariloche")
+      .name("Hotel los Andes")
+      .description("Hotel 4 estrellas con vista al lago Nahuel Huapi")
+      .rating(4.7)
+    .build();
+    StayPlaces stayPlace1 = StayPlaces.builder()
+      .id(indexes.get(1))
+      .from("El Calafate")
+      .name("Hostel Glaciar")
+      .description("Albergue económico cercano al glaciar Perito Moreno.")
+      .rating(4.3)
+    .build();
+    StayPlaces stayPlace2 = StayPlaces.builder()
+      .id(indexes.get(2))
+      .from("Ushuaia")
+      .name("Cabañas del Fin del Mundo")
+      .description("Cabañas rústicas con vistas al canal Beagle.")
+      .rating(4.8)
+    .build();
+    StayPlaces stayPlace3 = StayPlaces.builder()
+      .id(indexes.get(3))
+      .from("Salta")
+      .name("Hotel Colonial Salta")
+      .description("Hotel boutique en el centro histórico.")
+      .rating(4.5)
+    .build();
+    StayPlaces stayPlace4 = StayPlaces.builder()
+      .id(indexes.get(4))
+      .from("Tilcara")
+      .name("Hostería Quebrada")
+      .description("Pequeño hotel en la quebrada de Humahuaca.")
+      .rating(4.6)
+      .build();
+    StayPlaces stayPlace5 = StayPlaces.builder()
+      .id(indexes.get(5))
+      .from("Jujuy")
+      .name("Eco Lodge Puna")
+      .description("Alojamiento sostenible con vistas panorámicas.")
+      .rating(4.4)
+    .build();
+    StayPlaces stayPlace6 = StayPlaces.builder()
+      .id(indexes.get(6))
+      .from("Cancún")
+      .name("Resort Playa Azul")
+      .description("Resort todo incluido frente a la playa.")
+      .rating(4.9)
+    .build();
+    StayPlaces stayPlace7 = StayPlaces.builder()
+      .id(indexes.get(7))
+      .from("Playa del Carmen")
+      .name("Hotel Riviera Maya")
+      .description("Elegante hotel boutique cercano a la 5ta Avenida.")
+      .rating(4.7)
+    .build();
+    StayPlaces stayPlace8 = StayPlaces.builder()
+      .id(indexes.get(8))
+      .from("Cozumel")
+      .name("Villa Cozumel")
+      .description("Villas privadas en la isla.")
+      .rating(4.8)
+    .build();
+    StayPlaces stayPlace9 = StayPlaces.builder()
+      .id(indexes.get(9))
+      .from("París")
+      .name("Hotel Eiffel")
+      .description("Hotel cercano a la torre Eiffel.")
+      .rating(4.7)
+    .build();
+    StayPlaces stayPlace10 = StayPlaces.builder()
+      .id(indexes.get(10))
+      .from("Roma")
+      .name("Hostal Coliseo")
+      .description("Hostal económico con desayuno incluido.")
+      .rating(4.3)
+    .build();
+    StayPlaces stayPlace11 = StayPlaces.builder()
+      .id(indexes.get(11))
+      .from("Madrid")
+      .name("Hotel Gran Vía")
+      .description("Hotel céntrico con vistas a la Gran Vía.")
+      .rating(4.6)
+    .build();
+    StayPlaces stayPlace12 = StayPlaces.builder()
+      .id(indexes.get(12))
+      .from("Dubrovnik")
+      .name("Hotel Mura")
+      .description("Hotel con vista al casco antiguo de Dubrovnik.")
+      .rating(4.7)
+    .build();
+    StayPlaces stayPlace13 = StayPlaces.builder()
+      .id(indexes.get(13))
+      .from("Mostar")
+      .name("Hostal Stari Most")
+      .description("Hostal cercano al emblemático puente de Mostar.")
+      .rating(4.5)
+    .build();
+    StayPlaces stayPlace14 = StayPlaces.builder()
+      .id(indexes.get(14))
+      .from("Kotor")
+      .name("Villa Adriática")
+      .description("Villa con vistas espectaculares a la bahía de Kotor.")
+      .rating(4.8)
+    .build();
+    StayPlaces stayPlace15 = StayPlaces.builder()
+      .id(indexes.get(15))
+      .from("Belgrado")
+      .name("Hotel Danubio")
+      .description("Hotel moderno a orillas del río Danubio.")
+      .rating(4.6)
+    .build();
 
-      """
-        {
-          "id": "201",
-          "from": "Salta",
-          "name": "Hotel Colonial Salta",
-          "description": "Hotel boutique en el centro histórico.",
-          "rating": 4.5
-        }
-      """,
+    return new ReturnType(indexes, List.of(stayPlace0,stayPlace1,stayPlace2,stayPlace3,stayPlace4,stayPlace5,stayPlace6,stayPlace7,stayPlace8,stayPlace9,stayPlace10,stayPlace11,stayPlace12,stayPlace13,stayPlace14,stayPlace15));
+  }
 
-      """
-        {
-          "id": "202",
-          "from": "Tilcara",
-          "name": "Hostería Quebrada",
-          "description": "Pequeño hotel en la quebrada de Humahuaca.",
-          "rating": 4.6
-        }
-      """,
+  public static ReturnType images() throws IOException {
+    List<String> imagePaths = List.of(
+      "src/main/resources/static/travel0_01.webp",
+      "src/main/resources/static/travel0_02.webp",
+      "src/main/resources/static/travel0_03.webp",
 
-      """
-        {
-          "id": "203",
-          "from": "Jujuy",
-          "name": "Eco Lodge Puna",
-          "description": "Alojamiento sostenible con vistas panorámicas.",
-          "rating": 4.4
-        }
-      """,
-
-      """
-        {
-          "id": "301",
-          "from": "Cancún",
-          "name": "Resort Playa Azul",
-          "description": "Resort todo incluido frente a la playa.",
-          "rating": 4.9
-        }
-      """,
-
-      """
-        {
-          "id": "302",
-          "from": "Playa del Carmen",
-          "name": "Hotel Riviera Maya",
-          "description": "Elegante hotel boutique cercano a la 5ta Avenida.",
-          "rating": 4.7
-        }
-      """,
-
-      """
-        {
-          "id": "303",
-          "from": "Cozumel",
-          "name": "Villa Cozumel",
-          "description": "Villas privadas en la isla.",
-          "rating": 4.8
-        }
-      """,
-
-      """
-        {
-          "id": "401",
-          "from": "París",
-          "name": "Hotel Eiffel",
-          "description": "Hotel cercano a la torre Eiffel.",
-          "rating": 4.7
-        }
-      """,
-
-      """
-        {
-          "id": "402",
-          "from": "Roma",
-          "name": "Hostal Coliseo",
-          "description": "Hostal económico con desayuno incluido.",
-          "rating": 4.3
-        }
-      """,
-
-      """
-        {
-          "id": "403",
-          "from": "Madrid",
-          "name": "Hotel Gran Vía",
-          "description": "Hotel céntrico con vistas a la Gran Vía.",
-          "rating": 4.6
-        }
-      """,
-
-      """
-        {
-          "id": "601",
-          "from": "Dubrovnik",
-          "name": "Hotel Mura",
-          "description": "Hotel con vista al casco antiguo de Dubrovnik.",
-          "rating": 4.7
-        }
-      """,
-
-      """
-        {
-          "id": "602",
-          "from": "Mostar",
-          "name": "Hostal Stari Most",
-          "description": "Hostal cercano al emblemático puente de Mostar.",
-          "rating": 4.5
-        }
-      """,
-
-      """
-        {
-          "id": "603",
-          "from": "Kotor",
-          "name": "Villa Adriática",
-          "description": "Villa con vistas espectaculares a la bahía de Kotor.",
-          "rating": 4.8
-        }
-      """,
-
-      """
-        {
-          "id": "604",
-          "from": "Belgrado",
-          "name": "Hotel Danubio",
-          "description": "Hotel moderno a orillas del río Danubio.",
-          "rating": 4.6
-        }
-      """
+      "src/main/resources/static/travel1_02.webp",
+      "src/main/resources/static/travel1_02.webp",
+      
+      "src/main/resources/static/travel2_01.webp",
+      "src/main/resources/static/travel2_02.webp",
+      "src/main/resources/static/travel2_03.webp",
+      
+      "src/main/resources/static/travel3_01.webp",
+      "src/main/resources/static/travel3_02.webp",
+      "src/main/resources/static/travel3_03.webp",
+      
+      "src/main/resources/static/travel4_01.webp",
+      "src/main/resources/static/travel4_02.webp",
+      "src/main/resources/static/travel4_03.webp"
     );
 
-    return new ReturnType(indexes, data);
+    List<String> idList = new ArrayList<>();
+    List<Images> images = new ArrayList<>();
+
+    for (Integer i = 0; i < imagePaths.size(); i++) {
+      String id = "travelImg" + i.toString();
+      String path = imagePaths.get(i);
+      byte[] imageData = Files.readAllBytes(Paths.get(path));
+
+      idList.add(id);
+      images.add(
+        Images.builder()
+          .id(id)
+          .name(Paths.get(path).getFileName().toString())
+          .contentType("image/webp")
+          .data(imageData)
+        .build()
+      );
+    }
+
+    return new ReturnType(idList, images);
   }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.nahuelgDev.journeyjoy.dataClasses.Destinies;
@@ -32,6 +33,8 @@ public class Travels {
   private List<Destinies> destinies;
   private List<PayPlans> payPlans;
   private List<Reviews> reviews;
+
+  @DBRef
   private List<Images> images;
 
   private Double rating;
