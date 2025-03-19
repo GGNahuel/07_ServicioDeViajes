@@ -22,6 +22,7 @@ export interface Travel {
   destinies: Destiny[],
   payPlans: PayPlan[],
   reviews: Review[],
+  images: Image[]
 }
 
 interface Destiny {

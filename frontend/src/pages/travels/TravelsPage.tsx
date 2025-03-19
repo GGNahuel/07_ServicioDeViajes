@@ -9,6 +9,7 @@ import { TravelsSearchForm } from "./sections/TravelsSearchForm";
 import { Button } from "../../components/Button";
 import { Close } from "../../components/SvgIcons";
 import { useWindowProps } from "../../hooks/useWindowsProps";
+import { generateImageURL } from "../../utils/generateImageUrlFromAPI";
 
 export function TravelsPage() {
   const {response, makeRequest} = useTravelSearcher()
@@ -65,6 +66,16 @@ export function TravelsPage() {
     }
   `
 
+  const travelCardStyles = css`
+    img {
+      width: 100%;
+      max-width: 250px;
+      aspect-ratio: 8/6;
+      background-size: cover;
+      background-position: center;
+    }
+  `
+
   return (
     <main>
       <TravelsSearchForm makeRequest={makeRequest} />
@@ -74,7 +85,8 @@ export function TravelsPage() {
         align-items: stretch;
       `}>    
         {response?.map(travel => 
-          <Card key={travel.id} whenClicked={() => handleOnClickInTravelCard(travel)} {...getReferenceProps()}>
+          <Card key={travel.id} whenClicked={() => handleOnClickInTravelCard(travel)} additionalStyles={travelCardStyles} {...getReferenceProps()}>
+            {travel.images[0] && <img src={generateImageURL(travel.images[0])} alt={travel.images[0].name} />}
             <h3>{travel.name}</h3>
             <h4>{travel.rating}</h4>
             <h4>Destinos</h4>
