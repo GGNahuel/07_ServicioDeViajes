@@ -16,7 +16,7 @@ export interface Travel {
   maxCapacity: number,
   currentCapacity?: number,
   isAvailable: boolean,
-  availableDates: string[],
+  availableDates: [number, number, number][],
   rating?: number,
 
   destinies: Destiny[],

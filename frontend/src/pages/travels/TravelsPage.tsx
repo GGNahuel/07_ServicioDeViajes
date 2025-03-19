@@ -10,6 +10,7 @@ import { Button } from "../../components/Button";
 import { Close } from "../../components/SvgIcons";
 import { useWindowProps } from "../../hooks/useWindowsProps";
 import { generateImageURL } from "../../utils/generateImageUrlFromAPI";
+import { formatDate } from "../../utils/formatDateFromApi";
 
 export function TravelsPage() {
   const {response, makeRequest} = useTravelSearcher()
@@ -95,7 +96,7 @@ export function TravelsPage() {
             </ul>
             <h4>Fechas disponibles:</h4>
             <ul>
-              {travel.availableDates.map(date => <li key={date}>{date}</li>)}
+              {travel.availableDates.map(date => <li key={formatDate(date)}>{formatDate(date)}</li>)}
             </ul>
             <h4>{travel.isAvailable ? "Disponible para la próxima fecha" : "No disponible"}</h4>
             <h4>Capacidad actual:{travel.currentCapacity}</h4>
@@ -121,7 +122,7 @@ export function TravelsPage() {
               </ul>
               <h4>Fechas disponibles:</h4>
               <ul>
-                {selectedTravel?.availableDates.map(date => <li key={date}>{date}</li>)}
+                {selectedTravel?.availableDates.map(date => <li key={formatDate(date)}>{formatDate(date)}</li>)}
               </ul>
               <h4>{selectedTravel?.isAvailable ? "Disponible para la próxima fecha" : "No disponible"}</h4>
               <h4>Capacidad actual:{selectedTravel?.currentCapacity}</h4>
