@@ -20,4 +20,8 @@ public class Images {
     private String name;
     private String contentType;
     private byte[] data;
+
+    public Images(String id) {
+        this.id = id;
+    }
 }

@@ -18,6 +18,8 @@ import com.nahuelgDev.journeyjoy.enums.Transports;
 import lombok.AllArgsConstructor;
 
 public class InitData {
+  private static final String imageId_PREFIX = "";
+
   @AllArgsConstructor
   public static class ReturnType {
     public List<String> indexList;
@@ -56,6 +58,7 @@ public class InitData {
         PayPlans.builder().price(3500.0).planFor(PayPlansType.family).build(),
         PayPlans.builder().price(1200.0).planFor(PayPlansType.individual).build()
       ))
+      .images(List.of(new Images(imageId_PREFIX + "0"), new Images(imageId_PREFIX + "1"), new Images(imageId_PREFIX + "2")))
     .build();
 
     Travels travel2 = Travels.builder()
@@ -89,6 +92,7 @@ public class InitData {
         PayPlans.builder().price(2000.0).planFor(PayPlansType.couple).build(),
         PayPlans.builder().price(1800.0).planFor(PayPlansType.friends).build()
       ))
+      .images(List.of(new Images(imageId_PREFIX + "3"), new Images(imageId_PREFIX + "4")))
     .build();
 
     Travels travel3 = Travels.builder()
@@ -122,6 +126,7 @@ public class InitData {
         PayPlans.builder().price(4000.0).planFor(PayPlansType.family).build(),
         PayPlans.builder().price(3000.0).planFor(PayPlansType.friends).build()
       ))
+      .images(List.of(new Images(imageId_PREFIX + "5"), new Images(imageId_PREFIX + "6"), new Images(imageId_PREFIX + "7")))
     .build();
 
     Travels travel4 = Travels.builder()
@@ -155,6 +160,7 @@ public class InitData {
         PayPlans.builder().price(6000.0).planFor(PayPlansType.couple).build(),
         PayPlans.builder().price(3500.0).planFor(PayPlansType.individual).build()
       ))
+      .images(List.of(new Images(imageId_PREFIX + "8"), new Images(imageId_PREFIX + "9"), new Images(imageId_PREFIX + "10")))
     .build();
 
     Travels travel5 = Travels.builder()
@@ -194,6 +200,7 @@ public class InitData {
           PayPlans.builder().price(3200.0).planFor(PayPlansType.couple).build(),
           PayPlans.builder().price(2800.0).planFor(PayPlansType.friends).build()
       ))
+      .images(List.of(new Images(imageId_PREFIX + "11"), new Images(imageId_PREFIX + "12"), new Images(imageId_PREFIX + "13")))
     .build();
 
     return new ReturnType(indexList, List.of(travel1, travel2, travel3, travel4, travel5));
@@ -350,7 +357,7 @@ public class InitData {
     List<Images> images = new ArrayList<>();
 
     for (Integer i = 0; i < imagePaths.size(); i++) {
-      String id = "travelImg" + i.toString();
+      String id = imageId_PREFIX + i.toString();
       String path = imagePaths.get(i);
       byte[] imageData = Files.readAllBytes(Paths.get(path));
 
