@@ -337,7 +337,7 @@ public class InitData {
       "src/main/resources/static/travel0_02.webp",
       "src/main/resources/static/travel0_03.webp",
 
-      "src/main/resources/static/travel1_02.webp",
+      "src/main/resources/static/travel1_01.webp",
       "src/main/resources/static/travel1_02.webp",
       
       "src/main/resources/static/travel2_01.webp",
