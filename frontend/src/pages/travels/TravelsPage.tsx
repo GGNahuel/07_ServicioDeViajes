@@ -7,11 +7,13 @@ import { Travel } from "../../types/ApiTypes";
 import { TravelCard } from "./components/TravelCard";
 import { TravelContent } from "./sections/TravelContent";
 import { TravelsSearchForm } from "./sections/TravelsSearchForm";
+import { useWindowProps } from "../../hooks/useWindowsProps";
 
 export function TravelsPage() {
   const {response, makeRequest} = useTravelSearcher()
   const [selectedTravel, setSelectedTravel] = useState<Travel>()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const {width} = useWindowProps()
 
   const {context} = useFloating({
     open: isModalOpen,
@@ -38,6 +40,7 @@ export function TravelsPage() {
     width: 100%;
     max-width: 1136px;
     border-radius: 8px;
+    ${width > 720 ? "max-height: 90vh; overflow-y: auto;" : ""}
   `
 
   return (
@@ -51,7 +54,7 @@ export function TravelsPage() {
         {response?.map(travel => <TravelCard travel={travel} onClick={handleOnClickInTravelCard} referencePropsFloatingUI={getReferenceProps}/>)}
         {isModalOpen && selectedTravel &&
           <section css={modalStyles} {...getFloatingProps()}>
-            <TravelContent travel={selectedTravel} handleCloseModal={() => setIsModalOpen(false)} />
+            <TravelContent travel={selectedTravel} handleCloseIfModal={() => setIsModalOpen(false)} />
           </section>
         }
       </MainSection>
