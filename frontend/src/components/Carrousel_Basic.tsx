@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { List } from "./List";
 import { Next, Previous } from "./SvgIcons";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "./Button";
 
 export function Carrousel_Basic({imagesProps}: {imagesProps: {src: string, alt?: string}[]}) {
   const [selectedImg, setSelected] = useState<number>(0)
@@ -45,6 +46,10 @@ export function Carrousel_Basic({imagesProps}: {imagesProps: {src: string, alt?:
       }
     }
   `
+  const additionalStyles = css`
+    height: min-content;
+    padding: 0;
+  `
 
   useEffect(() => {
     const handleResize = () => {
@@ -82,13 +87,17 @@ export function Carrousel_Basic({imagesProps}: {imagesProps: {src: string, alt?:
         {imagesProps.map((image, index) => <img key={index} src={image.src} alt={image.alt} />)}
       </div>
       <div className="buttonsZone">
-        <Previous onClick={() => handleChangeImg(-1, true)}/>
+        <Button variant="secondary" additionalStyles={additionalStyles} onClick={() => handleChangeImg(-1, true)}>
+          <Previous/>
+        </Button>
         <List variant={"inline"}>
           {imagesProps.map((_, index) => 
             <li key={index}><input type="radio" name="carrousel" value={index} checked={selectedImg == index} onChange={() => handleChangeImg(index, false)}/></li>
           )}
         </List>
-        <Next onClick={() => handleChangeImg(1, true)}/>
+        <Button variant="secondary" additionalStyles={additionalStyles} onClick={() => handleChangeImg(1, true)}>
+          <Next/>
+        </Button>
       </div>
     </div>
   )

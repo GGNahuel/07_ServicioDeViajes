@@ -28,9 +28,9 @@ export function Close() {
   )
 }
 
-export function Next({onClick} : {onClick?: () => void}) {
+export function Next() {
   return (
-    <svg className="icon" onClick={onClick} fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="next" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg">
+    <svg className="icon" fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="next" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg">
       <g strokeWidth="0"></g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>
@@ -40,9 +40,9 @@ export function Next({onClick} : {onClick?: () => void}) {
   )
 }
 
-export function Previous({onClick} : {onClick?: () => void}) {
+export function Previous() {
   return (
-    <svg className="icon" onClick={onClick} fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="next" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" transform="rotate(180)">
+    <svg className="icon" fill="#000000" width="64px" height="64px" viewBox="0 0 24 24" id="next" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" transform="rotate(180)">
       <g strokeWidth="0"></g>
       <g strokeLinecap="round" strokeLinejoin="round"></g>
       <g>

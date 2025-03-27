@@ -13,10 +13,12 @@ export function Button(
     padding: 0.6rem;
     font-size: 1.05rem;
     border-radius: 8px;
-    border: 1px solid rgb(115, 115, 115);
-    ${variant == "default" ? "background-color: rgb(224, 233, 255);" 
-      : variant == "main" ? "background-color: var(--mainColor);" 
-    : ""}
+    border: ${variant != "secondary" ? "1px solid rgb(115, 115, 115)" : "0"};
+    background-color: ${
+      variant == "default" ? "rgb(224, 233, 255);" 
+      : variant == "main" ? "var(--mainColor);" 
+      : "rgba(0, 0, 0, 0)"
+    };
 
     &:hover {
       ${variant == "default" ?

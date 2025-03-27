@@ -58,7 +58,7 @@ export function TravelContent({travel, handleCloseModal} : {travel: Travel, hand
           <h3>{travel.name}</h3>
           <h4>{travel.rating} (Valoraciones: {travel.reviews?.length})</h4>
         </div>
-        {handleCloseModal && <Button variant="default" onClick={handleCloseModal}><Close /></Button>}
+        {handleCloseModal && <Button variant="default" onClick={handleCloseModal} additionalStyles={css`display: flex;`}><Close /></Button>}
       </header>
       <section>
         <Carrousel_Basic imagesProps={travel.images.map(imageData => ({src: generateImageURL(imageData)}))} />        
