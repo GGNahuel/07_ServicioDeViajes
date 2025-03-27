@@ -48,7 +48,7 @@ export function TravelsSearchForm({makeRequest} : {makeRequest: (e: React.FormEv
             </select>
           </label>
         </div>
-        <Button variant="default" otherType="submit">Aplicar</Button>
+        <Button variant="default" type="submit">Aplicar</Button>
       </form>
     </MainSection>
   )

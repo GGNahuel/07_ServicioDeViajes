@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 export function Tag({children, variant, additionalStyles} : {children: ReactNode, variant?: "default" | "empty", additionalStyles?: SerializedStyles}) {
   const style = css`
-    padding: 0.2rem;
+    padding: 0.2rem 0.8rem;
     font-weight: 600;
     border-radius: 16px;
     display: flex;

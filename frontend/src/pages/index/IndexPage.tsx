@@ -43,7 +43,7 @@ export function IndexPage() {
           <form action="">
             <label>texto<input type="text" /></label>
             <label>texto<input type="text" /></label>
-            <Button variant="default" otherType="submit">enviar</Button>
+            <Button variant="default" type="submit">enviar</Button>
           </form>
         </MainSection>
       </main>
