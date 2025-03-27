@@ -46,10 +46,6 @@ export function Carrousel_Basic({imagesProps}: {imagesProps: {src: string, alt?:
       }
     }
   `
-  const additionalStyles = css`
-    height: min-content;
-    padding: 0;
-  `
 
   useEffect(() => {
     const handleResize = () => {
@@ -87,7 +83,7 @@ export function Carrousel_Basic({imagesProps}: {imagesProps: {src: string, alt?:
         {imagesProps.map((image, index) => <img key={index} src={image.src} alt={image.alt} />)}
       </div>
       <div className="buttonsZone">
-        <Button variant="secondary" additionalStyles={additionalStyles} onClick={() => handleChangeImg(-1, true)}>
+        <Button variant="secondary-noBorder" onClick={() => handleChangeImg(-1, true)}>
           <Previous/>
         </Button>
         <List variant={"inline"}>
@@ -95,7 +91,7 @@ export function Carrousel_Basic({imagesProps}: {imagesProps: {src: string, alt?:
             <li key={index}><input type="radio" name="carrousel" value={index} checked={selectedImg == index} onChange={() => handleChangeImg(index, false)}/></li>
           )}
         </List>
-        <Button variant="secondary" additionalStyles={additionalStyles} onClick={() => handleChangeImg(1, true)}>
+        <Button variant="secondary-noBorder" onClick={() => handleChangeImg(1, true)}>
           <Next/>
         </Button>
       </div>

@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 
 export function Button(
   {variant, children, additionalStyles, ...attrs} : 
-  {variant: "default" | "main" | "secondary", children: ReactNode, additionalStyles?: SerializedStyles} 
+  {variant: "default" | "main" | "secondary" | "secondary-noBorder", children: ReactNode, additionalStyles?: SerializedStyles} 
   & ButtonHTMLAttributes<HTMLButtonElement>
 ) {
   const style = css`
@@ -11,7 +11,7 @@ export function Button(
     padding: 0.6rem;
     font-size: 1.05rem;
     border-radius: 8px;
-    border: ${variant != "secondary" ? "1px solid rgb(115, 115, 115)" : "0"};
+    border: ${variant != "secondary-noBorder" ? "1px solid rgb(115, 115, 115)" : "0; padding: 0; display: flex"};
     background-color: ${
       variant == "default" ? "rgb(224, 233, 255);" 
       : variant == "main" ? "var(--mainColor);" 
