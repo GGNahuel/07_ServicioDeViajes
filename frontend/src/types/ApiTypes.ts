@@ -31,7 +31,7 @@ interface Destiny {
   returnDay: number,
   transport: Transports,
 
-  stayPlaceId: string
+  stayPlaceId: StayPlace
 }
 
 interface PayPlan {
