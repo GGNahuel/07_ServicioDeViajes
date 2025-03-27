@@ -3,6 +3,7 @@ import { Card } from "../../../components/Card";
 import { Travel } from "../../../types/ApiTypes";
 import { formatDate } from "../../../utils/formatDateFromApi";
 import { generateImageURL } from "../../../utils/generateImageUrlFromAPI";
+import { List } from "../../../components/List";
 
 export function TravelCard({travel, onClick, referencePropsFloatingUI} : 
   {travel: Travel, onClick?: (travel: Travel) => void, referencePropsFloatingUI?: (userProps?: React.HTMLProps<Element>) => Record<string, unknown>}
@@ -27,13 +28,13 @@ export function TravelCard({travel, onClick, referencePropsFloatingUI} :
       <h3>{travel.name}</h3>
       <h4>{travel.rating}</h4>
       <h4>Destinos</h4>
-      <ul>
+      <List>
         {travel.destinies.map(destiny => <li key={destiny.place}>{destiny.place}</li>)}
-      </ul>
+      </List>
       <h4>Fechas disponibles:</h4>
-      <ul>
+      <List>
         {travel.availableDates.map(date => <li key={formatDate(date)}>{formatDate(date)}</li>)}
-      </ul>
+      </List>
       <h4>{travel.isAvailable ? "Disponible para la próxima fecha" : "No disponible"}</h4>
       <h4>Capacidad actual:{travel.currentCapacity}</h4>
       <h4>Capacidad máxima: {travel.maxCapacity}</h4>
