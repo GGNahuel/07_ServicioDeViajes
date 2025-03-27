@@ -1,14 +1,13 @@
 import { css } from "@emotion/react";
 import { Button } from "../../../components/Button";
+import { List } from "../../../components/List";
 import { Close } from "../../../components/SvgIcons";
 import { Travel } from "../../../types/ApiTypes";
 import { formatDate } from "../../../utils/formatDateFromApi";
 import { generateImageURL } from "../../../utils/generateImageUrlFromAPI";
-import { useWindowProps } from "../../../hooks/useWindowsProps";
+import { Carrousel_Basic } from "../../../components/Carrousel_Basic";
 
 export function TravelContent({travel, handleCloseModal} : {travel: Travel, handleCloseModal?: () => void}): JSX.Element {
-  const {width} = useWindowProps()
-  
   const styles = css`
     > header {
       display: flex;
@@ -17,18 +16,38 @@ export function TravelContent({travel, handleCloseModal} : {travel: Travel, hand
       gap: 1rem;
     
       > div {
+        padding: 1rem;
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
         align-items: baseline;
       }
+
+      .icon {
+        width: 24px;
+        height: 24px;
+      }
     }
 
     > section {
-      display: flex;
-      justify-content: center;
-      ${width < 720 ? "flex-direction: column;" : ""}
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
       gap: 1rem; 
+
+      > div {
+        border: 2px solid rgb(115, 115, 115);
+        border-radius: 16px;
+      }
+
+      > .info {
+        background-color: rgb(250,250,250);
+        line-height: 1.5rem;
+        padding: 1rem; 
+      }
+
+      .imagesContainer > img {
+        border-radius: 12px;
+      }
     }
   `
   
@@ -42,30 +61,24 @@ export function TravelContent({travel, handleCloseModal} : {travel: Travel, hand
         {handleCloseModal && <Button variant="default" onClick={handleCloseModal}><Close /></Button>}
       </header>
       <section>
-        <div css={css`
-          img {
-            max-width: 300px;
-          }
-        `}>
-          {travel.images[0] && travel.images.map(imageData => <img key={imageData.id} src={generateImageURL(imageData)} />)}
-        </div>
+        <Carrousel_Basic imagesProps={travel.images.map(imageData => ({src: generateImageURL(imageData)}))} />        
         <div className="info">
           <h4>Destinos</h4>
-          <ul>
+          <List>
             {travel.destinies.map(destiny => <li key={destiny.place}>{destiny.place}</li>)}
-          </ul>
+          </List>
           <h4>Fechas disponibles:</h4>
-          <ul>
+          <List>
             {travel.availableDates.map(date => <li key={formatDate(date)}>{formatDate(date)}</li>)}
-          </ul>
+          </List>
           <h4>{travel.isAvailable ? "Disponible para la próxima fecha" : "No disponible"}</h4>
           <h4>Capacidad actual:{travel.currentCapacity}</h4>
           <h4>Capacidad máxima: {travel.maxCapacity}</h4>
           <h4>Días de duración en total: {travel.longInDays}</h4>
           <h4>Planes disponibles:</h4>
-          <ul>
+          <List>
             {travel.payPlans.map(plan => <li key={plan.planFor}>{plan.planFor}: ${plan.price}</li>)}
-          </ul>
+          </List>
         </div>
       </section>
       <section>
