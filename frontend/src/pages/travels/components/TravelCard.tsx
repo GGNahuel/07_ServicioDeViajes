@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { Card } from "../../../components/Card";
 import { Travel } from "../../../types/ApiTypes";
-import { formatDate } from "../../../utils/formatDateFromApi";
+import { formatDate } from "../../../utils/fromApi/formatDateFromApi";
 import { generateImageURL } from "../../../utils/generateImageUrlFromAPI";
 import { List } from "../../../components/List";
 

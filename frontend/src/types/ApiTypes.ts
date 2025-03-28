@@ -1,7 +1,7 @@
 export type ApiMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
-enum Transports { PLANE, BUS, TRAIN, BOAT }
-enum PayPLansType { friends, family, couple, individual }
+export type Transports = "PLANE" | "BUS" | "TRAIN" | "BOAT"
+export type PayPLansType = "friends" | "family" | "couple" | "individual"
 
 export interface PopularTravel {
   name: string,

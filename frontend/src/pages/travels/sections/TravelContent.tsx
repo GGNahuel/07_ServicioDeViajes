@@ -3,10 +3,11 @@ import { Button } from "../../../components/Button";
 import { List } from "../../../components/List";
 import { Close } from "../../../components/SvgIcons";
 import { Travel } from "../../../types/ApiTypes";
-import { formatDate } from "../../../utils/formatDateFromApi";
-import { generateImageURL } from "../../../utils/generateImageUrlFromAPI";
+import { formatDate } from "../../../utils/fromApi/formatDateFromApi";
+import { generateImageURL } from "../../../utils/fromApi/generateImageUrlFromAPI";
 import { Carrousel_Basic } from "../../../components/Carrousel_Basic";
 import { Tag } from "../../../components/Tag";
+import { payPlansTranslations, transportTranslations } from "../../../const/ApiConstants";
 
 export function TravelContent({travel, handleCloseIfModal} : {travel: Travel, handleCloseIfModal?: () => void}): JSX.Element {
   const styles = css`
@@ -102,7 +103,7 @@ export function TravelContent({travel, handleCloseIfModal} : {travel: Travel, ha
           <h4>Días de duración en total: {travel.longInDays}</h4>
           <h4>Planes disponibles:</h4>
           <List>
-            {travel.payPlans.map(plan => <li key={plan.planFor}>{plan.planFor}: ${plan.price}</li>)}
+            {travel.payPlans.map(plan => <li key={plan.planFor}>{payPlansTranslations[plan.planFor]}: ${plan.price}</li>)}
           </List>
           <div className="actionZone">
             <Tag variant={travel.isAvailable ? "default" : "empty"} 
@@ -118,7 +119,7 @@ export function TravelContent({travel, handleCloseIfModal} : {travel: Travel, ha
         <h3>Detalle de destinos:</h3>
         {travel.destinies.map(destiny => <div>
           <h4>Lugar: {destiny.place}</h4>
-          <h4>Transporte: {destiny.transport}</h4>
+          <h4>Transporte: {transportTranslations[destiny.transport]}</h4>
           <h4>Llegada en el día {destiny.leaveDay}</h4>
           <h4>Salida en el día {destiny.returnDay}</h4>
           <h4>Lugar de estadía: {destiny.stayPlaceId.name}. ⭐{destiny.stayPlaceId.rating}</h4>
@@ -140,7 +141,7 @@ export function TravelContent({travel, handleCloseIfModal} : {travel: Travel, ha
         </div>
         <div>
           <h4>¿Qué pasa si no puedo viajar en la fecha reservada?</h4>
-          <p>Si necesitas modificar tu fecha de viaje, contáctanos lo antes posible. Dependiendo de la disponibilidad y la política del viaje, podremos ofrecerte un cambio de fecha o un reembolso parcial.</p>
+          <p>Si necesitas modificar tu fecha de viaje, contáctenos lo antes posible. Dependiendo de la disponibilidad y la política del viaje, podremos ofrecerte un cambio de fecha o un reembolso parcial.</p>
         </div>
         <div>
           <h4>¿Los viajes incluyen seguro de viajero?</h4>
