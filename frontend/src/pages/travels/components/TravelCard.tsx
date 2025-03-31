@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { Card } from "../../../components/Card";
 import { Travel } from "../../../types/ApiTypes";
 import { formatDate } from "../../../utils/fromApi/formatDateFromApi";
-import { generateImageURL } from "../../../utils/generateImageUrlFromAPI";
+import { generateImageURL } from "../../../utils/fromApi/generateImageUrlFromAPI";
 import { List } from "../../../components/List";
 
 export function TravelCard({travel, onClick, referencePropsFloatingUI} : 
