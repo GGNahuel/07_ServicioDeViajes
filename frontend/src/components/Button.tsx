@@ -3,19 +3,26 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 
 export function Button(
   {variant, children, additionalStyles, ...attrs} : 
-  {variant: "default" | "main" | "secondary" | "secondary-noBorder", children: ReactNode, additionalStyles?: SerializedStyles} 
+  {variant: "default" | "main" | "secondary" | "secondary-noBorder" | "rounded", children: ReactNode, additionalStyles?: SerializedStyles} 
   & ButtonHTMLAttributes<HTMLButtonElement>
 ) {
   const style = css`
     appearance: none;
-    padding: 0.6rem;
+    display: flex;
+    padding: ${variant != "secondary-noBorder" ? "0.6rem" : "0"};
     font-size: 1.05rem;
-    border-radius: 8px;
-    border: ${variant != "secondary-noBorder" ? "1px solid rgb(115, 115, 115)" : "0; padding: 0; display: flex"};
+    border-radius: ${
+      variant != "rounded" ? "8px" :
+      "100%"
+    };
+    border: ${
+      variant != "secondary-noBorder" ? "1px solid rgb(115, 115, 115)" : 
+      "0"
+    };
     background-color: ${
-      variant == "default" ? "rgb(224, 233, 255);" 
-      : variant == "main" ? "var(--mainColor);" 
-      : "rgba(0, 0, 0, 0)"
+      variant == "default" ? "rgb(224, 233, 255);" : 
+      variant == "main" ? "var(--mainColor);" : 
+      "rgba(0, 0, 0, 0)"
     };
 
     &:hover {
