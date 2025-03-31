@@ -7,21 +7,26 @@ import { formatDate } from "../../utils/fromApi/formatDateFromApi";
 import { Card } from "../../components/Card";
 import { css } from "@emotion/react";
 
-// type actionsToPersonList = "add" | "edit" | "delete"
+type actionsToPersonList = "add" | "delete"
 type PersonCardType = {id: number, data: Person | null}
+type HandleActionParameters = (e: FormEvent<HTMLFormElement> | null, card: PersonCardType, action: actionsToPersonList) => void
 
 export function MakeRequestPage({travel} : {travel?: Travel}) {
   const [cardList, setCardList] = useState<PersonCardType[]>([])
 
-  const handleChangesInPersonsAdded = (e: FormEvent<HTMLFormElement>, card: PersonCardType) => {
-    e.preventDefault()
+  const handleChangesInPersonsAdded: HandleActionParameters = (e, card, action) => {
+    e?.preventDefault()
     
-    const newEntry = {
-      id: card.id,
-      data: card.data
+    let newList: PersonCardType[] = []
+    if (action == "add") {
+      newList = cardList.map(cardInList => 
+        cardInList.id !== card.id ? cardInList : card
+      )
+    } else {
+      newList = cardList.filter(cardInList => cardInList.id !== card.id)
     }
 
-    setCardList(prev => [...prev, newEntry])
+    setCardList(newList)
   }
 
   return (
@@ -48,11 +53,8 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
   )
 }
 
-function PersonCardInRequestForm(
-  {handleAction, card} : 
-  {handleAction: (e: FormEvent<HTMLFormElement>, card: PersonCardType) => void, card: PersonCardType}
-) {
-  const [showingForm, _] = useState<boolean>(card.data != null)
+function PersonCardInRequestForm({handleAction, card} : {handleAction: HandleActionParameters, card: PersonCardType}) {
+  const [showingForm, setShowingForm] = useState<boolean>(card.data != null)
   const [personInForm, setPersonInForm] = useState<Person>({
     name: "",
     age: -1,
@@ -69,7 +71,7 @@ function PersonCardInRequestForm(
 
   return (
     <Card>
-      {showingForm && <form onSubmit={e => handleAction(e, {id: card.id, data: personInForm})}>
+      {showingForm && <form onSubmit={e => handleAction(e, {id: card.id, data: personInForm}, "add")}>
         <label>Nombre completo
           <input type="text" name="name" value={personInForm.name} onChange={(e) => handleInputChange(e, "name")}/></label>  
         <label>Edad
@@ -89,8 +91,8 @@ function PersonCardInRequestForm(
       </form>}
       {!showingForm && card.data && <>
         <div>
-          <Button variant="rounded"><PencilIcon /></Button>
-          <Button variant="rounded"><TrashCanIcon /></Button>
+          <Button variant="rounded" onClick={() => setShowingForm(true)}><PencilIcon /></Button>
+          <Button variant="rounded" onClick={() => handleAction(null, card, "delete")}><TrashCanIcon /></Button>
         </div>
         <div>
           <p><strong>Nombre completo</strong> {card.data.name}</p>
