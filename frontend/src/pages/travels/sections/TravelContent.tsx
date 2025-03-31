@@ -88,7 +88,9 @@ export function TravelContent({travel, handleCloseIfModal} : {travel: Travel, ha
         }
       </header>
       <section className="mainInfo">
-        <Carrousel_Basic imagesProps={travel.images.map(imageData => ({src: generateImageURL(imageData)}))} />        
+        <Carrousel_Basic listLength={travel.images.length}>
+          {travel.images.map((image, index) => <img key={index} src={generateImageURL(image)} alt={image.name} />)}
+        </Carrousel_Basic>      
         <div className="info">
           <h4>Destinos</h4>
           <List>
