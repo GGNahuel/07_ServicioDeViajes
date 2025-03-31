@@ -66,9 +66,9 @@ export interface StayPlace {
 export interface Request {
   id?: string,
   selectedPlan: PayPLansType,
-  persons: Person,
+  persons: Person[],
   email: {
-    id: string,
+    id?: string,
     email: string,
     owner: string
   },
@@ -79,7 +79,7 @@ export interface Request {
   selectedDate: string
 }
 
-interface Person {
+export interface Person {
   name: string,
   age: number,
   identificationNumber: number,
