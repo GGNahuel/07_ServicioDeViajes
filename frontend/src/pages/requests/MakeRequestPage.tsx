@@ -6,6 +6,8 @@ import { Person, Travel } from "../../types/ApiTypes";
 import { formatDate } from "../../utils/fromApi/formatDateFromApi";
 import { Card } from "../../components/Card";
 import { css } from "@emotion/react";
+import { Carrousel_Basic } from "../../components/Carrousel_Basic";
+import { payPlansTranslations } from "../../const/ApiConstants";
 
 type actionsToPersonList = "add" | "delete"
 type PersonCardType = {id: number, data: Person | null}
@@ -33,21 +35,41 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
     <MainSection>
       <h2>Formulario para {travel?.name}</h2>
       <form>
-        <label>Ingrese su email: <input type="email" name="email" /></label>
-        <label>Seleccione una de las fechas disponibles<select name="date">
-          {travel?.availableDates.map(date => <option value={formatDate(date)}></option>)}  
-        </select></label>
+        <Carrousel_Basic listLength={2}
+          nextButton={"Siguiente"}
+        >
+          <div>
+            <label>Ingrese su email: <input type="email" name="email" required /></label>
+            <label>Seleccione una de las fechas disponibles<select name="date" required>
+              {travel?.availableDates.map(date => <option value={formatDate(date)}></option>)}  
+            </select></label>
 
-        <section>
-          <header>
-            <h3>Ingrese los datos de las personas que viajaran</h3>
-            <Button variant="rounded" onClick={() => {
-              const id = cardList.length > 0 ? cardList[cardList.length - 1].id + 1 : 0
-              setCardList(prev => [...prev, {id, data: null}])
-            }}><AddIcon /></Button>
-          </header>
-          {cardList.map(card => <PersonCardInRequestForm key={card.id} card={card} handleAction={handleChangesInPersonsAdded} />)}
-        </section>
+            <section>
+              <header>
+                <h3>Ingrese los datos de las personas que viajaran</h3>
+                <Button variant="rounded" onClick={() => {
+                  const id = cardList.length > 0 ? cardList[cardList.length - 1].id + 1 : 0
+                  setCardList(prev => [...prev, {id, data: null}])
+                }}><AddIcon /></Button>
+              </header>
+              <div>
+                {cardList.map(card => <PersonCardInRequestForm key={card.id} card={card} handleAction={handleChangesInPersonsAdded} />)}
+              </div>
+            </section>
+          </div>
+          <div>
+            <p>Seleccione el plan de pago</p>
+            {travel?.payPlans.map(payPlan => <label>{payPlansTranslations[payPlan.planFor]}: ${payPlan.price}
+              <input type="radio" name="payPlan" value={payPlan.planFor}/>
+            </label>)}
+            <label>Ingrese la cantidad a pagar<input type="number" name="amountPaid" /></label>
+            <h3>Datos de tarjeta</h3>
+            <label>Número de tarjeta <input type="text" value={"xxxx-xxxx-xxxx-xxxx"} disabled /></label>
+            <label>Fecha de vencimiento<input type="text" value={"xx/xx"} disabled /></label>
+            <label>Titular<input type="text" disabled /></label>
+            <label>Código de seguridad<input type="text" value={"xxx"} disabled/></label>
+          </div>
+        </Carrousel_Basic>
       </form>
     </MainSection>
   )
