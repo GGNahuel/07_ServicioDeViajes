@@ -8,6 +8,7 @@ import { TravelCard } from "./components/TravelCard";
 import { TravelContent } from "./sections/TravelContent";
 import { TravelsSearchForm } from "./sections/TravelsSearchForm";
 import { useWindowProps } from "../../hooks/useWindowsProps";
+import { MakeRequestPage } from "../requests/MakeRequestPage";
 
 export function TravelsPage() {
   const {response, makeRequest} = useTravelSearcher()
@@ -51,13 +52,14 @@ export function TravelsPage() {
         flex-wrap: wrap;
         align-items: stretch;
       `}>    
-        {response?.map(travel => <TravelCard travel={travel} onClick={handleOnClickInTravelCard} referencePropsFloatingUI={getReferenceProps}/>)}
+        {response?.map(travel => <TravelCard key={travel.id} travel={travel} onClick={handleOnClickInTravelCard} referencePropsFloatingUI={getReferenceProps}/>)}
         {isModalOpen && selectedTravel &&
           <section css={modalStyles} {...getFloatingProps()}>
             <TravelContent travel={selectedTravel} handleCloseIfModal={() => setIsModalOpen(false)} />
           </section>
         }
       </MainSection>
+      {response && response[0] && <MakeRequestPage travel={response[0]} />}
     </main>
   )
 }
