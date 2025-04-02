@@ -72,11 +72,11 @@ function PostalCard({angle, travel} : {angle: number, travel: PopularTravel}) {
     background-image: url("${Math.random() > 0.5 ? "postal1.webp" : "postal2.webp"}");
     background-size: 100% 100%;
     
-    &:nth-child(even) {
+    &:nth-of-type(even) {
       justify-self: self-start;
       translate: -20px 0;
     }
-    &:nth-child(odd) {
+    &:nth-of-type(odd) {
       justify-self: self-end;
       translate: 20px 0;
     }
