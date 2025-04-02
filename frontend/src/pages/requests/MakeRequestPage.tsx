@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../../components/Button";
 import { MainSection } from "../../components/MainSection";
 import { AddIcon, CheckIcon, PencilIcon, TrashCanIcon } from "../../components/SvgIcons";
@@ -11,14 +11,12 @@ import { payPlansTranslations } from "../../const/ApiConstants";
 
 type actionsToPersonList = "add" | "delete"
 type PersonCardType = {id: number, data: Person | null}
-type HandleActionParameters = (e: FormEvent<HTMLFormElement> | null, card: PersonCardType, action: actionsToPersonList) => void
+type HandleActionParameters = (card: PersonCardType, action: actionsToPersonList) => void
 
 export function MakeRequestPage({travel} : {travel?: Travel}) {
   const [cardList, setCardList] = useState<PersonCardType[]>([])
 
-  const handleChangesInPersonsAdded: HandleActionParameters = (e, card, action) => {
-    e?.preventDefault()
-    
+  const handleChangesInPersonsAdded: HandleActionParameters = (card, action) => {   
     let newList: PersonCardType[] = []
     if (action == "add") {
       newList = cardList.map(cardInList => 
@@ -29,6 +27,7 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
     }
 
     setCardList(newList)
+    console.log(newList)
   }
 
   return (
@@ -41,13 +40,13 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
           <div>
             <label>Ingrese su email: <input type="email" name="email" required /></label>
             <label>Seleccione una de las fechas disponibles<select name="date" required>
-              {travel?.availableDates.map(date => <option value={formatDate(date)}></option>)}  
+              {travel?.availableDates.map((date, i) => <option key={i} value={formatDate(date)}>{formatDate(date)}</option>)}  
             </select></label>
 
             <section>
               <header>
                 <h3>Ingrese los datos de las personas que viajaran</h3>
-                <Button variant="rounded" onClick={() => {
+                <Button variant="rounded" type="button" onClick={() => {
                   const id = cardList.length > 0 ? cardList[cardList.length - 1].id + 1 : 0
                   setCardList(prev => [...prev, {id, data: null}])
                 }}><AddIcon /></Button>
@@ -59,7 +58,7 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
           </div>
           <div>
             <p>Seleccione el plan de pago</p>
-            {travel?.payPlans.map(payPlan => <label>{payPlansTranslations[payPlan.planFor]}: ${payPlan.price}
+            {travel?.payPlans.map(payPlan => <label key={payPlan.planFor}>{payPlansTranslations[payPlan.planFor]}: ${payPlan.price}
               <input type="radio" name="payPlan" value={payPlan.planFor}/>
             </label>)}
             <label>Ingrese la cantidad a pagar<input type="number" name="amountPaid" /></label>
@@ -76,7 +75,7 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
 }
 
 function PersonCardInRequestForm({handleAction, card} : {handleAction: HandleActionParameters, card: PersonCardType}) {
-  const [showingForm, setShowingForm] = useState<boolean>(card.data != null)
+  const [showingForm, setShowingForm] = useState<boolean>(card.data === null)
   const [personInForm, setPersonInForm] = useState<Person>({
     name: "",
     age: -1,
@@ -84,16 +83,23 @@ function PersonCardInRequestForm({handleAction, card} : {handleAction: HandleAct
     contactPhone: 0
   })
 
+  useEffect(() => {
+    setShowingForm(card.data === null)
+  }, [card])
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>, property: keyof Person) => {
+    const newValue = (property === "age" || property == "contactPhone" || property == "identificationNumber") ?
+      Number(e.target.value) : e.target.value
+
     setPersonInForm(prev => ({
       ...prev,
-      [property]: e.target.value
+      [property]: newValue
     }))
   }
 
   return (
     <Card>
-      {showingForm && <form onSubmit={e => handleAction(e, {id: card.id, data: personInForm}, "add")}>
+      {showingForm && <div>
         <label>Nombre completo
           <input type="text" name="name" value={personInForm.name} onChange={(e) => handleInputChange(e, "name")}/></label>  
         <label>Edad
@@ -105,16 +111,17 @@ function PersonCardInRequestForm({handleAction, card} : {handleAction: HandleAct
         <label>Número de contacto
           <input type="number" name="contactPhone" value={personInForm.contactPhone} onChange={e => handleInputChange(e, "contactPhone")} />
         </label>
-        <Button variant={"default"} type="submit" additionalStyles={css`gap: 8px; align-items: center;`}
-          disabled={personInForm.name === "" || personInForm.age >= 0}
+        <Button variant={"default"} type="button" additionalStyles={css`gap: 8px; align-items: center;`}
+          disabled={personInForm.name === "" || personInForm.age < 0 || personInForm.identificationNumber < 100} 
+          onClick={() => handleAction({id: card.id, data: personInForm}, "add")}
         >
           <CheckIcon/>Agregar
         </Button>
-      </form>}
+      </div>}
       {!showingForm && card.data && <>
         <div>
           <Button variant="rounded" onClick={() => setShowingForm(true)}><PencilIcon /></Button>
-          <Button variant="rounded" onClick={() => handleAction(null, card, "delete")}><TrashCanIcon /></Button>
+          <Button variant="rounded" onClick={() => handleAction(card, "delete")}><TrashCanIcon /></Button>
         </div>
         <div>
           <p><strong>Nombre completo</strong> {card.data.name}</p>
