@@ -9,7 +9,7 @@ type ReqBodyHeaders = Record<string, string> |& {
 }
 
 export async function handleRequest(
-  path: string, method: ApiMethods, {headers, objectToStringify, alternativeBody} : {
+  relativePath: string, method: ApiMethods, {headers, objectToStringify, alternativeBody} : {
     headers?: ReqBodyHeaders,
     objectToStringify?: unknown, alternativeBody?: BodyInit
   }, contextSetter: MessageContextInterface["setValue"]
@@ -17,7 +17,7 @@ export async function handleRequest(
   const requestBody = buildRequestBody({method, headers, alternativeBody, objectToStringify})
 
   try {
-    const request = await fetch(API_PREFIX + path, requestBody)
+    const request = await fetch(API_PREFIX + relativePath, requestBody)
     const response = await request.json()
     console.log(request, response)
 

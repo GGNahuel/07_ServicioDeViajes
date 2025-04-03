@@ -73,9 +73,9 @@ export interface Request {
     owner: string
   },
   amountPaid: number,
-  totalPrice: number,
+  totalPrice?: number,
 
-  associatedTravel: string,
+  associatedTravel: Travel,
   selectedDate: string
 }
 
