@@ -5,8 +5,16 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { Button } from "./Button";
 
 export function Carrousel_Basic(
-  {children, listLength, canGoNext, canGoPrevious, nextButton, prevButton} : 
-  {children: ReactNode, listLength: number, canGoNext?: boolean, canGoPrevious?: boolean, nextButton?: ReactNode, prevButton?: ReactNode}
+  {
+    children, listLength, isNotCyclic, includesSelector = true, 
+    canGoNext, canGoPrevious, nextButton, prevButton, 
+    indexGetter
+  } : 
+  {
+    children: ReactNode, listLength: number, isNotCyclic?: boolean, includesSelector?: boolean,
+    canGoNext?: boolean, canGoPrevious?: boolean, nextButton?: ReactNode, prevButton?: ReactNode,
+    indexGetter?: (selectedItem: number) => void
+  }
 ) {
   const [selectedITem, setSelected] = useState<number>(0)
   const [carrouselWidth, setCarrouselWidth] = useState<number>(0)
@@ -15,6 +23,7 @@ export function Carrousel_Basic(
   const style = css`
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     align-items: flex-start;
     box-sizing: border-box;
     overflow: hidden;
@@ -31,6 +40,7 @@ export function Carrousel_Basic(
         
       > * {
         width: ${carrouselWidth}px;
+        box-sizing: border-box;
       }
     }
 
@@ -65,6 +75,10 @@ export function Carrousel_Basic(
     }
   }, [])
 
+  useEffect(() => {
+    if (indexGetter) indexGetter(selectedITem)
+  }, [selectedITem])
+
   const handleChangeItem = (newValue: number, isRelativeValue: boolean) => {
     const finalValue = 
       !isRelativeValue ?
@@ -72,9 +86,9 @@ export function Carrousel_Basic(
         newValue < 0 ? 0 :
         newValue
       : (selectedITem + newValue) >= listLength ?
-        0
+        isNotCyclic ? listLength - 1 : 0
       : (selectedITem + newValue) < 0 ?
-        listLength - 1
+        isNotCyclic ? 0 : listLength - 1
       : selectedITem + newValue
 
     setSelected(finalValue)
@@ -86,15 +100,15 @@ export function Carrousel_Basic(
         {children}
       </div>
       <div className="buttonsZone">
-        <Button variant="secondary-noBorder" onClick={() => handleChangeItem(-1, true)} disabled={canGoPrevious !== false}>
+        <Button type="button" variant={prevButton ? "default" : "secondary-noBorder"} onClick={() => handleChangeItem(-1, true)} disabled={canGoPrevious === false}>
           {prevButton || <Previous/>}
         </Button>
-        <List variant={"inline"}>
+        {includesSelector && <List variant={"inline"}>
           {Array.from({length: listLength}).map((_, index) => 
             <li key={index}><input type="radio" name="carrousel" value={index} checked={selectedITem == index} onChange={() => handleChangeItem(index, false)}/></li>
           )}
-        </List>
-        <Button variant={nextButton ? "default" : "secondary-noBorder"} onClick={() => handleChangeItem(1, true)} disabled={canGoNext !== false}>
+        </List>}
+        <Button type="button" variant={nextButton ? "default" : "secondary-noBorder"} onClick={() => handleChangeItem(1, true)} disabled={canGoNext === false}>
           {nextButton || <Next/>}
         </Button>
       </div>
