@@ -15,6 +15,7 @@ type HandleActionParameters = (card: PersonCardType, action: actionsToPersonList
 
 export function MakeRequestPage({travel} : {travel?: Travel}) {
   const [cardList, setCardList] = useState<PersonCardType[]>([])
+  const [carrouselIndex, setCarrouselIndex] = useState<number>(0)
 
   const handleChangesInPersonsAdded: HandleActionParameters = (card, action) => {   
     let newList: PersonCardType[] = []
@@ -27,26 +28,72 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
     }
 
     setCardList(newList)
-    console.log(newList)
   }
 
+  const changeCarrouselIndex = (index: number) => {
+    setCarrouselIndex(index)
+  }
+
+  const styles = css`
+    form {
+      width: 100%;
+
+      .inputsZone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        border: 2px solid rgb(115, 115, 115);
+        border-radius: 16px;
+        background-color: rgb(250,250,250);
+        padding: 1rem;
+      }
+
+      .personsZone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        
+        > header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        
+        > div {
+          padding: 1rem;
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          gap: 16px;
+          width: 100%;
+        }
+      }
+    }
+  `
+
   return (
-    <MainSection>
+    <MainSection styles={styles}>
       <h2>Formulario para {travel?.name}</h2>
       <form>
-        <Carrousel_Basic listLength={2}
-          nextButton={"Siguiente"}
+        <Carrousel_Basic 
+          listLength={2} isNotCyclic includesSelector={false}
+          nextButton={carrouselIndex == 0 ? "Siguiente" : "Enviar solicitud"} canGoNext={cardList.length > 0 && cardList.every(card => card.data != null)}
+          prevButton={"Anterior"} canGoPrevious={carrouselIndex == 1}
+          indexGetter={changeCarrouselIndex}
         >
-          <div>
+          <div className="inputsZone">
             <label>Ingrese su email: <input type="email" name="email" required /></label>
-            <label>Seleccione una de las fechas disponibles<select name="date" required>
+            <label>Seleccione una de las fechas disponibles <select name="date" required>
               {travel?.availableDates.map((date, i) => <option key={i} value={formatDate(date)}>{formatDate(date)}</option>)}  
             </select></label>
 
-            <section>
+            <section className="personsZone">
               <header>
                 <h3>Ingrese los datos de las personas que viajaran</h3>
                 <Button variant="rounded" type="button" onClick={() => {
+                  if (cardList.length > 0 && cardList[cardList.length -1].data == null) return
+                  
                   const id = cardList.length > 0 ? cardList[cardList.length - 1].id + 1 : 0
                   setCardList(prev => [...prev, {id, data: null}])
                 }}><AddIcon /></Button>
@@ -56,17 +103,17 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
               </div>
             </section>
           </div>
-          <div>
+          <div className="inputsZone">
             <p>Seleccione el plan de pago</p>
-            {travel?.payPlans.map(payPlan => <label key={payPlan.planFor}>{payPlansTranslations[payPlan.planFor]}: ${payPlan.price}
-              <input type="radio" name="payPlan" value={payPlan.planFor}/>
+            {travel?.payPlans.map(payPlan => <label key={payPlan.planFor}>
+              <input type="radio" name="payPlan" value={payPlan.planFor}/> {payPlansTranslations[payPlan.planFor]}: ${payPlan.price}
             </label>)}
             <label>Ingrese la cantidad a pagar<input type="number" name="amountPaid" /></label>
             <h3>Datos de tarjeta</h3>
             <label>Número de tarjeta <input type="text" value={"xxxx-xxxx-xxxx-xxxx"} disabled /></label>
-            <label>Fecha de vencimiento<input type="text" value={"xx/xx"} disabled /></label>
-            <label>Titular<input type="text" disabled /></label>
-            <label>Código de seguridad<input type="text" value={"xxx"} disabled/></label>
+            <label>Fecha de vencimiento <input type="text" value={"xx/xx"} disabled /></label>
+            <label>Titular <input type="text" disabled /></label>
+            <label>Código de seguridad <input type="text" value={"xxx"} disabled/></label>
           </div>
         </Carrousel_Basic>
       </form>
@@ -97,8 +144,54 @@ function PersonCardInRequestForm({handleAction, card} : {handleAction: HandleAct
     }))
   }
 
+  const styles = css`
+    position: relative;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .buttonZone { 
+        align-self: flex-end; 
+        display: flex;
+        gap: 8px;
+
+        > button {
+          gap: 8px; 
+          align-items: center; 
+        }    
+      }
+    }
+
+    > .buttonZone {
+      gap: 8px;
+      position: absolute;
+      right: -1.2rem;
+      top: -1rem;
+      width: min-content;
+      z-index: 5;
+      
+      button {
+        background-color: rgb(210, 210, 210);
+        padding: 8px;
+        aspect-ratio: 1;
+      }
+    }
+
+    &:hover .buttonZone.svgZone > button {
+      scale: 1.1;
+      transition: scale 200ms:
+    }
+  `
+
   return (
-    <Card>
+    <Card additionalStyles={styles}>
       {showingForm && <div>
         <label>Nombre completo
           <input type="text" name="name" value={personInForm.name} onChange={(e) => handleInputChange(e, "name")}/></label>  
@@ -111,15 +204,22 @@ function PersonCardInRequestForm({handleAction, card} : {handleAction: HandleAct
         <label>Número de contacto
           <input type="number" name="contactPhone" value={personInForm.contactPhone} onChange={e => handleInputChange(e, "contactPhone")} />
         </label>
-        <Button variant={"default"} type="button" additionalStyles={css`gap: 8px; align-items: center;`}
-          disabled={personInForm.name === "" || personInForm.age < 0 || personInForm.identificationNumber < 100} 
-          onClick={() => handleAction({id: card.id, data: personInForm}, "add")}
-        >
-          <CheckIcon/>Agregar
-        </Button>
+        <div className="buttonZone">
+          <Button variant="secondary" type="button" 
+            onClick={() => handleAction(card, "delete")}
+          >
+            Cancelar
+          </Button>
+          <Button variant={"default"} type="button"
+            disabled={personInForm.name === "" || personInForm.age < 0 || personInForm.identificationNumber < 100} 
+            onClick={() => handleAction({id: card.id, data: personInForm}, "add")}
+          >
+            <CheckIcon/>Agregar
+          </Button>
+        </div>
       </div>}
       {!showingForm && card.data && <>
-        <div>
+        <div className="buttonZone svgZone">
           <Button variant="rounded" onClick={() => setShowingForm(true)}><PencilIcon /></Button>
           <Button variant="rounded" onClick={() => handleAction(card, "delete")}><TrashCanIcon /></Button>
         </div>

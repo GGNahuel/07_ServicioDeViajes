@@ -28,11 +28,6 @@ export function TravelContent({travel, handleCloseIfModal} : {travel: Travel, ha
         flex-wrap: wrap;
         align-items: baseline;
       }
-
-      .icon {
-        width: 24px;
-        height: 24px;
-      }
     }
 
     > section.mainInfo {
