@@ -18,9 +18,17 @@ export async function handleRequest(
 
   try {
     const request = await fetch(API_PREFIX + relativePath, requestBody)
-    const response = await request.json()
-    console.log(request, response)
+    console.log(request)
 
+    let response;
+    try {
+      response = await request.json();
+    } catch (jsonError) {
+      console.warn("Error al parsear JSON:", jsonError);
+      response = null; 
+    }
+    console.log(response);
+    
     if (!request.ok) {
       if (request.status == 500)
         throw new CriticalError(response)
@@ -29,15 +37,17 @@ export async function handleRequest(
 
     return response 
   } catch (error) {
-    if (error instanceof CriticalError)
+    if (error instanceof CriticalError) {
       contextSetter({
-        message: (error as Error).message,
+        message: "Ocurrió un error inesperado, vuelva a intentar más tarde",
         type: "error"
       })
-    else
+    }
+    else {
       contextSetter({
         message: (error as Error).message,
         type: "warn"
       })
+    }
   }
 }
