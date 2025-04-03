@@ -70,3 +70,5 @@ Secciones vista de viajes y promociones
 cambiar en los travels la estructura de fechas y capacidad
 
 los viajes tendrán una lista de imagenes y popularidad según visitas
+
+en la pagina de creacion de request agregar los mensajes de pago necesario para reserva, lista de espera, 

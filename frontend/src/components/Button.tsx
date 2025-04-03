@@ -9,7 +9,7 @@ export function Button(
   const style = css`
     appearance: none;
     display: flex;
-    padding: ${variant != "secondary-noBorder" ? "0.6rem" : "0"};
+    padding: ${variant != "secondary-noBorder" ? "0.4rem 0.6rem" : "0"};
     font-size: 1.05rem;
     border-radius: ${
       variant != "rounded" ? "8px" :
