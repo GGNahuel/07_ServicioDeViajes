@@ -34,7 +34,7 @@ interface Destiny {
   stayPlaceId: StayPlace
 }
 
-interface PayPlan {
+export interface PayPlan {
   price: number,
   planFor: PayPLansType
 }
@@ -65,7 +65,7 @@ export interface StayPlace {
 
 export interface Request {
   id?: string,
-  selectedPlan: PayPLansType,
+  selectedPlan: PayPlan,
   persons: Person[],
   email: {
     id?: string,
@@ -76,7 +76,7 @@ export interface Request {
   totalPrice?: number,
 
   associatedTravel: Travel,
-  selectedDate: string
+  selectedDate: [number, number, number]
 }
 
 export interface Person {

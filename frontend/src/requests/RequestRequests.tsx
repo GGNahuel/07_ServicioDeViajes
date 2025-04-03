@@ -1,7 +1,8 @@
 import { FormEvent, useContext, useState } from "react";
 import { handleRequest } from "./_RequestHandler";
-import { PayPLansType, Person, Request, Travel } from "../types/ApiTypes";
+import { PayPlan, PayPLansType, Person, Request, Travel } from "../types/ApiTypes";
 import { MessageContext, MessageContextInterface } from "../contexts/MessageContext";
+import { formatDateToApi } from "../utils/fromApi/formatDateFromApi";
 
 export function useRequestCreator() {
   const [returned, setReturned] = useState<Request | unknown>()
@@ -12,22 +13,23 @@ export function useRequestCreator() {
     const form = new FormData(e.currentTarget)
 
     // API will check or set the total price if it's needed
-    const totalPrice = associatedTravel.payPlans.find(payPlan => payPlan.planFor == planFor)?.price
     const planFor = form.get("payPlan") as PayPLansType;
+    const associatedPlan = associatedTravel.payPlans.find(payPlan => payPlan.planFor == planFor)
     const newRequest: Request = {
-      selectedPlan: planFor,
+      selectedPlan: associatedPlan as PayPlan,
       persons: persons,
       email: {
         email: form.get("email") as string,
         owner: persons[0].name
       },
       amountPaid: Number(form.get("amountPaid")),
-      totalPrice: totalPrice,
+      totalPrice: associatedPlan?.price,
       associatedTravel,
-      selectedDate: form.get("date") as string
+      selectedDate:formatDateToApi(form.get("date") as string)
     }
+    console.log(newRequest)
 
-    const apiReturn = await handleRequest("/requests", "POST", {
+    const apiReturn = await handleRequest("/request", "POST", {
       objectToStringify: newRequest
     }, setValue)
 

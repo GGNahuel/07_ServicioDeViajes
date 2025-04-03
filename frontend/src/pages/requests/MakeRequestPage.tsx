@@ -1,13 +1,14 @@
+import { css } from "@emotion/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../../components/Button";
+import { Card } from "../../components/Card";
+import { Carrousel_Basic } from "../../components/Carrousel_Basic";
 import { MainSection } from "../../components/MainSection";
 import { AddIcon, CheckIcon, PencilIcon, TrashCanIcon } from "../../components/SvgIcons";
+import { payPlansTranslations } from "../../const/ApiConstants";
 import { Person, Travel } from "../../types/ApiTypes";
 import { formatDate } from "../../utils/fromApi/formatDateFromApi";
-import { Card } from "../../components/Card";
-import { css } from "@emotion/react";
-import { Carrousel_Basic } from "../../components/Carrousel_Basic";
-import { payPlansTranslations } from "../../const/ApiConstants";
+import { useRequestCreator } from "../../requests/RequestRequests";
 
 type actionsToPersonList = "add" | "delete"
 type PersonCardType = {id: number, data: Person | null}
@@ -16,6 +17,7 @@ type HandleActionParameters = (card: PersonCardType, action: actionsToPersonList
 export function MakeRequestPage({travel} : {travel?: Travel}) {
   const [cardList, setCardList] = useState<PersonCardType[]>([])
   const [carrouselIndex, setCarrouselIndex] = useState<number>(0)
+  const {sendRequest} = useRequestCreator()
 
   const handleChangesInPersonsAdded: HandleActionParameters = (card, action) => {   
     let newList: PersonCardType[] = []
@@ -75,10 +77,11 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
   return (
     <MainSection styles={styles}>
       <h2>Formulario para {travel?.name}</h2>
-      <form>
+      <form onSubmit={(e) => sendRequest(e, cardList.map(card => card.data) as Person[], travel as Travel)}>
         <Carrousel_Basic 
           listLength={2} isNotCyclic includesSelector={false}
-          nextButton={carrouselIndex == 0 ? "Siguiente" : "Enviar solicitud"} canGoNext={cardList.length > 0 && cardList.every(card => card.data != null)}
+          nextButton={carrouselIndex == 0 ? "Siguiente" : "Enviar solicitud"} 
+          canGoNext={cardList.length > 0 && cardList.every(card => card.data != null)}
           prevButton={"Anterior"} canGoPrevious={carrouselIndex == 1}
           indexGetter={changeCarrouselIndex}
         >
@@ -106,14 +109,15 @@ export function MakeRequestPage({travel} : {travel?: Travel}) {
           <div className="inputsZone">
             <p>Seleccione el plan de pago</p>
             {travel?.payPlans.map(payPlan => <label key={payPlan.planFor}>
-              <input type="radio" name="payPlan" value={payPlan.planFor}/> {payPlansTranslations[payPlan.planFor]}: ${payPlan.price}
+              <input type="radio" name="payPlan" value={payPlan.planFor} required /> {payPlansTranslations[payPlan.planFor]}: ${payPlan.price}
             </label>)}
-            <label>Ingrese la cantidad a pagar<input type="number" name="amountPaid" /></label>
+            <label>Ingrese la cantidad a pagar<input type="number" name="amountPaid" required /></label>
             <h3>Datos de tarjeta</h3>
-            <label>Número de tarjeta <input type="text" value={"xxxx-xxxx-xxxx-xxxx"} disabled /></label>
-            <label>Fecha de vencimiento <input type="text" value={"xx/xx"} disabled /></label>
-            <label>Titular <input type="text" disabled /></label>
-            <label>Código de seguridad <input type="text" value={"xxx"} disabled/></label>
+            <label>Número de tarjeta <input type="text" value={"xxxx-xxxx-xxxx-xxxx"} disabled  required/></label>
+            <label>Fecha de vencimiento <input type="text" value={"xx/xx"} disabled  required/></label>
+            <label>Titular <input type="text" disabled value={"Xx Xx"} required/></label>
+            <label>Código de seguridad <input type="text" value={"xxx"} disabled required/></label>
+            <button type="submit">Enviar</button>
           </div>
         </Carrousel_Basic>
       </form>
